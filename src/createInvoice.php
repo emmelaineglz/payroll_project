@@ -1,6 +1,7 @@
 <?php
 include "../vendor/autoload.php";
 include "Certificate.php";
+include "testPdf.php";
 
 use Charles\CFDI\CFDI;
 use Charles\CFDI\Node\Emisor;
@@ -68,14 +69,44 @@ if($json) {
     $cadenaOriginal = $response->TimbraCFDIResult->anyType[5];
 
     if($xmlTimbrado != ''){
-      /*Guardamos comprobante timbrado*/
-      file_put_contents("/Applications/XAMPP/htdocs/payroll_project/uploads/{$rfc}/comprobanteTimbrado.xml", $xmlTimbrado);
-      /*Guardamos codigo qr*/
-      file_put_contents("/Applications/XAMPP/htdocs/payroll_project/uploads/{$rfc}/codigoQr.jpg", $codigoQr);
-      /*Guardamos cadena original del complemento de certificacion del SAT*/
-      file_put_contents("/Applications/XAMPP/htdocs/payroll_project/uploads/{$rfc}/cadenaOriginal.txt", $cadenaOriginal);
 
-      $responseFinal = ["status" => true, "message" => "Timbrado Exitoso", "data" => (string)$xmlTimbrado];
+      $xml_READ = simplexml_load_string($xmlTimbrado);
+      $ns = $xml_READ->getNamespaces(true);
+      $xml_READ->registerXPathNamespace('t', $ns['tfd']);
+      $atributos = $xml_READ->xpath('//t:TimbreFiscalDigital');
+      foreach ($atributos as $tfd) {
+          $selloCFD = $tfd['SelloCFD'];
+        	$FechaTimbrado = $tfd['FechaTimbrado'];
+        	$UUID = $tfd['UUID'];
+        	$noCertificadoSAT = $tfd['NoCertificadoSAT'];
+        	$versionSAT = $tfd['Version'];
+        	$selloSAT = $tfd['SelloSAT'];
+      }
+
+      /*Guardamos comprobante timbrado*/
+      file_put_contents("{$ruta}/{$rfc}/{$UUID}.xml", $xmlTimbrado);
+      /*Guardamos codigo qr*/
+      file_put_contents("{$ruta}/{$rfc}/codigoQr_{$UUID}.jpg", $codigoQr);
+      /*Guardamos cadena original del complemento de certificacion del SAT*/
+      file_put_contents("{$ruta}/uploads/{$rfc}/cadenaOriginal_{$UUID}.txt", $cadenaOriginal);
+      $image = "{$ruta}/{$rfc}/codigoQr_{$UUID}.jpg";
+      /* Generamos archivo PDF */
+      $pdf = new FacturaPdf();
+      $xml = json_decode($json);
+      $xml = $xml->comprobante;
+      $nomina = $xml->complemento->nomina12;
+      $pdf->AddPage();
+      $pdf->SetFont('Arial','B',16);
+      $pdf->HeaderPay($xml, $UUID, $noCertificadoSAT, $FechaTimbrado);
+      $pdf->HeaderNomina($xml->receptor, $nomina);
+      $pdf->Conceptos($xml->conceptos, $nomina->header);
+      $pdf->Percepciones($nomina->percepcion, $nomina->detallePercepcion);
+      $pdf->Deducciones($nomina->deduccion, $nomina->detalleDeduccion);
+      $pdf->FooterNomina($selloCFD, $selloSAT, $cadenaOriginal, $image);
+      $archivo = "{$ruta}/{$rfc}/{$UUID}.pdf";
+      $pdf->Output('F', $archivo);
+
+      $responseFinal = ["status" => true, "message" => "Timbrado Exitoso", "data" => (string)$xmlTimbrado, "origenPdf" => "http://159.89.38.133/payroll_project/{$ruta}/{$rfc}/{$UUID}.pdf"];
       echo json_encode($responseFinal);
     } else {
       $responseFinal = ["status" => false, "message" => $descripcionResultado];

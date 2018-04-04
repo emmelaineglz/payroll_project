@@ -2,29 +2,27 @@
   "comprobante": {
     "header": {
       "Serie": "A",
-      "Folio": "A0101",
-      "Fecha": "2017-06-17T03:00:00",
-      "FormaPago": "01",
-      "NoCertificado": "00000000000000000000",
-      "CondicionesDePago": "",
-      "Subtotal": "",
-      "Descuento": "0.00",
+      "Folio": "911",
+      "Fecha": "2018-04-03T14:21:00",
+      "FormaPago": "99",
+      "NoCertificado": "30001000000300023708",
+      "SubTotal": "3890.23",
+      "Descuento": "548.48",
       "Moneda": "MXN",
-      "TipoCambio": "1.0",
-      "Total": "5550.56",
+      "Total": "3341.75",
       "TipoDeComprobante": "N",
       "MetodoPago": "PUE",
-      "LugarExpedicion": "64000"
+      "LugarExpedicion": "06700"
     },
     "emisor": {
-      "rfc": "ILD041028IT1",
-      "Nombre": "INNOVACION EN LOGISTICA Y DISTRIBUCION, SA DE CV",
+      "Rfc": "AAA010101AAA",
+      "Nombre": "Ethel Gonzalez",
       "RegimenFiscal": "601"
     },
     "receptor": {
-      "rfc": "ROPJ911121F83",
-      "Nombre": "RODRIGUEZ PINTO JUANA CORINA",
-      "UsoCFDI": "P01"
+      "Rfc": "MOOT9104055S8",
+      "Nombre": "TERESITA MORA ORTIZ",
+      "UsoCFDI": "G01"
     },
     "conceptos": [
       {
@@ -32,72 +30,96 @@
         "Cantidad": "1",
         "ClaveUnidad": "ACT",
         "Descripcion": "Pago de nómina",
-        "ValorUnitario": "11499.90",
-        "Importe": "11499.90",
-        "Descuento": "2147.91"
+        "ValorUnitario": "3890.23",
+        "Importe": "3890.23",
+        "Descuento": "548.48"
       }
     ],
     "complemento": {
       "nomina12": {
         "header": {
+          "xmlns:nomina12" :  "http://www.sat.gob.mx/nomina12",
           "Version" : "1.2",
-          "TipoNomina" : "0",
-          "FechaPago" : "2018-01-15T12:00:00",
-          "FechaInicialPago" : "2018-01-01T12:00:00",
-          "FechaFinalPago" : "2018-01-15T12:00:00",
-          "NumDiasPagados" : "15.000",
-          "TotalPercepciones" : "7999.95",
-          "TotalDeducciones" : "1294.72",
-          "TotalOtrosPagos" : "0"
+          "TipoNomina" : "O",
+          "FechaPago" : "2018-03-02",
+          "FechaInicialPago" : "2018-02-26",
+          "FechaFinalPago" : "2018-03-04",
+          "NumDiasPagados" : "7",
+          "TotalPercepciones" : "3890.23",
+          "TotalDeducciones" : "548.48",
+            "xsi:schemaLocation" : "http://www.sat.gob.mx/nomina12 http://www.sat.gob.mx/informacion_fiscal/factura_electronica/Documents/Complementoscfdi/nomina12.xsd"
         },
         "emisor": {
-          "RegistroPatronal" : "Y5844311109"
+          "RegistroPatronal" : "Y6064672105",
+          "RfcPatronOrigen" : "BON150210EN4"
         },
         "receptor": {
-          "Curp" : "DORF730530HMCMMR02",
-          "NumSeguridadSocial" : "94917301676",
-          "FechaInicioRelLaboral" : "2011-07-29",
-          "Antigüedad" : "P337W",
-          "TipoContrato" : "01",
+          "Curp" : "AAHA921222MDFLRL07",
+          "FechaInicioRelLaboral" : "2017-11-06",
+          "Antigüedad" : "P17W",
+          "TipoContrato" : "02",
           "TipoJornada" : "01",
           "TipoRegimen" : "02",
-          "NumEmpleado" : "002579",
-          "Puesto" : "CHOFER EJECUTIVO",
-          "RiesgoPuesto" : "4",
-          "PeriodicidadPago" : "04",
-          "SalarioBaseCotApor" : "591.56",
-          "SalarioDiarioIntegrado" : "591.56",
-          "ClaveEntFed" : "DIF"
+          "NumEmpleado" : "105",
+          "Departamento" : "LOMAS ESTRELLA",
+          "PeriodicidadPago" : "02",
+          "CuentaBancaria" : "0361390385",
+          "Banco" : "072",
+          "ClaveEntFed" : "DIF",
+          "NumSeguridadSocial" : "03169292509",
+          "RiesgoPuesto" : "1",
+          "SalarioDiarioIntegrado" : "130.35"
         },
+        "percepcion": {
+          "TotalSueldos" : "3890.23",
+          "TotalGravado" : "3860.56",
+          "TotalExento" : "29.67"
+        },
+        "detallePercepcion": [
+          {
+            "TipoPercepcion" : "001",
+            "Clave" : "P001",
+            "Concepto" : "SUELDOS, SALARIOS  RAYAS Y JORNALES",
+            "ImporteGravado" : "830.96",
+            "ImporteExento" : "0.00"
+          },
+          {
+            "TipoPercepcion" : "020",
+            "Clave" : "P022",
+            "Concepto" : "PRIMA DOMINICAL",
+            "ImporteGravado" : "0.00",
+            "ImporteExento" : "29.67"
+          },
+          {
+            "TipoPercepcion" : "028",
+            "Clave" : "P031",
+            "Concepto" : "COMISIONES",
+            "ImporteGravado" : "3029.60",
+            "ImporteExento" : "0.00"
+          }
+        ],
         "deduccion": {
-          "TotalOtrasDeducciones" : "232.66",
-          "TotalImpuestosRetenidos" : "1062.06"
+          "TotalOtrasDeducciones" : "21.68",
+          "TotalImpuestosRetenidos" : "526.80"
         },
         "detalleDeduccion": [
           {
-            "TipoDeduccion" : "001",
-            "Clave" : "022",
-            "Concepto" : "SEGURIDAD SOCIAL",
-            "Importe" : "232.66" 
+            "TipoDeduccion" : "002",
+            "Clave" : "D001",
+            "Concepto" : "ISR",
+            "Importe" : "526.80"
           },
           {
-            "TipoDeduccion": "002",
-            "Clave": "021",
-            "Concepto": "ISR",
-            "Importe": "1062.06"
-          }
-        ],
-        "percepcion": {
-          "TotalSueldos" : "7999.95",
-          "TotalGravado" : "7999.95",
-          "TotalExento" : "0.00"
-        },
-        "detallePercepcion": [
-          { 
-            "TipoDeduccion" : "001",
-            "Clave" : "022",
-            "Concepto" : "SEGURIDAD SOCIAL",
-            "Importe" : "232.66" 
+            "TipoDeduccion": "001",
+            "Clave": "D003",
+            "Concepto": "SEGURIDAD SOCIAL",
+            "Importe": "11.41"
+          },
+          {
+            "TipoDeduccion": "003",
+            "Clave": "D004",
+            "Concepto": "APORTACIONES A RETIRO, CESANTIA EN EDAD AVANZADA Y VEJEZ",
+            "Importe": "10.27"
           }
         ]
       }
