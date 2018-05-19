@@ -58,8 +58,6 @@ if($json) {
       $params['xmlComprobanteBase64'] = $base64Comprobante;
       $params['idComprobante'] = rand(5, 999999);
 
-      die(print_r($params));
-
       $client = new SoapClient($ws,$params);
       $response = $client->__soapCall('TimbraCFDI', array('parameters' => $params));
     } catch (SoapFault $fault){
