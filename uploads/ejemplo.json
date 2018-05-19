@@ -2,10 +2,9 @@
   "comprobante": {
     "header": {
       "Serie": "A",
-      "Folio": "911",
-      "Fecha": "2018-04-03T14:21:00",
+      "Folio": "916",
+      "Fecha": "2018-04-17T14:25:00",
       "FormaPago": "99",
-      "NoCertificado": "30001000000300023708",
       "SubTotal": "3890.23",
       "Descuento": "548.48",
       "Moneda": "MXN",
