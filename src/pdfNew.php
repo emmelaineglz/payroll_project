@@ -8,97 +8,101 @@ use GreenCape\Xml\Converter;
 
 class FacturaPdf extends FPDF {
 
-  public function HeaderPay($data, $UUID, $noCertificadoSAT, $FechaTimbrado){
+
+  public function reduceText($text, $maxWidth) {
+      return strlen($text) > $maxWidth ? substr($text, 0, $maxWidth)."..." : $text;
+  }
+
+  public function HeaderPay($data){
       $nomina = $data->complemento->nomina12;
-      $this->SetDrawColor(26, 84, 251);
-      $this->SetLineWidth(1);
-      $this->Line(10, 15, 130, 15);
       $this->SetFont('Arial','B',9);
       $this->SetFillColor(191, 191, 192);
-			$this->Cell(190, 5, "Comprobante Fiscal Digital por Internet", 0, 0, 'R');
+			//$this->Cell(190, 5, "Comprobante Fiscal Digital por Internet", 0, 0, 'R');
       $this->Ln();
-      $this->Cell(190, 5, "Recibo de Nomina", 0, 0, 'R');
+      $this->Cell(153, 5, "RECIBO DE NOMINA", 0, 0, 'R');
       $this->Ln();
       $this->SetFont('Arial','B',7);
       $this->SetTextColor(5, 5, 5);
-      $this->Cell(190, 4, $data->emisor->Nombre, 0, 0, 'L');
+      $this->Cell(60, 4, "", 0, 0, 'L');
+      $this->Cell(60, 4, "", 0, 0, 'L');
+      $this->Cell(40, 4, "Numero", 0, 0, 'L');
+      $this->Cell(40, 4, "Forma de Pago", 0, 0, 'L');
       $this->Ln();
-      $this->Cell(40, 4, $data->emisor->Rfc, 0, 0, 'L');
-      $this->SetTextColor(173, 173, 173);
-      $this->SetFont('Arial','',7);
-      $this->Cell(99, 4, "Folio Fiscal", 0, 0, 'R');
+      $this->Cell(60, 4, "", 0, 0, 'L');
+      $this->Cell(60, 4, "", 0, 0, 'L');
+      $this->Cell(40, 4, "12345", 0, 0, 'L');
+      $this->Cell(30, 4, $data->header->FormaPago, 0, 0, 'L');
       $this->Ln();
+      $this->Cell(60, 4, "", 0, 0, 'L');
+      $this->Cell(60, 4, "", 0, 0, 'L');
+      $this->Cell(40, 4, "Fecha y Hora de emision", 0, 0, 'L');
+      $this->Cell(45, 4, "Lugar de expedicion", 0, 0, 'L');
+      $this->Ln();
+      $this->Cell(60, 4, "", 0, 0, 'L');
+      $this->Cell(60, 4, "", 0, 0, 'L');
+      $this->Cell(40, 4, $data->header->Fecha, 0, 0, 'L');
+      $this->Cell(40, 4, $data->header->LugarExpedicion, 0, 0, 'L');
+    }
+
+    public function HeaderEmisor($data) {
+      $this->SetDrawColor(26, 84, 251);
+      $this->SetLineWidth(0.5);
+      $this->Line(10, 33, 200, 33);
+      $this->Ln();
+      $this->Ln();
+      $this->SetFont('Arial','B',9);
       $this->SetTextColor(5, 5, 5);
-      $this->Cell(125, 4, "", 0, 0, 'L');
-      $this->Cell(175, 4, $UUID, 0, 0, 'L');
+      $this->Cell(30, 2, "Datos del Emisor", 0, 0, 'L');
       $this->Ln();
-      $this->SetTextColor(173, 173, 173);
-      $this->Cell(125, 4, "REGIMEN FISCAL:", 0, 0, 'L');
-      $this->Cell(120, 4, "No. de Serie del Cert. del SAT", 0, 0, 'L');
+      $this->SetDrawColor(26, 84, 251);
+      $this->SetLineWidth(0.5);
+      $this->Line(10, 39, 200, 39);
       $this->Ln();
-      $this->Cell(125, 4, $data->emisor->RegimenFiscal, 0, 0, 'L');
-      $this->SetTextColor(5, 5, 5);
-      $this->Cell(117, 4, $noCertificadoSAT, 0, 0, 'L');
       $this->Ln();
-      $this->SetTextColor(173, 173, 173);
-      $this->Cell(125, 4, "REGISTRO PATRONAL:", 0, 0, 'L');
-      $this->Cell(100, 4, "Fecha y Hora de Certificacion", 0, 0, 'L');
+      $this->SetFont('Arial','B',7);
+      $this->Cell(25, 4, "Razon Social", 0, 0, 'L');
+      $this->Cell(40, 4, "BON&EFFICACE SA DE CV", 0, 0, 'L');
       $this->Ln();
-      $this->Cell(125, 4, $nomina->emisor->RegistroPatronal, 0, 0, 'L');
-      $this->SetTextColor(5, 5, 5);
-      $this->Cell(100, 4, $FechaTimbrado, 0, 0, 'L');
+      $this->Cell(25, 4, "RFC", 0, 0, 'L');
+      $this->Cell(40, 4, "BON150210EN4", 0, 0, 'L');
+      $this->Cell(25, 4, "Regimen Fiscal", 0, 0, 'L');
+      $this->Cell(50, 4, "General de Ley Personas Morales", 0, 0, 'L');
+      $this->Cell(25, 4, "Registro Patronal", 0, 0, 'L');
+      $this->Cell(40, 4, "Y6064672105", 0, 0, 'L');
       $this->Ln();
-      $this->SetTextColor(173, 173, 173);
-      $this->Cell(125, 4, "", 0, 0, 'L');
-      $this->Cell(100, 4, "Fecha y Hora de emision", 0, 0, 'L');
+      $this->Cell(25, 4, "Colonia", 0, 0, 'L');
+      $this->Cell(40, 4, "ROMA NORTE", 0, 0, 'L');
+      $this->Cell(25, 4, "Calle y Numero", 0, 0, 'L');
+      $this->Cell(50, 4, "GUANAJUATO", 0, 0, 'L');
+      $this->Cell(25, 4, "Codigo Postal", 0, 0, 'L');
+      $this->Cell(40, 4, "06700", 0, 0, 'L');
       $this->Ln();
-      $this->Cell(125, 4, "Lugar de expedicion: {$data->header->LugarExpedicion}", 0, 0, 'L');
-      $this->SetTextColor(5, 5, 5);
-      $this->Cell(100, 4, $data->header->Fecha, 0, 0, 'L');
-      $this->Ln();
-      $this->SetTextColor(173, 173, 173);
-      $this->Cell(125, 4, "", 0, 0, 'L');
-      $this->Cell(100, 4, "No. Certificado", 0, 0, 'L');
-      $this->Ln();
-      $this->SetTextColor(5, 5, 5);
-      $this->Cell(125, 4, "", 0, 0, 'L');
-      $this->Cell(117, 4, $data->header->NoCertificado, 0, 0, 'L');
-      $this->Ln();
-      $this->SetTextColor(173, 173, 173);
-      $this->Cell(125, 4, "", 0, 0, 'L');
-      $this->Cell(100, 4, "Metodo de Pago", 0, 0, 'L');
-      $this->Ln();
-      $this->SetTextColor(5, 5, 5);
-      $this->Cell(125, 4, "", 0, 0, 'L');
-      $this->Cell(100, 4, $data->header->MetodoPago, 0, 0, 'L');
-      $this->Ln();
-      $this->SetTextColor(173, 173, 173);
-      $this->Cell(125, 4, "", 0, 0, 'L');
-      $this->Cell(100, 4, "Forma de Pago", 0, 0, 'L');
-      $this->Ln();
-      $this->SetTextColor(5, 5, 5);
-      $this->Cell(125, 4, "", 0, 0, 'L');
-      $this->Cell(100, 4, $data->header->FormaPago, 0, 0, 'L');
-      $this->Ln();
+      $this->Cell(25, 4, "Estado", 0, 0, 'L');
+      $this->Cell(40, 4, "Ciudad de Mexico", 0, 0, 'L');
+      $this->Cell(25, 4, "Delegacion", 0, 0, 'L');
+      $this->Cell(50, 4, "Cuauhtemoc", 0, 0, 'L');
+      $this->Cell(25, 4, "Pais", 0, 0, 'L');
+      $this->Cell(40, 4, "Mexico", 0, 0, 'L');
 		}
 
     public function HeaderNomina ($receptor, $data) {
       $this->SetDrawColor(26, 84, 251);
-      $this->SetLineWidth(1);
-      $this->Line(10, 85, 200, 85);
+      $this->SetLineWidth(0.5);
+      $this->Line(10, 60, 200, 60);
       $this->Ln();
       $this->Ln();
       $this->SetFont('Arial','B',9);
       $this->SetTextColor(5, 5, 5);
-      $this->Cell(30, 2, "EMPLEADO", 0, 0, 'L');
-      $this->Cell(117, 2, $receptor->Nombre, 0, 0, 'L');
+      $this->Cell(30, 4, "Datos del Receptor", 0, 0, 'L');
       $this->Ln();
       $this->SetDrawColor(26, 84, 251);
       $this->SetLineWidth(0.5);
-      $this->Line(10, 92, 200, 92);
-      $this->Ln();
+      $this->Line(10, 66, 200, 66);
       $this->Ln();
       $this->SetFont('Arial','B',7);
+      $this->cell(33, 4, "Nombre", 0, 0, 'L');
+      $this->Cell(50, 4, $receptor->Nombre, 0, 0, 'L');
+      $this->Ln();
       $this->Cell(33, 4, "No Empleado", 0, 0, 'L');
       $this->Cell(36, 4, $data->receptor->NumEmpleado, 0, 0, 'L');
       $this->Cell(23, 4, "IMSS", 0, 0, 'L');
@@ -192,6 +196,83 @@ class FacturaPdf extends FPDF {
       $this->Ln();
     }
 
+    public function percep_deducc ($percepcion, $detPercepcion, $deduccion, $detDeduccion){
+      $this->SetDrawColor(26, 84, 251);
+      $this->SetLineWidth(0.5);
+      $this->Line(10, 100, 108, 100);
+      $this->Ln();
+      $this->SetFont('Arial','B',9);
+      $this->SetTextColor(5, 5, 5);
+      $this->Cell(100, 4, "Percepciones", 0, 0, 'L');
+      $this->Line(10, 110, 108, 110);
+      $this->Cell(100, 4, "Deducciones", 0, 0, 'L');
+      $this->Ln();
+      $this->SetFont('Arial','B',7);
+      $this->SetTextColor(32, 155, 255);
+      $this->Cell(8, 4, "Tipo", 0, 0, 'L');
+      $this->Cell(45, 4, "Percepcion", 0, 0, 'L');
+      $this->Cell(12, 4, "Unidades", 0, 0, 'L');
+      $this->Cell(18, 4, "Imp.Gravado", 0, 0, 'R');
+      $this->Cell(16, 4, "Imp.Exento", 0, 0, 'R');
+      //$this->Cell(5, 4, "", 0, 0, 'L');
+      $this->Line(200, 100, 111, 100);
+      $this->Cell(8, 4, "Tipo", 0, 0, 'R');
+      $this->Cell(60, 4, "Deduccion", 0, 0, 'L');
+      $this->Cell(12, 4, "Unidades", 0, 0, 'C');
+      $this->Cell(12, 4, "Importe", 0, 0, 'R');
+      //$this->Cell(10, 4, "", 0, 0, 'L');
+      $this->SetDrawColor(26, 84, 251);
+      $this->SetLineWidth(0.5);
+      $this->Line(200, 110, 111, 110);
+      $this->SetFont('Arial','',5);
+      $this->SetTextColor(5, 5, 5);
+      $this->Ln();
+      $this->Ln();
+
+      $currentY = 0;
+      foreach ($detPercepcion as $value) {
+        $currentY = $this->GetY();
+	      $this->MultiCell(6, 4, $value->TipoPercepcion, 0, 'C');
+        $this->SetXY($this->GetX()+6, $currentY);
+	      $this->MultiCell(48, 4, $this->reduceText($value->Concepto, 42), 0);
+        $this->SetXY($this->GetX()+48+6, $currentY);
+	      $this->MultiCell(8, 4, "15.00", 0, 'R');
+        $this->SetXY($this->GetX()+48+6+8, $currentY);
+	      $this->MultiCell(18, 4, $value->ImporteGravado, 0, 'R');
+        $this->SetXY($this->GetX()+48+6+8+18, $currentY);
+        $this->MultiCell(18, 4, $value->ImporteExento, 0, 'R');
+      }
+      $currentY = 109;
+      foreach ($detDeduccion as $value) {
+        $currentY = $currentY + 4;
+        $this->SetXY($this->GetX()+48+6+8+16+16+7, $currentY);
+	      $this->MultiCell(8, 4, $value->TipoDeduccion, 0, 'L');
+        $this->SetXY($this->GetX()+48+6+8+16+16+7+6, $currentY);
+        $this->MultiCell(7, 4, $value->Clave, 0);
+        $this->SetXY($this->GetX()+48+6+8+16+16+7+6+7, $currentY);
+        $this->MultiCell(53, 4, $this->reduceText($value->Concepto, 45), 0, 'L');
+        $this->SetXY($this->GetX()+48+6+8+16+16+7+6+7+53, $currentY);
+        $this->MultiCell(10, 4, "", 0);
+        $this->SetXY($this->GetX()+48+6+8+16+16+7+6+7+53+8, $currentY);
+        $this->MultiCell(16, 4, $value->Importe, 0, 'R');
+      }
+
+      /*$currentY = $this->GetY();
+      $this->SetXY($this->GetX(), $currentY);
+      $this->SetDrawColor(26, 84, 251);
+      $this->SetLineWidth(0.5);
+      //$this->Line(10, $this->GetX(), 108, $this->GetX());*/
+      $this->Ln();
+      $this->SetFont('Arial','B',7);
+      $this->SetTextColor(5, 5, 5);
+      $this->Cell(68, 4, "Total de percepciones", 0, 0, 'C');
+      $this->Cell(12, 4, $percepcion->TotalGravado, 0, 0, 'R');
+      $this->Cell(18, 4, $percepcion->TotalExento, 0, 0, 'R');
+      $this->Line(200, 100, 111, 100);
+      $this->Cell(81, 4, "Total de Deducciones", 0, 0, 'C');
+      $this->Cell(12, 4, ($deduccion->TotalOtrasDeducciones + $deduccion->TotalImpuestosRetenidos), 0, 0, 'R');
+    }
+
     public function Percepciones ($percepcion, $data) {
       $this->SetDrawColor(26, 84, 251);
       $this->SetLineWidth(1);
@@ -273,25 +354,46 @@ class FacturaPdf extends FPDF {
       $this->Ln();
     }
 
-    public function FooterNomina ($selloCFD, $selloSAT, $cadena_original, $image) {
-      $this->SetY(235); /* Inicio */
-      $this->SetFont('Arial','',5);
+  public function FooterNomina ($selloCFD, $selloSAT, $cadenaOriginal, $image, $UUID, $noCertificadoSAT, $FechaTimbrado) {
+      $this->SetY(220); /* Inicio */
+      $this->SetFont('Arial','B',6);
       $this->SetTextColor(5, 5, 5);
-      $this->MultiCell(190, 2, "El trabajador recibe de la empresa que se cita en el encabezado, la cantidad anteriormente descrita por lo que con este Comprobante Fiscal Digital por Internet se dan por pagadas y aceptadas todas y cada una de las prestaciones que se generaron durante este periodo y anteriores, estando de acuerdo con los descuentos aplicables, por lo que no se adeuda prestacion o cantidad alguna por cualquier otro concepto, otorgando el trabajador su consentimiento y no se  reserva accion o derecho de ejercitar en contra de la empresa a que se hace referencia.", 0, 'J');
-      $this->SetY(245); /* Set 20 Eje Y */
+      $this->Cell(20, 4, "Folio Fiscal", 0, 0, 'L');
+      $this->SetFont('Arial','',6);
+      $this->Cell(30, 4, $UUID, 0, 0, 'L');
+      $this->Ln();
+      $this->SetFont('Arial','B',6);
+      $this->Cell(25, 4, "Fecha de Timbrado", 0, 0, 'L');
+      $this->SetFont('Arial','',6);
+      $this->Cell(30, 4, $FechaTimbrado, 0, 0, 'L');
+      $this->Ln();
+      $this->SetFont('Arial','B',6);
+      $this->Cell(45, 4, "Numero de Serie del Certificado del SAT", 0, 0, 'L');
+      $this->SetFont('Arial','',6);
+      $this->Cell(30, 4, $noCertificadoSAT, 0, 0, 'L');
+      $this->SetY(235); /* Set 20 Eje Y */
+      $this->SetFont('Arial','B',6);
       $this->Cell(30, 2, "Sello Digital del CFDI", 0, 0, 'L');
       $this->Ln();
-      $this->MultiCell(140, 2, "$selloCFD", 0, 'J');
+      $this->SetFont('Arial','',6);
+      $this->MultiCell(140, 2, $selloCFD, 0, 'J');
       $this->Ln();
+      $this->SetFont('Arial','B',6);
       $this->Cell(30, 2, "Sello SAT", 0, 0, 'L');
       $this->Ln();
+      $this->SetFont('Arial','',6);
       $this->MultiCell(140, 2, $selloSAT, 0, 'J');
       $this->Ln();
+      $this->SetFont('Arial','B',6);
       $this->Cell(30, 2, "Cadena Original del complemento de certificacion digital del SAT", 0, 0, 'L');
       $this->Ln();
-      $this->MultiCell(140, 2, $cadena_original, 0, 'J');
+      $this->SetFont('Arial','',6);
+      $this->MultiCell(140, 2, $cadenaOriginal, 0, 'J');
       $this->Ln();
-      $this->Image($image, 160, 245, 35, 35);
+      $this->Image($image, 160, 235, 35, 35);
+      $this->Ln();
+      $this->Cell(200, 2, "Este documento es una representacion impresa de un CFDI", 0, 0, 'C');
+
     }
 }
 
@@ -303,10 +405,15 @@ $nomina = $xml->complemento->nomina12;
 $pdf->AddPage();
 $pdf->SetFont('Arial','B',16);
 $pdf->HeaderPay($xml);
+$pdf->HeaderEmisor($xml->emisor);
 $pdf->HeaderNomina($xml->receptor, $nomina);
+//$pdf->Conceptos($xml->conceptos, $nomina->header);
+$pdf->percep_deducc($nomina->percepcion, $nomina->detallePercepcion, $nomina->deduccion, $nomina->detalleDeduccion);
+//$pdf->Deducciones($nomina->deduccion, $nomina->detalleDeduccion);
+/*$pdf->HeaderNomina($xml->receptor, $nomina);
 $pdf->Conceptos($xml->conceptos, $nomina->header);
 $pdf->Percepciones($nomina->percepcion, $nomina->detallePercepcion);
 $pdf->Deducciones($nomina->deduccion, $nomina->detalleDeduccion);
-//$pdf->FooterNomina();
+$pdf->FooterNomina();
 $archivo = "/Applications/XAMPP/htdocs/payroll_project/uploads/facturas.pdf";
 $pdf->Output('F', $archivo);*/
