@@ -17,8 +17,8 @@ use Charles\CFDI\Node\Complemento\Nomina\Deduccion\DetalleDeduccion;
 use Charles\CFDI\Node\Complemento\Nomina\Percepcion\DetallePercepcion;
 
 
-$json = file_get_contents("php://input");
-//$json = file_get_contents('/Applications/XAMPP/htdocs/payroll_project/uploads/ejemplo.json');
+//$json = file_get_contents("php://input");
+$json = file_get_contents('../uploads/ejemplo.json');
 $ruta = "../uploads/";
 /* Ruta del servicio de integracion*/
 $ws = "https://cfdi33-pruebas.buzoncfdi.mx:1443/Timbrado.asmx?wsdl";
@@ -26,7 +26,9 @@ $response = '';
 
 if($json) {
   $jsonData = json_decode($json, true);
-  if($comprobante = $jsonData['comprobante']) {
+  if($jsonData['comprobante'] && $jsonData['empresa']) {
+    $comprobante = $jsonData['comprobante'];
+    $empresa = $jsonData['empresa'];
     $comprobanteHeader = $comprobante['header'];
     $compobanteEmisor = $comprobante['emisor'];
     $compobanteReceptor = $comprobante['receptor'];
@@ -34,9 +36,10 @@ if($json) {
     $compobanteComplemento = $comprobante['complemento'];
 
     $rfc = $compobanteEmisor['Rfc'];
-    $rutaCer = "{$ruta}{$rfc}/{$rfc}_C.pem";
+    //$empresa = $jsonData['empresa'];
+    $rutaCer = "{$ruta}{$empresa}/{$rfc}/{$rfc}_C.pem";
     $cerFile = file_get_contents($rutaCer);
-    $keyFile = file_get_contents("{$ruta}{$rfc}/{$rfc}_K.pem");
+    $keyFile = file_get_contents("{$ruta}{$empresa}/{$rfc}/{$rfc}_K.pem");
     $cert = new Certificate();
     $comprobanteHeader['NoCertificado'] = $cert->getSerial($rutaCer);
 
@@ -88,12 +91,12 @@ if($json) {
       }
 
       /*Guardamos comprobante timbrado*/
-      file_put_contents("{$ruta}/{$rfc}/{$UUID}.xml", $xmlTimbrado);
+      file_put_contents("{$ruta}{$empresa}/{$rfc}/{$UUID}.xml", $xmlTimbrado);
       /*Guardamos codigo qr*/
-      file_put_contents("{$ruta}/{$rfc}/codigoQr_{$UUID}.jpg", $codigoQr);
+      file_put_contents("{$ruta}{$empresa}/{$rfc}/codigoQr_{$UUID}.jpg", $codigoQr);
       /*Guardamos cadena original del complemento de certificacion del SAT*/
-      file_put_contents("{$ruta}/{$rfc}/cadenaOriginal_{$UUID}.txt", $cadenaOriginal);
-      $image = "{$ruta}/{$rfc}/codigoQr_{$UUID}.jpg";
+      file_put_contents("{{$ruta}{$empresa}/{$rfc}/cadenaOriginal_{$UUID}.txt", $cadenaOriginal);
+      $image = "{$ruta}{$empresa}/{$rfc}/codigoQr_{$UUID}.jpg";
       /* Generamos archivo PDF */
       $pdf = new FacturaPdf();
       $xml = json_decode($json);
@@ -106,16 +109,19 @@ if($json) {
       $pdf->HeaderNomina($xml->receptor, $nomina);
       $pdf->percep_deducc($nomina->percepcion, $nomina->detallePercepcion, $nomina->deduccion, $nomina->detalleDeduccion);
       $pdf->FooterNomina($selloCFD, $selloSAT, $cadenaOriginal, $image, $UUID, $noCertificadoSAT, $FechaTimbrado);
-      $archivo = "{$ruta}/{$rfc}/{$UUID}.pdf";
+      $archivo = "{$ruta}{$empresa}/{$rfc}/{$UUID}.pdf";
       $pdf->Output('F', $archivo);
-      $ruta_xml = "http://159.89.38.133/payroll_project/uploads/{$rfc}/{$UUID}.xml";
-      $ruta_pdf = "http://159.89.38.133/payroll_project/uploads/{$rfc}/{$UUID}.pdf";
+      $ruta_xml = "http://159.89.38.133/payroll_project/uploads/{$empresa}/{$rfc}/{$UUID}.xml";
+      $ruta_pdf = "http://159.89.38.133/payroll_project/uploads/{$empresa}/{$rfc}/{$UUID}.pdf";
       $responseFinal = ["status" => true, "message" => "Timbrado Exitoso", "url_xml" => $ruta_xml, "url_pdf" => $ruta_pdf];
       echo json_encode($responseFinal);
     } else {
       $responseFinal = ["status" => false, "message" => $descripcionResultado];
       echo json_encode($responseFinal);
     }
+  } else {
+    $responseFinal = ["status" => false, "message" => 'La estructura del Json, es incorrecta'];
+      echo json_encode($responseFinal);
   }
 }
 

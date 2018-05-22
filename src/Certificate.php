@@ -16,17 +16,17 @@ class Certificate
      *
      * @throws \Exception
      */
-    public function makeKeyPem(string $fileKey, string $password, string $rfc): string
+    public function makeKeyPem(string $fileKey, string $password, string $rfc, string $empresa): string
     {
         if (!file_exists($fileKey)) {
             throw new \Exception("The file {$fileKey} not exists");
         }
 
-        if(!file_exists("../uploads/{$rfc}")){
-          mkdir("../uploads/{$rfc}", 0777, true);
+        if(!file_exists("../uploads/{$empresa}/{$rfc}")){
+          mkdir("../uploads/{$empresa}/{$rfc}", 0777, true);
         }
 
-        $process = new Process("openssl pkcs8 -inform DER -in {$fileKey} -out ../uploads/{$rfc}/{$rfc}_K.pem -passin pass:{$password}");
+        $process = new Process("openssl pkcs8 -inform DER -in {$fileKey} -out ../uploads/{$empresa}/{$rfc}/{$rfc}_K.pem -passin pass:{$password}");
         $process->run();
 
         if (!$process->isSuccessful()) {
@@ -42,16 +42,16 @@ class Certificate
      *
      * @throws \Exception
      */
-    public function makeCerPem(string $fileCer, string $rfc ): string
+    public function makeCerPem(string $fileCer, string $rfc, string $empresa): string
     {
         if (!file_exists($fileCer)) {
             throw new \Exception("The file {$fileCer} not exists");
         }
-        if(!file_exists("../uploads/{$rfc}")){
-          mkdir("../uploads/{$rfc}", 0777, true);
+        if(!file_exists("../uploads/{$empresa}/{$rfc}")){
+          mkdir("../uploads/{$empresa}/{$rfc}", 0777, true);
         }
 
-        $process = new Process("openssl x509 -inform DER -outform PEM -in {$fileCer} -out ../uploads/{$rfc}/{$rfc}_C.pem");
+        $process = new Process("openssl x509 -inform DER -outform PEM -in {$fileCer} -out ../uploads/{$empresa}/{$rfc}/{$rfc}_C.pem");
         $process->run();
 
         if (!$process->isSuccessful()) {
