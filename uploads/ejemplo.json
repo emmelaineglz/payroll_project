@@ -2,8 +2,8 @@
   "comprobante": {
     "header": {
       "Serie": "A",
-      "Folio": "916",
-      "Fecha": "2018-04-17T14:25:00",
+      "Folio": "921",
+      "Fecha": "2018-05-21T14:25:00",
       "FormaPago": "99",
       "SubTotal": "3890.23",
       "Descuento": "548.48",
@@ -46,7 +46,7 @@
           "NumDiasPagados" : "7",
           "TotalPercepciones" : "3890.23",
           "TotalDeducciones" : "548.48",
-            "xsi:schemaLocation" : "http://www.sat.gob.mx/nomina12 http://www.sat.gob.mx/informacion_fiscal/factura_electronica/Documents/Complementoscfdi/nomina12.xsd"
+          "xsi:schemaLocation" : "http://www.sat.gob.mx/nomina12 http://www.sat.gob.mx/informacion_fiscal/factura_electronica/Documents/Complementoscfdi/nomina12.xsd"
         },
         "emisor": {
           "RegistroPatronal" : "Y6064672105",
@@ -119,6 +119,18 @@
             "Clave": "D004",
             "Concepto": "APORTACIONES A RETIRO, CESANTIA EN EDAD AVANZADA Y VEJEZ",
             "Importe": "10.27"
+          }
+        ],
+        "Incapacidades": [
+          {
+            "DiasIncapacidad" : "2",
+            "TipoIncapacidad" : "01",
+            "ImporteMonetario" : "1200.50"
+          },
+          {
+            "DiasIncapacidad" : "3",
+            "TipoIncapacidad" : "01",
+            "ImporteMonetario" : "800.50"
           }
         ]
       }

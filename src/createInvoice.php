@@ -140,5 +140,11 @@ function complementoNomina($nominaData) {
   foreach ($nominaDetalleDeduccion as $deduccion) {
     $nomina->add(new DetalleDeduccion($deduccion));
   }
+
+  if($nominaData['Incapacidades']){
+    foreach ($nominaData['Incapacidades'] as $value) {
+      $nomina->add(new Incapacidad($value));
+    }
+  }
   return $nomina;
 }
