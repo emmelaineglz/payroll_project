@@ -12,6 +12,7 @@ use Charles\CFDI\Node\Complemento\Nomina\EmisorN;
 use Charles\CFDI\Node\Complemento\Nomina\ReceptorN;
 use Charles\CFDI\Node\Complemento\Nomina\Deduccion\Deduccion;
 use Charles\CFDI\Node\Complemento\Nomina\Percepcion\Percepcion;
+use Charles\CFDI\Node\Complemento\Nomina\Incapacidad\Incapacidad;
 use Charles\CFDI\Node\Complemento\Nomina\Deduccion\DetalleDeduccion;
 use Charles\CFDI\Node\Complemento\Nomina\Percepcion\DetallePercepcion;
 
