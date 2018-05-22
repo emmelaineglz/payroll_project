@@ -17,8 +17,8 @@ use Charles\CFDI\Node\Complemento\Nomina\Deduccion\DetalleDeduccion;
 use Charles\CFDI\Node\Complemento\Nomina\Percepcion\DetallePercepcion;
 
 
-//$json = file_get_contents("php://input");
-$json = file_get_contents('../uploads/ejemplo.json');
+$json = file_get_contents("php://input");
+//$json = file_get_contents('../uploads/ejemplo.json');
 $ruta = "../uploads/";
 /* Ruta del servicio de integracion*/
 $ws = "https://cfdi33-pruebas.buzoncfdi.mx:1443/Timbrado.asmx?wsdl";
