@@ -12,6 +12,7 @@ use Charles\CFDI\Node\Complemento\Nomina\EmisorN;
 use Charles\CFDI\Node\Complemento\Nomina\ReceptorN;
 use Charles\CFDI\Node\Complemento\Nomina\Deduccion\Deduccion;
 use Charles\CFDI\Node\Complemento\Nomina\Percepcion\Percepcion;
+use Charles\CFDI\Node\Complemento\Nomina\Incapacidad\Incapacidad;
 use Charles\CFDI\Node\Complemento\Nomina\Deduccion\DetalleDeduccion;
 use Charles\CFDI\Node\Complemento\Nomina\Percepcion\DetallePercepcion;
 
@@ -22,7 +23,9 @@ $ruta = "../uploads/";
 
 if($json) {
   $jsonData = json_decode($json, true);
-  if($comprobante = $jsonData['comprobante']) {
+  if($comprobante = $jsonData['comprobante'] && $jsonData['empresa']) {
+    $comprobante = $jsonData['comprobante'];
+    $empresa = $jsonData['empresa'];
     $comprobanteHeader = $comprobante['header'];
     $compobanteEmisor = $comprobante['emisor'];
     $compobanteReceptor = $comprobante['receptor'];
@@ -30,9 +33,9 @@ if($json) {
     $compobanteComplemento = $comprobante['complemento'];
 
     $rfc = $compobanteEmisor['Rfc'];
-    $rutaCer = "{$ruta}{$rfc}/{$rfc}_C.pem";
+    $rutaCer = "{$ruta}{$empresa}/{$rfc}/{$rfc}_C.pem";
     $cerFile = file_get_contents($rutaCer);
-    $keyFile = file_get_contents("{$ruta}{$rfc}/{$rfc}_K.pem");
+    $keyFile = file_get_contents("{$ruta}{$empresa}/{$rfc}/{$rfc}_K.pem");
     $cert = new Certificate();
     $comprobanteHeader['NoCertificado'] = $cert->getSerial($rutaCer);
 
@@ -50,7 +53,7 @@ if($json) {
     $nameXml = "{$rfc}_{$num}";
 
     if($cfdi){
-      file_put_contents("{$ruta}/{$rfc}/{$nameXml}.xml", $cfdi);
+      file_put_contents("{$ruta}{$empresa}/{$rfc}/{$nameXml}.xml", $cfdi);
       /* Generamos archivo PDF */
       $pdf = new FacturaPdf();
       $xml = json_decode($json);
@@ -63,10 +66,10 @@ if($json) {
       $pdf->HeaderNomina($xml->receptor, $nomina);
       $pdf->percep_deducc($nomina->percepcion, $nomina->detallePercepcion, $nomina->deduccion, $nomina->detalleDeduccion);
       //$pdf->FooterNomina($selloCFD, $selloSAT, $cadenaOriginal, $image, $UUID, $noCertificadoSAT, $FechaTimbrado);
-      $archivo = "{$ruta}/{$rfc}/{$nameXml}.pdf";
+      $archivo = "{$ruta}{$empresa}//{$rfc}/{$nameXml}.pdf";
       $pdf->Output('F', $archivo);
-      $ruta_xml = "http://159.89.38.133/payroll_project/uploads/{$rfc}/{$nameXml}.xml";
-      $ruta_pdf = "http://159.89.38.133/payroll_project/uploads/{$rfc}/{$nameXml}.pdf";
+      $ruta_xml = "http://159.89.38.133/payroll_project/uploads/{$empresa}/{$rfc}/{$nameXml}.xml";
+      $ruta_pdf = "http://159.89.38.133/payroll_project/uploads/{$empresa}/{$rfc}/{$nameXml}.pdf";
       $responseFinal = ["status" => true, "message" => "Timbrado Exitoso", "url_xml" => $ruta_xml, "url_pdf" => $ruta_pdf];
       echo json_encode($responseFinal);
     } else {
@@ -97,6 +100,12 @@ function complementoNomina($nominaData) {
   $nomina->add(new Deduccion($nominaDeduccion));
   foreach ($nominaDetalleDeduccion as $deduccion) {
     $nomina->add(new DetalleDeduccion($deduccion));
+  }
+
+  if($nominaData['Incapacidades']){
+    foreach ($nominaData['Incapacidades'] as $value) {
+      $nomina->add(new Incapacidad($value));
+    }
   }
   return $nomina;
 }
