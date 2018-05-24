@@ -1,5 +1,6 @@
 <?php
 //include "/Applications/XAMPP/htdocs/payroll_project/vendor/autoload.php";
+include "numberToLetter.php";
 
 use FPDF as FPDF;
 use DOMDocument as DOMDocument;
@@ -129,7 +130,7 @@ class FacturaPdf extends FPDF {
       $this->Cell(23, 4, "Fecha Pago", 0, 0, 'L');
       $this->Cell(43, 4, $data->header->FechaPago, 0, 0, 'L');
       $this->Cell(30, 4, "S.B.C", 0, 0, 'L');
-      $this->Cell(25, 4, $data->receptor->SalarioDiarioIntegrado, 0, 0, 'R');
+      $this->Cell(25, 4, $data->receptor->SalarioBaseCotApor, 0, 0, 'R');
       $this->Ln();
       $this->Cell(33, 4, "CURP", 0, 0, 'L');
       $this->Cell(36, 4, $data->receptor->Curp, 0, 0, 'L');
@@ -196,7 +197,7 @@ class FacturaPdf extends FPDF {
       $this->Ln();
     }
 
-    public function percep_deducc ($percepcion, $detPercepcion, $deduccion, $detDeduccion){
+    public function percep_deducc ($percepcion, $detPercepcion, $deduccion, $detDeduccion, $dias, $subsidio){
       $this->SetDrawColor(26, 84, 251);
       $this->SetLineWidth(0.5);
       $this->Line(10, 100, 108, 100);
@@ -236,12 +237,25 @@ class FacturaPdf extends FPDF {
         $this->SetXY($this->GetX()+6, $currentY);
 	      $this->MultiCell(48, 4, $this->reduceText($value->Concepto, 42), 0);
         $this->SetXY($this->GetX()+48+6, $currentY);
-	      $this->MultiCell(8, 4, "15.00", 0, 'R');
+	      $this->MultiCell(8, 4, ($value->Clave == 'P001')? $dias." Dias" : '' , 0, 'R');
         $this->SetXY($this->GetX()+48+6+8, $currentY);
-	      $this->MultiCell(18, 4, $value->ImporteGravado, 0, 'R');
+	      $this->MultiCell(18, 4, number_format($value->ImporteGravado, 2), 0, 'R');
         $this->SetXY($this->GetX()+48+6+8+18, $currentY);
-        $this->MultiCell(18, 4, $value->ImporteExento, 0, 'R');
+        $this->MultiCell(18, 4, number_format($value->ImporteExento, 2), 0, 'R');
       }
+      if(!empty($subsidio)){
+        $currentY = $this->GetY();
+	      $this->MultiCell(6, 4, "002", 0, 'C');
+        $this->SetXY($this->GetX()+6, $currentY);
+	      $this->MultiCell(48, 4, "SUBSIDIO AL EMPLEO", 0);
+        $this->SetXY($this->GetX()+48+6, $currentY);
+	      $this->MultiCell(8, 4, "P600" , 0, 'R');
+        $this->SetXY($this->GetX()+48+6+8, $currentY);
+	      $this->MultiCell(18, 4, "0.00", 0, 'R');
+        $this->SetXY($this->GetX()+48+6+8+18, $currentY);
+        $this->MultiCell(18, 4, number_format($subsidio, 2), 0, 'R');
+      }
+
       $currentY = 109;
       foreach ($detDeduccion as $value) {
         $currentY = $currentY + 4;
@@ -254,7 +268,7 @@ class FacturaPdf extends FPDF {
         $this->SetXY($this->GetX()+48+6+8+16+16+7+6+7+53, $currentY);
         $this->MultiCell(10, 4, "", 0);
         $this->SetXY($this->GetX()+48+6+8+16+16+7+6+7+53+8, $currentY);
-        $this->MultiCell(16, 4, $value->Importe, 0, 'R');
+        $this->MultiCell(16, 4, number_format($value->Importe, 2), 0, 'R');
       }
 
       /*$currentY = $this->GetY();
@@ -262,15 +276,17 @@ class FacturaPdf extends FPDF {
       $this->SetDrawColor(26, 84, 251);
       $this->SetLineWidth(0.5);
       //$this->Line(10, $this->GetX(), 108, $this->GetX());*/
+
+      $totalExc = (!empty($subsidio))? ($percepcion->TotalExento + $subsidio) : $percepcion->TotalExento;
       $this->Ln();
       $this->SetFont('Arial','B',7);
       $this->SetTextColor(5, 5, 5);
       $this->Cell(68, 4, "Total de percepciones", 0, 0, 'C');
-      $this->Cell(12, 4, $percepcion->TotalGravado, 0, 0, 'R');
-      $this->Cell(18, 4, $percepcion->TotalExento, 0, 0, 'R');
+      $this->Cell(12, 4, number_format($percepcion->TotalGravado, 2), 0, 0, 'R');
+      $this->Cell(18, 4, number_format($totalExc, 2), 0, 0, 'R');
       $this->Line(200, 100, 111, 100);
       $this->Cell(81, 4, "Total de Deducciones", 0, 0, 'C');
-      $this->Cell(12, 4, ($deduccion->TotalOtrasDeducciones + $deduccion->TotalImpuestosRetenidos), 0, 0, 'R');
+      $this->Cell(12, 4, number_format(($deduccion->TotalOtrasDeducciones + $deduccion->TotalImpuestosRetenidos), 2), 0, 0, 'R');
     }
 
     public function Percepciones ($percepcion, $data) {
@@ -394,6 +410,16 @@ class FacturaPdf extends FPDF {
       $this->Ln();
       $this->Cell(200, 2, "Este documento es una representacion impresa de un CFDI", 0, 0, 'C');
 
+    }
+
+    public function Totales ($data) {
+      $total = $data->header->Total;
+      $this->Ln(10);
+      $this->SetFont('Arial','B',7);
+      $this->Cell(152, 4, "Neto a pagar:", 0, 0, 'R');
+      $this->Cell(39, 4, ($total), 0, 0, 'R');
+      $this->Ln(5);
+      $this->Cell(191, 4, num2letras($total, 0, 0).' '. substr(strrchr($total, "."), 1)."/100 M. N.", 0, 0, 'R');
     }
 }
 

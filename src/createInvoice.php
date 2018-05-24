@@ -13,15 +13,20 @@ use Charles\CFDI\Node\Complemento\Nomina\ReceptorN;
 use Charles\CFDI\Node\Complemento\Nomina\Deduccion\Deduccion;
 use Charles\CFDI\Node\Complemento\Nomina\Percepcion\Percepcion;
 use Charles\CFDI\Node\Complemento\Nomina\Incapacidad\Incapacidad;
+use Charles\CFDI\Node\Complemento\Nomina\OtrosPagos\OtrosPagos;
+use Charles\CFDI\Node\Complemento\Nomina\OtrosPagos\SubsidioAlEmpleo;
+use Charles\CFDI\Node\Complemento\Nomina\OtrosPagos\CompensacionSaldosAFavor;
 use Charles\CFDI\Node\Complemento\Nomina\Deduccion\DetalleDeduccion;
 use Charles\CFDI\Node\Complemento\Nomina\Percepcion\DetallePercepcion;
 
 
-$json = file_get_contents("php://input");
-//$json = file_get_contents('../uploads/ejemplo.json');
+//$json = file_get_contents("php://input");
+$json = file_get_contents('../uploads/ejemplo.json');
 $ruta = "../uploads/";
-/* Ruta del servicio de integracion*/
-$ws = "https://cfdi33-pruebas.buzoncfdi.mx:1443/Timbrado.asmx?wsdl";
+/* Ruta del servicio de integracion Pruebas*/
+//$ws = "https://cfdi33-pruebas.buzoncfdi.mx:1443/Timbrado.asmx?wsdl";
+/* Ruta del servicio de integracion Productivo*/
+$ws = "https://timbracfdi33.mx:1443/Timbrado.asmx?wsdl";
 $response = '';
 
 if($json) {
@@ -58,7 +63,10 @@ if($json) {
     $base64Comprobante = base64_encode($cfdi);
     try {
       $params = array();
-      $params['usuarioIntegrador'] = 'mvpNUXmQfK8=';
+      /** Usuario Integrador para pruebas **/
+      //$params['usuarioIntegrador'] = 'mvpNUXmQfK8=';
+      /** Usuario Integrador para Productivo **/
+      $params['usuarioIntegrador'] = '8E5CyvqyxsyGkK0DbKbA8g==';
       $params['xmlComprobanteBase64'] = $base64Comprobante;
       $params['idComprobante'] = rand(5, 999999);
 
@@ -102,12 +110,15 @@ if($json) {
       $xml = json_decode($json);
       $xml = $xml->comprobante;
       $nomina = $xml->complemento->nomina12;
+      $subsidio = (!empty($nomina->OtrosPagos))? $nomina->OtrosPagos[0]->subsidio->SubsidioCausado : '';
+
       $pdf->AddPage();
       $pdf->SetFont('Arial','B',16);
       $pdf->HeaderPay($xml);
       $pdf->HeaderEmisor($xml->emisor);
       $pdf->HeaderNomina($xml->receptor, $nomina);
-      $pdf->percep_deducc($nomina->percepcion, $nomina->detallePercepcion, $nomina->deduccion, $nomina->detalleDeduccion);
+      $pdf->percep_deducc($nomina->percepcion, $nomina->detallePercepcion, $nomina->deduccion, $nomina->detalleDeduccion, $nomina->header->NumDiasPagados, $subsidio);
+      $pdf->Totales($xml);
       $pdf->FooterNomina($selloCFD, $selloSAT, $cadenaOriginal, $image, $UUID, $noCertificadoSAT, $FechaTimbrado);
       $archivo = "{$ruta}{$empresa}/{$rfc}/{$UUID}.pdf";
       $pdf->Output('F', $archivo);
@@ -151,6 +162,19 @@ function complementoNomina($nominaData) {
   if($nominaData['Incapacidades']){
     foreach ($nominaData['Incapacidades'] as $value) {
       $nomina->add(new Incapacidad($value));
+    }
+  }
+
+  if($nominaData['OtrosPagos']){
+    foreach ($nominaData['OtrosPagos'] as $value) {
+      $oPagos = new OtrosPagos($value['header']);
+      if($value['subsidio']){
+        $oPagos->add(new SubsidioAlEmpleo($value['subsidio']));
+      }
+      if($value['compensacion']){
+        $oPagos->add(new CompensacionSaldosAFavor($value['compensacion']));
+      }
+      $nomina->add($oPagos);
     }
   }
   return $nomina;

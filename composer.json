@@ -9,7 +9,7 @@
         }
     ],
     "require": {
-        "orlandocharles/cfdi": "^0.0.6",
+        "orlandocharles/cfdi": "^0.0.7",
         "symfony/process": "^3.4",
         "nesbot/carbon": "^1.23",
         "cangelis/pdf": "^2.2",
