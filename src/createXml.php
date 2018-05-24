@@ -22,7 +22,7 @@ use Charles\CFDI\Node\Complemento\Nomina\Percepcion\DetallePercepcion;
 
 $json = file_get_contents("php://input");
 //$json = file_get_contents('/Applications/XAMPP/htdocs/payroll_project/uploads/ejemplo.json');
-$ruta = "/Applications/XAMPP/htdocs/payroll_project/uploads/";
+$ruta = "../uploads/";
 
 if($json) {
   $jsonData = json_decode($json, true);
