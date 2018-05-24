@@ -2,26 +2,26 @@
 include "../vendor/autoload.php";
 include "Certificate.php";
 
-/*$cer = $_FILES['certificate']['tmp_name'];
+$cer = $_FILES['certificate']['tmp_name'];
 $cer_name = $_FILES['certificate']['name'];
 $key = $_FILES['key']['tmp_name'];
 $key_name = $_FILES['key']['name'];
 $pass = $_POST['pass'];
 $rfc = $_POST['rfc'];
-$empresa = $_POST['empresa'];*/
-$cer = '../uploads/00001000000307490701_BON150210EN4.cer';
+$empresa = $_POST['empresa'];
+/*$cer = '../uploads/00001000000307490701_BON150210EN4.cer';
 $cer_name = '00001000000307490701_BON150210EN4.cer';
 $key = '../uploads/CSD_Unidas_BON150210EN4_20171201_180455.key';
 $key_name = 'CSD_Unidas_BON150210EN4_20171201_180455.key';
 $pass = 'Bony2015';
 $rfc = 'BON150210EN4';
-$empresa = '1';
+$empresa = '1';*/
 $registro = 0;
 
 /* Ruta del servicio de integracion Pruebas*/
-//$ws = "https://cfdi33-pruebas.buzoncfdi.mx:1443/Timbrado.asmx?wsdl";
+$ws = "https://cfdi33-pruebas.buzoncfdi.mx:1443/Timbrado.asmx?wsdl";
 /* Ruta del servicio de integracion Productivo*/
-$ws = "https://timbracfdi33.mx:1443/Timbrado.asmx?wsdl";
+//$ws = "https://timbracfdi33.mx:1443/Timbrado.asmx?wsdl";
 
 
 $process = new Certificate ();
@@ -51,7 +51,9 @@ if($val > 0){
   try {
     $params = array();
     /*Nombre del usuario integrador asignado, para efecto de pruebas utilizaremos 'mvpNUXmQfK8='*/
-    $params['usuarioIntegrador'] = '8E5CyvqyxsyGkK0DbKbA8g==';
+    $params['usuarioIntegrador'] = 'mvpNUXmQfK8=';
+
+    //$params['usuarioIntegrador'] = '8E5CyvqyxsyGkK0DbKbA8g==';
     /* Rfc emisor a registrar 64*/
     $params['rfcEmisor'] = $rfc;
     /*Archivo .cer en base 64, sello digital del emisor*/
@@ -61,7 +63,6 @@ if($val > 0){
     /*Contraseña, sello digital del emisor*/
     $params['contrasena'] = $pass;
 
-    var_dump($params);
     $client = new SoapClient($ws,$params);
     $respon = $client->__soapCall('RegistraEmisor', array('parameters' => $params));
   }
@@ -70,15 +71,13 @@ if($val > 0){
   }
 
   $numeroExcepcion = $respon->RegistraEmisorResult->anyType[1];
-  echo $descripcionResultado = $respon->RegistraEmisorResult->anyType[2];
+  $descripcionResultado = $respon->RegistraEmisorResult->anyType[2];
 
   if($numeroExcepcion == "0"){
     $registro = 1;
     /*El emisor fue registrado correctamente*/
   }
 }
-var_dump("algoo>>>",$registro);
-var_dump("algoo>>>",$val);
 $response['status'] = ($val > 0 && $registro == 1)? true : false;
 $response['message'] = ($val > 0 && $registro == 1)? "Los archivos para la empresa {$empresa} con rfc {$rfc} se han cargado correctamente!" : "Error al cargar los archivos. ".$descripcionResultado;
 echo json_encode($response);

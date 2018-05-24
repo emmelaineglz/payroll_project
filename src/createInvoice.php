@@ -20,13 +20,13 @@ use Charles\CFDI\Node\Complemento\Nomina\Deduccion\DetalleDeduccion;
 use Charles\CFDI\Node\Complemento\Nomina\Percepcion\DetallePercepcion;
 
 
-//$json = file_get_contents("php://input");
-$json = file_get_contents('../uploads/ejemplo.json');
+$json = file_get_contents("php://input");
+//$json = file_get_contents('../uploads/ejemplo.json');
 $ruta = "../uploads/";
 /* Ruta del servicio de integracion Pruebas*/
-//$ws = "https://cfdi33-pruebas.buzoncfdi.mx:1443/Timbrado.asmx?wsdl";
+$ws = "https://cfdi33-pruebas.buzoncfdi.mx:1443/Timbrado.asmx?wsdl";
 /* Ruta del servicio de integracion Productivo*/
-$ws = "https://timbracfdi33.mx:1443/Timbrado.asmx?wsdl";
+//$ws = "https://timbracfdi33.mx:1443/Timbrado.asmx?wsdl";
 $response = '';
 
 if($json) {
@@ -64,9 +64,9 @@ if($json) {
     try {
       $params = array();
       /** Usuario Integrador para pruebas **/
-      //$params['usuarioIntegrador'] = 'mvpNUXmQfK8=';
+      $params['usuarioIntegrador'] = 'mvpNUXmQfK8=';
       /** Usuario Integrador para Productivo **/
-      $params['usuarioIntegrador'] = '8E5CyvqyxsyGkK0DbKbA8g==';
+      //$params['usuarioIntegrador'] = '8E5CyvqyxsyGkK0DbKbA8g==';
       $params['xmlComprobanteBase64'] = $base64Comprobante;
       $params['idComprobante'] = rand(5, 999999);
 
