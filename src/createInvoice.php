@@ -98,12 +98,23 @@ if($json) {
         	$selloSAT = $tfd['SelloSAT'];
       }
 
+      $xml_READ->registerXPathNamespace('n', $ns['nomina12']);
+      $receptor = $xml_READ->xpath('//n:Receptor');
+      foreach ($receptor as $recep) {
+          $numEmpleado = $recep['NumEmpleado'];
+      }
+
+      $header = $xml_READ->xpath('//n:Nomina');
+      foreach ($header as $head) {
+          $fechaFin = $head['FechaFinalPago'];
+      }
+
       /*Guardamos comprobante timbrado*/
-      file_put_contents("{$ruta}{$empresa}/{$rfc}/{$UUID}.xml", $xmlTimbrado);
+      file_put_contents("{$ruta}{$empresa}/{$rfc}/{$UUID}_{$numEmpleado}_{$fechaFin}.xml", $xmlTimbrado);
       /*Guardamos codigo qr*/
       file_put_contents("{$ruta}{$empresa}/{$rfc}/codigoQr_{$UUID}.jpg", $codigoQr);
       /*Guardamos cadena original del complemento de certificacion del SAT*/
-      file_put_contents("{{$ruta}{$empresa}/{$rfc}/cadenaOriginal_{$UUID}.txt", $cadenaOriginal);
+      file_put_contents("{$ruta}{$empresa}/{$rfc}/cadenaOriginal_{$UUID}.txt", $cadenaOriginal);
       $image = "{$ruta}{$empresa}/{$rfc}/codigoQr_{$UUID}.jpg";
       /* Generamos archivo PDF */
       $pdf = new FacturaPdf();
@@ -120,11 +131,11 @@ if($json) {
       $pdf->percep_deducc($nomina->percepcion, $nomina->detallePercepcion, $nomina->deduccion, $nomina->detalleDeduccion, $nomina->header->NumDiasPagados, $subsidio);
       $pdf->Totales($xml);
       $pdf->FooterNomina($selloCFD, $selloSAT, $cadenaOriginal, $image, $UUID, $noCertificadoSAT, $FechaTimbrado);
-      $archivo = "{$ruta}{$empresa}/{$rfc}/{$UUID}.pdf";
+      $archivo = "{$ruta}{$empresa}/{$rfc}/{$UUID}_{$numEmpleado}_{$fechaFin}.pdf";
       $pdf->Output('F', $archivo);
-      $ruta_xml = "http://159.89.38.133/payroll_project/uploads/{$empresa}/{$rfc}/{$UUID}.xml";
-      $ruta_pdf = "http://159.89.38.133/payroll_project/uploads/{$empresa}/{$rfc}/{$UUID}.pdf";
-      $responseFinal = ["status" => true, "message" => "Timbrado Exitoso", "url_xml" => $ruta_xml, "url_pdf" => $ruta_pdf];
+      $ruta_xml = "http://159.89.38.133/payroll_project/uploads/{$empresa}/{$rfc}/{$UUID}_{$numEmpleado}_{$fechaFin}.xml";
+      $ruta_pdf = "http://159.89.38.133/payroll_project/uploads/{$empresa}/{$rfc}/{$UUID}_{$numEmpleado}_{$fechaFin}.pdf";
+      $responseFinal = ["status" => true, "message" => "Timbrado Exitoso. ". $comprobanteHeader['Serie']. $comprobanteHeader['Folio'], "url_xml" => $ruta_xml, "url_pdf" => $ruta_pdf];
       echo json_encode($responseFinal);
     } else {
       $responseFinal = ["status" => false, "message" => $descripcionResultado];
@@ -159,19 +170,18 @@ function complementoNomina($nominaData) {
     $nomina->add(new DetalleDeduccion($deduccion));
   }
 
-  if($nominaData['Incapacidades']){
+  if(!empty($nominaData['Incapacidades'])){
     foreach ($nominaData['Incapacidades'] as $value) {
       $nomina->add(new Incapacidad($value));
     }
   }
-
-  if($nominaData['OtrosPagos']){
+  if(!empty($nominaData['OtrosPagos'])){
     foreach ($nominaData['OtrosPagos'] as $value) {
       $oPagos = new OtrosPagos($value['header']);
-      if($value['subsidio']){
+      if(!empty($value['subsidio'])){
         $oPagos->add(new SubsidioAlEmpleo($value['subsidio']));
       }
-      if($value['compensacion']){
+      if(!empty($value['compensacion'])){
         $oPagos->add(new CompensacionSaldosAFavor($value['compensacion']));
       }
       $nomina->add($oPagos);

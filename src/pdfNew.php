@@ -279,6 +279,8 @@ class FacturaPdf extends FPDF {
 
       $totalExc = (!empty($subsidio))? ($percepcion->TotalExento + $subsidio) : $percepcion->TotalExento;
       $this->Ln();
+      $this->Ln();
+      $this->Ln();
       $this->SetFont('Arial','B',7);
       $this->SetTextColor(5, 5, 5);
       $this->Cell(68, 4, "Total de percepciones", 0, 0, 'C');
@@ -417,7 +419,7 @@ class FacturaPdf extends FPDF {
       $this->Ln(10);
       $this->SetFont('Arial','B',7);
       $this->Cell(152, 4, "Neto a pagar:", 0, 0, 'R');
-      $this->Cell(39, 4, ($total), 0, 0, 'R');
+      $this->Cell(39, 4, number_format($total, 2), 0, 0, 'R');
       $this->Ln(5);
       $this->Cell(191, 4, num2letras($total, 0, 0).' '. substr(strrchr($total, "."), 1)."/100 M. N.", 0, 0, 'R');
     }

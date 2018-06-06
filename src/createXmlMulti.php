@@ -19,14 +19,11 @@ use Charles\CFDI\Node\Complemento\Nomina\OtrosPagos\CompensacionSaldosAFavor;
 use Charles\CFDI\Node\Complemento\Nomina\Deduccion\DetalleDeduccion;
 use Charles\CFDI\Node\Complemento\Nomina\Percepcion\DetallePercepcion;
 
+
 $json = file_get_contents("php://input");
 //$json = file_get_contents('/Applications/XAMPP/htdocs/payroll_project/uploads/ejemploMulti.json');
 $ruta = "../uploads/";
 
-/* Ruta del servicio de integracion Pruebas*/
-$ws = "https://cfdi33-pruebas.buzoncfdi.mx:1443/Timbrado.asmx?wsdl";
-/* Ruta del servicio de integracion Productivo*/
-//$ws = "https://timbracfdi33.mx:1443/Timbrado.asmx?wsdl";
 
 if($json){
   $jsonData = json_decode($json, true);
@@ -57,64 +54,11 @@ if($json){
         $nomina = complementoNomina($compobanteComplemento['nomina12']);
         $cfdi->add($nomina);
       }
-      /* El servicio recibe el comprobante (xml) codificado en Base64, el rfc del emisor deberá ser 'AAA010101AAA' para efecto de pruebas*/
-      $base64Comprobante = base64_encode($cfdi);
-      try {
-        $params = array();
-        /** Usuario Integrador para pruebas **/
-        $params['usuarioIntegrador'] = 'mvpNUXmQfK8=';
-        /** Usuario Integrador para Productivo **/
-        //$params['usuarioIntegrador'] = '8E5CyvqyxsyGkK0DbKbA8g==';
-        $params['xmlComprobanteBase64'] = $base64Comprobante;
-        $params['idComprobante'] = rand(5, 999999);
+      $num = rand(5, 999999);
+      $nameXml = "{$rfc}_{$num}";
 
-        $client = new SoapClient($ws,$params);
-        $response = $client->__soapCall('TimbraCFDI', array('parameters' => $params));
-      } catch (SoapFault $fault){
-        echo "SOAPFault: ".$fault->faultcode."-".$fault->faultstring."\n";
-      }
-
-      $tipoExcepcion = $response->TimbraCFDIResult->anyType[0];
-      $numeroExcepcion = $response->TimbraCFDIResult->anyType[1];
-      $descripcionResultado = $response->TimbraCFDIResult->anyType[2];
-      $xmlTimbrado = $response->TimbraCFDIResult->anyType[3];
-      $codigoQr = $response->TimbraCFDIResult->anyType[4];
-      $cadenaOriginal = $response->TimbraCFDIResult->anyType[5];
-
-      if($xmlTimbrado != ''){
-
-        $xml_READ = simplexml_load_string($xmlTimbrado);
-        $ns = $xml_READ->getNamespaces(true);
-        $xml_READ->registerXPathNamespace('t', $ns['tfd']);
-        $atributos = $xml_READ->xpath('//t:TimbreFiscalDigital');
-        foreach ($atributos as $tfd) {
-            $selloCFD = $tfd['SelloCFD'];
-          	$FechaTimbrado = $tfd['FechaTimbrado'];
-          	$UUID = $tfd['UUID'];
-          	$noCertificadoSAT = $tfd['NoCertificadoSAT'];
-          	$versionSAT = $tfd['Version'];
-          	$selloSAT = $tfd['SelloSAT'];
-        }
-
-        $xml_READ->registerXPathNamespace('n', $ns['nomina12']);
-        $receptor = $xml_READ->xpath('//n:Receptor');
-        foreach ($receptor as $recep) {
-            $numEmpleado = $recep['NumEmpleado'];
-        }
-
-        $header = $xml_READ->xpath('//n:Nomina');
-        foreach ($header as $head) {
-            $fechaFin = $head['FechaFinalPago'];
-        }
-
-        /*Guardamos comprobante timbrado*/
-        file_put_contents("{$ruta}{$empresa}/{$rfc}/{$UUID}_{$numEmpleado}_{$fechaFin}.xml", $xmlTimbrado);
-        /*Guardamos codigo qr*/
-        file_put_contents("{$ruta}{$empresa}/{$rfc}/codigoQr_{$UUID}.jpg", $codigoQr);
-        /*Guardamos cadena original del complemento de certificacion del SAT*/
-        file_put_contents("{$ruta}{$empresa}/{$rfc}/cadenaOriginal_{$UUID}.txt", $cadenaOriginal);
-        $image = "{$ruta}{$empresa}/{$rfc}/codigoQr_{$UUID}.jpg";
-
+      if($cfdi){
+        file_put_contents("{$ruta}{$empresa}/{$rfc}/{$nameXml}.xml", $cfdi);
         /* Generamos archivo PDF */
         $pdf = new FacturaPdf();
         $xml = json_decode(json_encode($value));
@@ -129,15 +73,15 @@ if($json){
         $pdf->HeaderNomina($xml->receptor, $nomina);
         $pdf->percep_deducc($nomina->percepcion, $nomina->detallePercepcion, $nomina->deduccion, $nomina->detalleDeduccion, $nomina->header->NumDiasPagados, $subsidio);
         $pdf->Totales($xml);
-        $pdf->FooterNomina($selloCFD, $selloSAT, $cadenaOriginal, $image, $UUID, $noCertificadoSAT, $FechaTimbrado);
-        $archivo = "{$ruta}{$empresa}/{$rfc}/{$UUID}_{$numEmpleado}_{$fechaFin}.pdf";
+        //$pdf->FooterNomina($selloCFD, $selloSAT, $cadenaOriginal, $image, $UUID, $noCertificadoSAT, $FechaTimbrado);
+        $archivo = "{$ruta}{$empresa}//{$rfc}/{$nameXml}.pdf";
         $pdf->Output('F', $archivo);
-        $ruta_xml = "http://159.89.38.133/payroll_project/uploads/{$empresa}/{$rfc}/{$UUID}_{$numEmpleado}_{$fechaFin}.xml";
-        $ruta_pdf = "http://159.89.38.133/payroll_project/uploads/{$empresa}/{$rfc}/{$UUID}_{$numEmpleado}_{$fechaFin}.pdf";
-        $responseFinal = ["status" => true, "message" => "Timbrado Exitoso. ". $comprobanteHeader['Serie']. $comprobanteHeader['Folio'], "url_xml" => $ruta_xml, "url_pdf" => $ruta_pdf];
+        $ruta_xml = "http://159.89.38.133/payroll_project/uploads/{$empresa}/{$rfc}/{$nameXml}.xml";
+        $ruta_pdf = "http://159.89.38.133/payroll_project/uploads/{$empresa}/{$rfc}/{$nameXml}.pdf";
+        $responseFinal = ["status" => true, "message" => "Timbrado Exitoso", "url_xml" => $ruta_xml, "url_pdf" => $ruta_pdf];
         echo json_encode($responseFinal);
       } else {
-        $responseFinal = ["status" => false, "message" => $descripcionResultado ." ". $comprobanteHeader['Serie']. $comprobanteHeader['Folio']];
+        $responseFinal = ["status" => false, "message" => 'Fallo la generacion del XML'];
         echo json_encode($responseFinal);
       }
     } else {

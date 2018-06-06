@@ -1,27 +1,27 @@
 {
-   "empresa":"1",
+   "empresa":"2",
    "comprobante":{
       "header":{
-         "Serie":"A",
-         "Folio":"196",
-         "Fecha":"2018-05-24T00:05:50",
+         "Serie":"B",
+         "Folio":"27",
+         "Fecha":"2018-05-24T23:50:57",
          "FormaPago":"99",
-         "SubTotal":"2624.66",
-         "Descuento":"193.25",
+         "SubTotal":"6,886.09",
+         "Descuento":"870.29",
          "Moneda":"MXN",
-         "Total":"2431.41",
+         "Total":"6,015.80",
          "TipoDeComprobante":"N",
          "MetodoPago":"PUE",
          "LugarExpedicion":"06700"
       },
-      "emisor":{  
+      "emisor":{
          "Rfc":"BON150210EN4",
          "Nombre":"BON&EFFICACE SA DE CV",
          "RegimenFiscal":"601"
       },
       "receptor":{
-         "Rfc":"BEAY951125GM7",
-         "Nombre":"BERMUDEZ AGUILAR YOSHUA",
+         "Rfc":"GOLA890119C52",
+         "Nombre":"GONZALEZ LIMA ALIX VIRGINIA",
          "UsoCFDI":"P01"
       },
       "conceptos":[
@@ -30,9 +30,9 @@
             "Cantidad":"1",
             "ClaveUnidad":"ACT",
             "Descripcion":"Pago de nómina",
-            "ValorUnitario":"2624.66",
-            "Importe":"2624.66",
-            "Descuento":"193.25"
+            "ValorUnitario":"6,886.09",
+            "Importe":"6,886.09",
+            "Descuento":"870.29"
          }
       ],
       "complemento":{
@@ -41,49 +41,61 @@
                "xmlns:nomina12":"http:\/\/www.sat.gob.mx\/nomina12",
                "Version":"1.2",
                "TipoNomina":"O",
-               "FechaPago":"2018-05-17",
-               "FechaInicialPago":"2018-04-30",
-               "FechaFinalPago":"2018-05-13",
-               "NumDiasPagados":"14",
-               "TotalPercepciones":"2475",
-               "TotalDeducciones":"193.25",
-               "xsi:schemaLocation":"http:\/\/www.sat.gob.mx\/nomina12 http:\/\/www.sat.gob.mx\/informacion_fiscal\/factura_electronica\/Documents\/Complementoscfdi\/nomina12.xsd",
-               "TotalOtrosPagos":"149.66"
+               "FechaPago":"2018-05-14",
+               "FechaInicialPago":"2018-05-01",
+               "FechaFinalPago":"2018-05-15",
+               "NumDiasPagados":"15",
+               "TotalPercepciones":"6,886.09",
+               "TotalDeducciones":"870.29",
+               "xsi:schemaLocation":"http:\/\/www.sat.gob.mx\/nomina12 http:\/\/www.sat.gob.mx\/informacion_fiscal\/factura_electronica\/Documents\/Complementoscfdi\/nomina12.xsd"
             },
             "emisor":{
                "RegistroPatronal":"Y6064672105",
                "RfcPatronOrigen":"BON150210EN4"
             },
             "receptor":{
-               "Curp":"BEAY951125HDFRGS02",
-               "FechaInicioRelLaboral":"2018-02-06",
-               "Antigüedad":"P12W",
+               "Curp":"GOLA890119HOCNML01",
+               "FechaInicioRelLaboral":"2015-09-01",
+               "Antigüedad":"P139W",
                "TipoContrato":"02",
                "TipoJornada":"01",
                "TipoRegimen":"02",
-               "NumEmpleado":"10062",
-               "Departamento":"GENERAL                                                                                             ",
-               "PeriodicidadPago":"03",
+               "NumEmpleado":"8405",
+               "Departamento":"SOPORTE OPERACIÓN DE SUCURSALES HELP DESK",
+               "PeriodicidadPago":"04",
                "Sindicalizado":"No",
-               "SalarioBaseCotApor":"183.83",
-               "CuentaBancaria":"1001218139",
-               "Banco":"072",
+               "SalarioBaseCotApor":"441.81",
+               "Banco":"127",
                "ClaveEntFed":"DIF",
-               "NumSeguridadSocial":"07129501925",
+               "NumSeguridadSocial":"23058943350",
                "RiesgoPuesto":"1",
-               "SalarioDiarioIntegrado":"150"
+               "SalarioDiarioIntegrado":"421.60"
             },
             "percepcion":{
-               "TotalSueldos":"2475",
-               "TotalGravado":"2100",
-               "TotalExento":"375"
+               "TotalSueldos":"6,886.09",
+               "TotalGravado":"6,272.29",
+               "TotalExento":"613.80"
             },
             "detallePercepcion":[
                {
                   "TipoPercepcion":"001",
                   "Clave":"P001",
                   "Concepto":"SUELDOS, SALARIOS  RAYAS Y JORNALES",
-                  "ImporteGravado":"2100",
+                  "ImporteGravado":"6,323.93",
+                  "ImporteExento":"0.00"
+               },
+               {
+                  "TipoPercepcion":"001",
+                  "Clave":"P020",
+                  "Concepto":"AUSENTISMO (FALTAS)",
+                  "ImporteGravado":"491.83",
+                  "ImporteExento":"0.00"
+               },
+               {
+                  "TipoPercepcion":"001",
+                  "Clave":"P009",
+                  "Concepto":"DIA FESTIVO TRABAJADO",
+                  "ImporteGravado":"440.19",
                   "ImporteExento":"0.00"
                },
                {
@@ -91,51 +103,38 @@
                   "Clave":"P009",
                   "Concepto":"DIA FESTIVO TRABAJADO",
                   "ImporteGravado":"0.00",
-                  "ImporteExento":"300"
+                  "ImporteExento":"403.00"
                },
                {
                   "TipoPercepcion":"020",
                   "Clave":"P022",
                   "Concepto":"PRIMA DOMINICAL",
                   "ImporteGravado":"0.00",
-                  "ImporteExento":"75"
+                  "ImporteExento":"210.80"
                }
             ],
             "deduccion":{
-               "TotalOtrasDeducciones":"61.12",
-               "TotalImpuestosRetenidos":"132.13"
+               "TotalOtrasDeducciones":"158.11",
+               "TotalImpuestosRetenidos":"712.18"
             },
             "detalleDeduccion":[
                {
                   "TipoDeduccion":"002",
                   "Clave":"D001",
                   "Concepto":"ISR",
-                  "Importe":"132.13"
+                  "Importe":"712.18"
                },
                {
                   "TipoDeduccion":"001",
                   "Clave":"D003",
                   "Concepto":"IMSS",
-                  "Importe":"32.17"
+                  "Importe":"88.52"
                },
                {
                   "TipoDeduccion":"003",
                   "Clave":"D004",
                   "Concepto":"APORTACIONES A RETIRO, CESANTIA EN EDAD AVANZADA Y VEJEZ",
-                  "Importe":"28.95"
-               }
-            ],
-            "OtrosPagos":[
-               {
-                  "header":{
-                     "TipoOtroPago":"002",
-                     "Clave":"P600",
-                     "Concepto":"SUBSIDIO AL EMPLEO",
-                     "Importe":"149.66"
-                  },
-                  "subsidio":{
-                     "SubsidioCausado":"149.66"
-                  }
+                  "Importe":"69.59"
                }
             ]
          }

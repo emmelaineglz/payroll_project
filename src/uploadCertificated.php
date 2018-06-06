@@ -9,13 +9,13 @@ $key_name = $_FILES['key']['name'];
 $pass = $_POST['pass'];
 $rfc = $_POST['rfc'];
 $empresa = $_POST['empresa'];
-/*$cer = '../uploads/00001000000307490701_BON150210EN4.cer';
-$cer_name = '00001000000307490701_BON150210EN4.cer';
-$key = '../uploads/CSD_Unidas_BON150210EN4_20171201_180455.key';
-$key_name = 'CSD_Unidas_BON150210EN4_20171201_180455.key';
-$pass = 'Bony2015';
-$rfc = 'BON150210EN4';
-$empresa = '1';*/
+/*$cer = '../uploads/00001000000401961599_MIN120828HI0.cer';
+$cer_name = '00001000000401961599_MIN120828HI0.cer';
+$key = '../uploads/MIN120828HI0_MIN120828HI0.key';
+$key_name = 'MIN120828HI0_MIN120828HI0.key';
+$pass = 'Merc2017';
+$rfc = 'MIN120828HI0';
+$empresa = '6';*/
 $registro = 0;
 
 /* Ruta del servicio de integracion Pruebas*/
@@ -52,7 +52,6 @@ if($val > 0){
     $params = array();
     /*Nombre del usuario integrador asignado, para efecto de pruebas utilizaremos 'mvpNUXmQfK8='*/
     $params['usuarioIntegrador'] = 'mvpNUXmQfK8=';
-
     //$params['usuarioIntegrador'] = '8E5CyvqyxsyGkK0DbKbA8g==';
     /* Rfc emisor a registrar 64*/
     $params['rfcEmisor'] = $rfc;

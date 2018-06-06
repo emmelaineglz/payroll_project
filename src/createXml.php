@@ -70,6 +70,7 @@ if($json) {
       $pdf->HeaderEmisor($xml->emisor);
       $pdf->HeaderNomina($xml->receptor, $nomina);
       $pdf->percep_deducc($nomina->percepcion, $nomina->detallePercepcion, $nomina->deduccion, $nomina->detalleDeduccion, $nomina->header->NumDiasPagados, $subsidio);
+      $pdf->Totales($xml);
       //$pdf->FooterNomina($selloCFD, $selloSAT, $cadenaOriginal, $image, $UUID, $noCertificadoSAT, $FechaTimbrado);
       $archivo = "{$ruta}{$empresa}//{$rfc}/{$nameXml}.pdf";
       $pdf->Output('F', $archivo);
