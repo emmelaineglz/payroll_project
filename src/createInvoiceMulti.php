@@ -19,8 +19,8 @@ use Charles\CFDI\Node\Complemento\Nomina\OtrosPagos\CompensacionSaldosAFavor;
 use Charles\CFDI\Node\Complemento\Nomina\Deduccion\DetalleDeduccion;
 use Charles\CFDI\Node\Complemento\Nomina\Percepcion\DetallePercepcion;
 
-$json = file_get_contents("php://input");
-//$json = file_get_contents('/Applications/XAMPP/htdocs/payroll_project/uploads/ejemploMulti.json');
+//$json = file_get_contents("php://input");
+$json = file_get_contents('/Applications/XAMPP/htdocs/payroll_project/uploads/ejemploMulti.json');
 $ruta = "../uploads/";
 
 /* Ruta del servicio de integracion Pruebas*/
@@ -125,7 +125,7 @@ if($json){
         $pdf->AddPage();
         $pdf->SetFont('Arial','B',16);
         $pdf->HeaderPay($xml);
-        $pdf->HeaderEmisor($xml->emisor);
+        $pdf->HeaderBon();
         $pdf->HeaderNomina($xml->receptor, $nomina);
         $pdf->percep_deducc($nomina->percepcion, $nomina->detallePercepcion, $nomina->deduccion, $nomina->detalleDeduccion, $nomina->header->NumDiasPagados, $subsidio);
         $pdf->Totales($xml);
@@ -135,10 +135,10 @@ if($json){
         $ruta_xml = "http://159.89.38.133/payroll_project/uploads/{$empresa}/{$rfc}/{$UUID}_{$numEmpleado}_{$fechaFin}.xml";
         $ruta_pdf = "http://159.89.38.133/payroll_project/uploads/{$empresa}/{$rfc}/{$UUID}_{$numEmpleado}_{$fechaFin}.pdf";
         $responseFinal = ["status" => true, "message" => "Timbrado Exitoso. ". $comprobanteHeader['Serie']. $comprobanteHeader['Folio'], "url_xml" => $ruta_xml, "url_pdf" => $ruta_pdf];
-        echo json_encode($responseFinal);
+        echo json_encode($responseFinal)."/n";
       } else {
         $responseFinal = ["status" => false, "message" => $descripcionResultado ." ". $comprobanteHeader['Serie']. $comprobanteHeader['Folio']];
-        echo json_encode($responseFinal);
+        echo json_encode($responseFinal)."/n";
       }
     } else {
       $responseFinal = ["status" => false, "message" => 'La estructura del Json, es incorrecta'];

@@ -3,3 +3,4 @@ cfdi/
 composer.lock
 uploads/*
 src/Timbrado/
+readExcel/ejemplos/
