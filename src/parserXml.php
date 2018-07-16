@@ -1,5 +1,6 @@
 <?php
 
+use Endroid\QrCode\QrCode;
 
 //$json = file_get_contents("php://input");
 /*$json = file_get_contents('../uploads/ejemplo_toPDF.json');
@@ -68,4 +69,23 @@ function registerNamespaces($xml) {
 	$xml->registerXPathNamespace('c', $ns['cfdi']);
 	$xml->registerXPathNamespace('n', $ns['nomina12']);
 	$xml->registerXPathNamespace('t', $ns['tfd']);
+}
+
+function getCadenaOriginalCertificacion($timbreFiscal) {
+	$version = $timbreFiscal['Version'];
+	$UUID = $timbreFiscal['UUID'];
+	$FechaTimbrado = $timbreFiscal['FechaTimbrado'];
+	$selloCFD = $timbreFiscal['SelloCFD'];
+	$noCertificadoSAT = $timbreFiscal['NoCertificadoSAT'];
+	$cadena = "||{$version}|{$UUID}|{$FechaTimbrado}|{$selloCFD}|{$noCertificadoSAT}||";
+
+	return $cadena;
+}
+
+function getQRCode($rfcEmisor, $rfcReceptor, $total, $UUID, $saveInPath) {
+	$cadena = "?re={$rfcEmisor}&rr={$rfcReceptor}&tt={$total}&id={$UUID}";
+	$qrCode = new QrCode($cadena);
+	$qrCode->writeFile($saveInPath.'/uploads/gQR.png');
+	return $saveInPath.'/uploads/gQR.png';
+
 }

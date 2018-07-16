@@ -13,7 +13,8 @@
         "symfony/process": "^3.4",
         "nesbot/carbon": "^1.23",
         "cangelis/pdf": "^2.2",
-        "setasign/fpdf": "1.8.1"
+        "setasign/fpdf": "1.8.1",
+        "endroid/qr-code": "2.x-dev"
     },
     "repositories": [
        {
