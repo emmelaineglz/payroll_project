@@ -1,90 +1,28 @@
 {
+   "empresa":"9999",
    "comprobante":{
-      "complemento":{
-         "nomina12":{
-            "OtrosPagos":[
-               {
-                  "header":{
-                     "TipoOtroPago":"002",
-                     "Clave":"D600",
-                     "Concepto":"SUBSIDIO AL EMPLEO.",
-                     "Importe":"125.10"
-                  },
-                  "subsidio":{
-                     "SubsidioCausado":"125.10"
-                  }
-               }
-            ],
-            "deduccion":{
-               "TotalImpuestosRetenidos":"258.13",
-               "TotalOtrasDeducciones":"86.94"
-            },
-            "detalleDeduccion":[
-               {
-                  "TipoDeduccion":"002",
-                  "Clave":"D001",
-                  "Concepto":"ISR",
-                  "Importe":"258.13"
-               },
-               {
-                  "TipoDeduccion":"001",
-                  "Clave":"D003",
-                  "Concepto":"CUOTA IMSS",
-                  "Importe":"45.81"
-               },
-               {
-                  "TipoDeduccion":"003",
-                  "Clave":"D004",
-                  "Concepto":"CESANTÍA Y VEJEZ",
-                  "Importe":"41.13"
-               }
-            ],
-            "detallePercepcion":[
-               {
-                  "TipoPercepcion":"001",
-                  "Clave":"P001",
-                  "Concepto":"SUELDOS",
-                  "ImporteGravado":"3488.35",
-                  "ImporteExento":"0.00"
-               }
-            ],
-            "emisor":{
-               "RegistroPatronal":"Y6064672105"
-            },
-            "header":{
-               "FechaFinalPago":"2018-05-31",
-               "FechaInicialPago":"2018-05-16",
-               "FechaPago":"2018-05-31",
-               "NumDiasPagados":"15",
-               "TipoNomina":"O",
-               "TotalDeducciones":"345.07",
-               "TotalPercepciones":"3488.35",
-               "Version":"1.2"
-            },
-            "percepcion":{
-               "TotalExento":"0.00",
-               "TotalGravado":"0.00",
-               "TotalSueldos":"3488.35"
-            },
-            "receptor":{
-               "Antigüedad":"P212W",
-               "Banco":"127",
-               "ClaveEntFed":"DIF",
-               "CuentaBancaria":"01720107116667",
-               "Curp":"CULN891010MDFRPM08",
-               "Departamento":"STAFF",
-               "FechaInicioRelLaboral":"2009-04-20",
-               "NumEmpleado":"8289",
-               "NumSeguridadSocial":"30078907547",
-               "PeriodicidadPago":"04",
-               "RiesgoPuesto":"1",
-               "SalarioBaseCotApor":"243.71",
-               "SalarioDiarioIntegrado":"232.56",
-               "TipoContrato":"2",
-               "TipoJornada":"01",
-               "TipoRegimen":"02"
-            }
-         }
+      "header":{
+         "Serie":"A",
+         "Folio":"3039",
+         "Fecha":"2018-07-15T15:50:57",
+         "FormaPago":"99",
+         "SubTotal":"2430107.00",
+         "Descuento":"861606.47",
+         "Moneda":"MXN",
+         "Total":"1568500.53",
+         "TipoDeComprobante":"N",
+         "MetodoPago":"PUE",
+         "LugarExpedicion":"06700"
+      },
+      "emisor":{
+         "Rfc":"AAA010101AAA",
+         "Nombre":"FAPRICO S. DE R.L. DE C.V.",
+         "RegimenFiscal":"601"
+      },
+      "receptor":{
+         "Rfc":"TOCE650111NH3",
+         "Nombre":"TORRES CANO EDUARDO JOSE",
+         "UsoCFDI":"P01"
       },
       "conceptos":[
          {
@@ -92,34 +30,134 @@
             "Cantidad":"1",
             "ClaveUnidad":"ACT",
             "Descripcion":"Pago de nómina",
-            "ValorUnitario":"3613.45",
-            "Importe":"3613.45",
-            "Descuento":"345.07"
+            "ValorUnitario":"2430107.00",
+            "Importe":"2430107.00",
+            "Descuento":"861606.47"
          }
       ],
-      "emisor":{
-         "Nombre":"SALINAS",
-         "RegimenFiscal":"601",
-         "Rfc":"AAA010101AAA"
-      },
-      "header":{
-         "Descuento":"345.07",
-         "Fecha":"2018-06-29T16:24:45",
-         "Folio":"921",
-         "FormaPago":"99",
-         "LugarExpedicion":"06700",
-         "MetodoPago":"PUE",
-         "Moneda":"MXN",
-         "Serie":"A",
-         "SubTotal":"3613.45",
-         "TipoDeComprobante":"N",
-         "Total":"3268.38"
-      },
-      "receptor":{
-         "Nombre":"CRUZ LOPEZ NOEMI",
-         "Rfc":"CULN891010EI9",
-         "UsoCFDI":"G01"
+      "complemento":{
+         "nomina12":{
+            "header":{
+               "xmlns:nomina12":"http:\/\/www.sat.gob.mx\/nomina12",
+               "Version":"1.2",
+               "TipoNomina":"O",
+               "FechaPago":"2018-06-08",
+               "FechaInicialPago":"2018-06-01",
+               "FechaFinalPago":"2018-06-30",
+               "NumDiasPagados":"30",
+               "TotalPercepciones":"2430107.00",
+               "TotalDeducciones":"861606.47",
+               "xsi:schemaLocation":"http:\/\/www.sat.gob.mx\/nomina12 http:\/\/www.sat.gob.mx\/informacion_fiscal\/factura_electronica\/Documents\/Complementoscfdi\/nomina12.xsd"
+            },
+            "emisor":{
+               "RegistroPatronal":"Y5455140102",
+               "RfcPatronOrigen":"FAP141125CR3"
+            },
+            "receptor":{
+               "Curp":"TOCE650111HDFRND06",
+               "FechaInicioRelLaboral":"2014-04-02",
+               "Antigüedad":"P217W",
+               "TipoContrato":"02",
+               "TipoJornada":"01",
+               "TipoRegimen":"02",
+               "NumEmpleado":"1101001",
+               "Departamento":"UNICO",
+               "PeriodicidadPago":"05",
+               "Sindicalizado":"No",
+               "SalarioBaseCotApor":"15386.67",
+               "ClaveEntFed":"DIF",
+               "NumSeguridadSocial":"64846515001",
+               "RiesgoPuesto":"2",
+               "SalarioDiarioIntegrado":"2015.00",
+               "Banco":"002"
+            },
+            "percepcion":{
+               "TotalSueldos":"2430107.00",
+               "TotalGravado":"2424471.45",
+               "TotalExento":"5635.55"
+            },
+            "detallePercepcion":[
+               {
+                  "TipoPercepcion":"001",
+                  "Clave":"P001",
+                  "Concepto":"SUELDOS, SALARIOS  RAYAS Y JORNALES",
+                  "ImporteGravado":"461600.00",
+                  "ImporteExento":"0.00"
+               },
+               {
+                  "TipoPercepcion":"001",
+                  "Clave":"P038",
+                  "Concepto":"BONO",
+                  "ImporteGravado":"1939007.00",
+                  "ImporteExento":"0.00"
+               },
+               {
+                  "TipoPercepcion":"029",
+                  "Clave":"P029",
+                  "Concepto":"VALES DESPENSA",
+                  "ImporteGravado":"0.00",
+                  "ImporteExento":"2450.24"
+               },
+               {
+                  "TipoPercepcion":"029",
+                  "Clave":"P029",
+                  "Concepto":"VALES DESPENSA",
+                  "ImporteGravado":"5049.76",
+                  "ImporteExento":"0.00"
+               },
+               {
+                  "TipoPercepcion":"005",
+                  "Clave":"P005",
+                  "Concepto":"FONDO DE AHORRO EMPRESA",
+                  "ImporteGravado":"0.00",
+                  "ImporteExento":"3185.31"
+               },
+               {
+                  "TipoPercepcion":"005",
+                  "Clave":"P005",
+                  "Concepto":"FONDO DE AHORRO EMPRESA",
+                  "ImporteGravado":"7814.69",
+                  "ImporteExento":"0.00"
+               },
+               {
+                  "TipoPercepcion":"038",
+                  "Clave":"P038",
+                  "Concepto":"PREMIO DE PRODUCTIVIDAD",
+                  "ImporteGravado":"11000.00",
+                  "ImporteExento":"0.00"
+               }
+            ],
+            "deduccion":{
+               "TotalOtrasDeducciones":"23648.47",
+               "TotalImpuestosRetenidos":"837958.00"
+            },
+            "detalleDeduccion":[
+               {
+                  "TipoDeduccion":"002",
+                  "Clave":"D001",
+                  "Concepto":"ISR",
+                  "Importe":"837958.00"
+               },
+               {
+                  "TipoDeduccion":"001",
+                  "Clave":"D003",
+                  "Concepto":"IMSS",
+                  "Importe":"968.41"
+               },
+               {
+                  "TipoDeduccion":"003",
+                  "Clave":"D004",
+                  "Concepto":"APORTACIONES A RETIRO, CESANTIA EN EDAD AVANZADA Y VEJEZ",
+                  "Importe":"680.06"
+               },
+               {
+                  "TipoDeduccion":"004",
+                  "Clave":"D004",
+                  "Concepto":"FONDO DE AHORRO",
+                  "Importe":"22000.00"
+               }
+            ]
+         }
       }
-   },
-   "empresa":"9999"
+   }
 }
