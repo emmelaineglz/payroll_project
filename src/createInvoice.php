@@ -87,6 +87,12 @@ if($json) {
 
       $xml_READ = simplexml_load_string($xmlTimbrado);
       $ns = $xml_READ->getNamespaces(true);
+      $xml_READ->registerXPathNamespace('c', $ns['cfdi']);
+      $comprobante = $xml_READ->xpath('//c:Comprobante');
+      foreach ($comprobante as $comp) {
+          $FechaEmision = $comp['Fecha'];
+      }
+
       $xml_READ->registerXPathNamespace('t', $ns['tfd']);
       $atributos = $xml_READ->xpath('//t:TimbreFiscalDigital');
       foreach ($atributos as $tfd) {
@@ -127,11 +133,12 @@ if($json) {
         "serie" => $serie,
         "folio" => $folio,
         "cadenaOriginal" => (string)$cadenaOriginal,
-        "uuid" => $UUID,
+        "uuid" => (string)$UUID,
         "fechaTimbre" => $FechaTimbrado,
         "selloSAT" => (string)$selloSAT,
         "selloCFD" => (string)$selloCFD,
-        "noCertif" = $noCertificadoSAT
+        "noCertif" => $noCertificadoSAT,
+        "fechaEmision" => $FechaEmision
       ];
       echo json_encode($responseFinal);
     } else {
