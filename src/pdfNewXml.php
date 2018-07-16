@@ -7,7 +7,7 @@ use DOMDocument as DOMDocument;
 use MarkWilson\XmlToJson\XmlToJsonConverter;
 use GreenCape\Xml\Converter;
 
-class FacturaPdf extends FPDF {
+class FacturaPdfXml extends FPDF {
 
 
   public function reduceText($text, $maxWidth) {
@@ -15,7 +15,6 @@ class FacturaPdf extends FPDF {
   }
 
   public function HeaderPay($data){
-      $nomina = $data->complemento->nomina12;
       $this->SetFont('Arial','B',9);
       $this->SetFillColor(191, 191, 192);
 			//$this->Cell(190, 5, "Comprobante Fiscal Digital por Internet", 0, 0, 'R');
@@ -31,8 +30,8 @@ class FacturaPdf extends FPDF {
       $this->Ln();
       $this->Cell(60, 4, "", 0, 0, 'L');
       $this->Cell(60, 4, "", 0, 0, 'L');
-      $this->Cell(40, 4, "12345", 0, 0, 'L');
-      $this->Cell(30, 4, $data->header->FormaPago, 0, 0, 'L');
+      $this->Cell(40, 4, $data['Serie']."-".$data['Folio'], 0, 0, 'L');
+      $this->Cell(30, 4, $data['FormaPago'], 0, 0, 'L');
       $this->Ln();
       $this->Cell(60, 4, "", 0, 0, 'L');
       $this->Cell(60, 4, "", 0, 0, 'L');
@@ -41,8 +40,8 @@ class FacturaPdf extends FPDF {
       $this->Ln();
       $this->Cell(60, 4, "", 0, 0, 'L');
       $this->Cell(60, 4, "", 0, 0, 'L');
-      $this->Cell(40, 4, $data->header->Fecha, 0, 0, 'L');
-      $this->Cell(40, 4, $data->header->LugarExpedicion, 0, 0, 'L');
+      $this->Cell(40, 4, $data['Fecha'], 0, 0, 'L');
+      $this->Cell(40, 4, $data['LugarExpedicion'], 0, 0, 'L');
     }
 
     public function HeaderBon() {
@@ -127,7 +126,7 @@ class FacturaPdf extends FPDF {
       $this->Cell(40, 4, "Mexico", 0, 0, 'L');
 		}
 
-    public function HeaderNomina ($receptor, $data) {
+    public function HeaderNomina ($receptor, $headerNomina, $receptorNomina) {
       $this->SetDrawColor(26, 84, 251);
       $this->SetLineWidth(0.5);
       $this->Line(10, 60, 200, 60);
@@ -143,47 +142,47 @@ class FacturaPdf extends FPDF {
       $this->Ln();
       $this->SetFont('Arial','B',7);
       $this->cell(33, 4, "Nombre", 0, 0, 'L');
-      $this->Cell(50, 4, $receptor->Nombre, 0, 0, 'L');
+      $this->Cell(50, 4, $receptor['Nombre'], 0, 0, 'L');
       $this->Ln();
       $this->Cell(33, 4, "No Empleado", 0, 0, 'L');
-      $this->Cell(36, 4, $data->receptor->NumEmpleado, 0, 0, 'L');
+      $this->Cell(36, 4, $receptorNomina['NumEmpleado'], 0, 0, 'L');
       $this->Cell(23, 4, "IMSS", 0, 0, 'L');
-      $this->Cell(43, 4, $data->receptor->NumSeguridadSocial, 0, 0, 'L');
+      $this->Cell(43, 4, $receptorNomina['NumSeguridadSocial'], 0, 0, 'L');
       $this->Cell(30, 4, "Dias", 0, 0, 'L');
-      $this->Cell(25, 4, $data->header->NumDiasPagados, 0, 0, 'R');
+      $this->Cell(25, 4, $headerNomina['NumDiasPagados'], 0, 0, 'R');
       $this->Ln();
       $this->Cell(33, 4, "Riesgo Puesto", 0, 0, 'L');
-      $this->Cell(36, 4, $data->receptor->RiesgoPuesto, 0, 0, 'L');
+      $this->Cell(36, 4, $receptorNomina['RiesgoPuesto'], 0, 0, 'L');
       $this->Cell(23, 4, "Jornada", 0, 0, 'L');
-      $this->Cell(43, 4, $data->receptor->TipoJornada, 0, 0, 'L');
+      $this->Cell(43, 4, $receptorNomina['TipoJornada'], 0, 0, 'L');
       $this->Cell(30, 4, "Periodicidad", 0, 0, 'L');
-      $this->Cell(25, 4, $data->receptor->PeriodicidadPago, 0, 0, 'R');
+      $this->Cell(25, 4, $receptorNomina['PeriodicidadPago'], 0, 0, 'R');
       $this->Ln();
       $this->Cell(33, 4, "Antigüedad", 0, 0, 'L');
-      $this->Cell(36, 4, $data->receptor->Antigüedad, 0, 0, 'L');
+      $this->Cell(36, 4, $receptorNomina['Antigüedad'], 0, 0, 'L');
       $this->Cell(23, 4, "Tipo Contrato", 0, 0, 'L');
-      $this->Cell(43, 4, $data->receptor->TipoContrato, 0, 0, 'L');
+      $this->Cell(43, 4, $receptorNomina['TipoContrato'], 0, 0, 'L');
       $this->Cell(30, 4, "Salario Diario", 0, 0, 'L');
-      $this->Cell(25, 4, $data->receptor->SalarioDiarioIntegrado, 0, 0, 'R');
+      $this->Cell(25, 4, $receptorNomina['SalarioDiarioIntegrado'], 0, 0, 'R');
       $this->Ln();
       $this->Cell(33, 4, "RFC", 0, 0, 'L');
-      $this->Cell(36, 4, $receptor->Rfc, 0, 0, 'L');
+      $this->Cell(36, 4, $receptor['Rfc'], 0, 0, 'L');
       $this->Cell(23, 4, "Fecha Pago", 0, 0, 'L');
-      $this->Cell(43, 4, $data->header->FechaPago, 0, 0, 'L');
+      $this->Cell(43, 4, $headerNomina['FechaPago'], 0, 0, 'L');
       $this->Cell(30, 4, "S.B.C", 0, 0, 'L');
-      $this->Cell(25, 4, $data->receptor->SalarioBaseCotApor, 0, 0, 'R');
+      $this->Cell(25, 4, $receptorNomina['SalarioBaseCotApor'], 0, 0, 'R');
       $this->Ln();
       $this->Cell(33, 4, "CURP", 0, 0, 'L');
-      $this->Cell(36, 4, $data->receptor->Curp, 0, 0, 'L');
+      $this->Cell(36, 4, $receptorNomina['Curp'], 0, 0, 'L');
       $this->Cell(23, 4, "Fecha Inicio", 0, 0, 'L');
-      $this->Cell(43, 4, $data->header->FechaInicialPago, 0, 0, 'L');
+      $this->Cell(43, 4, $headerNomina['FechaInicialPago'], 0, 0, 'L');
       $this->Cell(30, 4, "Tipo Regimen", 0, 0, 'L');
-      $this->Cell(25, 4, $data->receptor->TipoRegimen, 0, 0, 'R');
+      $this->Cell(25, 4, $receptorNomina['TipoRegimen'], 0, 0, 'R');
       $this->Ln();
       $this->Cell(33, 4, "", 0, 0, 'L');
       $this->Cell(36, 4, "", 0, 0, 'L');
       $this->Cell(23, 4, "Fecha Fin", 0, 0, 'L');
-      $this->Cell(43, 4, $data->header->FechaFinalPago, 0, 0, 'L');
+      $this->Cell(43, 4, $headerNomina['FechaFinalPago'], 0, 0, 'L');
       $this->Cell(30, 4, "", 0, 0, 'L');
       $this->Cell(25, 4, "", 0, 0, 'R');
       $this->Ln();
@@ -272,17 +271,19 @@ class FacturaPdf extends FPDF {
       $this->Ln();
 
       $currentY = 0;
+      $detPercepcion = (!empty($detPercepcion['Clave'])) ? array($detPercepcion) : $detPercepcion;
       foreach ($detPercepcion as $value) {
         $currentY = $this->GetY();
-	      $this->MultiCell(6, 4, $value->TipoPercepcion, 0, 'C');
+	      $this->MultiCell(6, 4, $value['TipoPercepcion'], 0, 'C');
         $this->SetXY($this->GetX()+6, $currentY);
-	      $this->MultiCell(48, 4, $this->reduceText($value->Concepto, 42), 0);
+	      $this->MultiCell(48, 4, $this->reduceText($value['Concepto'], 42), 0);
         $this->SetXY($this->GetX()+48+6, $currentY);
-	      $this->MultiCell(8, 4, ($value->Clave == 'P001')? $dias." Dias" : '' , 0, 'R');
+	      $this->MultiCell(8, 4, ($value['Clave'] == 'P001')? $dias." Dias" : '' , 0, 'R');
         $this->SetXY($this->GetX()+48+6+8, $currentY);
-	      $this->MultiCell(18, 4, number_format($value->ImporteGravado, 2), 0, 'R');
+	      $this->MultiCell(18, 4, number_format($value['ImporteGravado'], 2), 0, 'R');
         $this->SetXY($this->GetX()+48+6+8+18, $currentY);
-        $this->MultiCell(18, 4, number_format($value->ImporteExento, 2), 0, 'R');
+        $this->MultiCell(18, 4, number_format($value['ImporteExento'], 2), 0, 'R');
+
       }
       if(!empty($subsidio)){
         $currentY = $this->GetY();
@@ -298,18 +299,19 @@ class FacturaPdf extends FPDF {
       }
 
       $currentY = 109;
+      $detDeduccion = (!empty($detDeduccion['Clave'])) ? array($detDeduccion) : $detDeduccion;
       foreach ($detDeduccion as $value) {
         $currentY = $currentY + 4;
         $this->SetXY($this->GetX()+48+6+8+16+16+7, $currentY);
-	      $this->MultiCell(8, 4, $value->TipoDeduccion, 0, 'L');
+	      $this->MultiCell(8, 4, $value['TipoDeduccion'], 0, 'L');
         $this->SetXY($this->GetX()+48+6+8+16+16+7+6, $currentY);
-        $this->MultiCell(7, 4, $value->Clave, 0);
+        $this->MultiCell(7, 4, $value['Clave'], 0);
         $this->SetXY($this->GetX()+48+6+8+16+16+7+6+7, $currentY);
-        $this->MultiCell(53, 4, $this->reduceText($value->Concepto, 45), 0, 'L');
+        $this->MultiCell(53, 4, $this->reduceText($value['Concepto'], 45), 0, 'L');
         $this->SetXY($this->GetX()+48+6+8+16+16+7+6+7+53, $currentY);
         $this->MultiCell(10, 4, "", 0);
         $this->SetXY($this->GetX()+48+6+8+16+16+7+6+7+53+8, $currentY);
-        $this->MultiCell(16, 4, number_format($value->Importe, 2), 0, 'R');
+        $this->MultiCell(16, 4, number_format($value['Importe'], 2), 0, 'R');
       }
 
       /*$currentY = $this->GetY();
@@ -317,131 +319,51 @@ class FacturaPdf extends FPDF {
       $this->SetDrawColor(26, 84, 251);
       $this->SetLineWidth(0.5);
       //$this->Line(10, $this->GetX(), 108, $this->GetX());*/
-
-      $totalExc = (!empty($subsidio))? ($percepcion->TotalExento + $subsidio) : $percepcion->TotalExento;
+  
+      $totalExc = (!empty($subsidio))? ($percepcion['TotalExento'] + $subsidio) : $percepcion['TotalExento'];
       $this->Ln();
       $this->Ln();
       $this->Ln();
       $this->SetFont('Arial','B',7);
       $this->SetTextColor(5, 5, 5);
       $this->Cell(68, 4, "Total de percepciones", 0, 0, 'C');
-      $this->Cell(12, 4, number_format($percepcion->TotalGravado, 2), 0, 0, 'R');
+      $this->Cell(12, 4, number_format($percepcion['TotalGravado'], 2), 0, 0, 'R');
       $this->Cell(18, 4, number_format($totalExc, 2), 0, 0, 'R');
       $this->Line(200, 100, 111, 100);
       $this->Cell(81, 4, "Total de Deducciones", 0, 0, 'C');
-      $this->Cell(12, 4, number_format(($deduccion->TotalOtrasDeducciones + $deduccion->TotalImpuestosRetenidos), 2), 0, 0, 'R');
+      $TIR = (!empty($deduccion['TotalImpuestosRetenidos'])) ? $deduccion['TotalImpuestosRetenidos'] : 0;
+      $this->Cell(12, 4, number_format(($deduccion['TotalOtrasDeducciones'] + $TIR), 2), 0, 0, 'R');
     }
-
-    public function Percepciones ($percepcion, $data) {
-      $this->SetDrawColor(26, 84, 251);
-      $this->SetLineWidth(1);
-      $this->Line(10, 160, 200, 160);
-      $this->Ln();
-      $this->Ln();
-      $this->SetFont('Arial','B',9);
-      $this->SetTextColor(5, 5, 5);
-      $this->Cell(30, 4, "PERCEPCIONES", 0, 0, 'L');
-      $this->Ln();
-      $this->SetDrawColor(26, 84, 251);
-      $this->SetLineWidth(0.5);
-      $this->Line(10, 167, 200, 167);
-      $this->Ln();
-      $this->SetFont('Arial','B',7);
-      $this->SetTextColor(32, 155, 255);
-      $this->Cell(30, 4, "Tipo Percepcion", 0, 0, 'C');
-      $this->Cell(30, 4, "Clave", 0, 0, 'C');
-      $this->Cell(95, 4, "Descripcion", 0, 0, 'L');
-      $this->Cell(35, 4, "Importe", 0, 0, 'R');
-      $this->SetFont('Arial','',6);
-      $this->SetTextColor(5, 5, 5);
-
-      foreach ($data as $value) {
-        $this->Ln();
-        $this->Cell(30, 4, $value->TipoPercepcion, 0, 0, 'C');
-        $this->Cell(30, 4, $value->Clave, 0, 0, 'C');
-        $this->Cell(95, 4, $value->Concepto, 0, 0, 'L');
-        $this->Cell(35, 4, ($value->ImporteGravado + $value->ImporteExento), 0, 0, 'R');
-      }
-
-      $this->Ln();
-      $this->Cell(30, 4, "", 0, 0, 'C');
-      $this->Cell(30, 4, "", 0, 0, 'C');
-      $this->SetFont('Arial','B',7);
-      $this->Cell(95, 4, "Total:", 0, 0, 'C');
-      $this->SetFont('Arial','',7);
-      $this->Cell(35, 4, $percepcion->TotalSueldos, 0, 0, 'R');
-      $this->Ln();
-    }
-
-    public function Deducciones ($deduccion, $data) {
-      $this->SetDrawColor(26, 84, 251);
-      $this->SetLineWidth(1);
-      $this->Line(10, 196, 200, 196);
-      $this->Ln();
-      $this->Ln();
-      $this->SetFont('Arial','B',9);
-      $this->SetTextColor(5, 5, 5);
-      $this->Cell(30, 4, "DEDUCCIONES", 0, 0, 'L');
-      $this->Ln();
-      $this->SetDrawColor(26, 84, 251);
-      $this->SetLineWidth(0.5);
-      $this->Line(10, 203, 200, 203);
-      $this->Ln();
-      $this->SetFont('Arial','B',7);
-      $this->SetTextColor(32, 155, 255);
-      $this->Cell(30, 4, "Tipo Deduccion", 0, 0, 'C');
-      $this->Cell(30, 4, "Clave", 0, 0, 'C');
-      $this->Cell(95, 4, "Descripcion", 0, 0, 'L');
-      $this->Cell(35, 4, "Importe", 0, 0, 'R');
-      $this->SetFont('Arial','',6);
-      $this->SetTextColor(5, 5, 5);
-      foreach ($data as $value) {
-        $this->Ln();
-        $this->Cell(30, 4, $value->TipoDeduccion, 0, 0, 'C');
-        $this->Cell(30, 4, $value->Clave, 0, 0, 'C');
-        $this->Cell(95, 4, $value->Concepto, 0, 0, 'L');
-        $this->Cell(35, 4, $value->Importe, 0, 0, 'R');
-      }
-
-      $this->Ln();
-      $this->Cell(30, 4, "", 0, 0, 'C');
-      $this->Cell(30, 4, "", 0, 0, 'C');
-      $this->SetFont('Arial','B',7);
-      $this->Cell(95, 4, "Total:", 0, 0, 'C');
-      $this->SetFont('Arial','',7);
-      $this->Cell(35, 4, ($deduccion->TotalOtrasDeducciones + $deduccion->TotalImpuestosRetenidos), 0, 0, 'R');
-      $this->Ln();
-    }
-
-  public function FooterNomina ($selloCFD, $selloSAT, $cadenaOriginal, $image, $UUID, $noCertificadoSAT, $FechaTimbrado) {
+//$selloCFD, $selloSAT, $cadenaOriginal, $image, $UUID, $noCertificadoSAT, $FechaTimbrado
+  public function FooterNomina ($data, $cadenaOriginal, $image) {
       $this->SetY(220); /* Inicio */
       $this->SetFont('Arial','B',6);
       $this->SetTextColor(5, 5, 5);
       $this->Cell(20, 4, "Folio Fiscal", 0, 0, 'L');
       $this->SetFont('Arial','',6);
-      $this->Cell(30, 4, $UUID, 0, 0, 'L');
+      $this->Cell(30, 4, $data['UUID'], 0, 0, 'L');
       $this->Ln();
       $this->SetFont('Arial','B',6);
       $this->Cell(25, 4, "Fecha de Timbrado", 0, 0, 'L');
       $this->SetFont('Arial','',6);
-      $this->Cell(30, 4, $FechaTimbrado, 0, 0, 'L');
+      $this->Cell(30, 4, $data['FechaTimbrado'], 0, 0, 'L');
       $this->Ln();
       $this->SetFont('Arial','B',6);
       $this->Cell(45, 4, "Numero de Serie del Certificado del SAT", 0, 0, 'L');
       $this->SetFont('Arial','',6);
-      $this->Cell(30, 4, $noCertificadoSAT, 0, 0, 'L');
+      $this->Cell(30, 4, $data['NoCertificadoSAT'], 0, 0, 'L');
       $this->SetY(235); /* Set 20 Eje Y */
       $this->SetFont('Arial','B',6);
       $this->Cell(30, 2, "Sello Digital del CFDI", 0, 0, 'L');
       $this->Ln();
       $this->SetFont('Arial','',6);
-      $this->MultiCell(140, 2, $selloCFD, 0, 'J');
+      $this->MultiCell(140, 2, $data['SelloCFD'], 0, 'J');
       $this->Ln();
       $this->SetFont('Arial','B',6);
       $this->Cell(30, 2, "Sello SAT", 0, 0, 'L');
       $this->Ln();
       $this->SetFont('Arial','',6);
-      $this->MultiCell(140, 2, $selloSAT, 0, 'J');
+      $this->MultiCell(140, 2, $data['SelloSAT'], 0, 'J');
       $this->Ln();
       $this->SetFont('Arial','B',6);
       $this->Cell(30, 2, "Cadena Original del complemento de certificacion digital del SAT", 0, 0, 'L');
@@ -456,7 +378,7 @@ class FacturaPdf extends FPDF {
     }
 
     public function Totales ($data) {
-      $total = $data->header->Total;
+      $total = $data['Total'];
       $this->Ln(10);
       $this->SetFont('Arial','B',7);
       $this->Cell(152, 4, "Neto a pagar:", 0, 0, 'R');

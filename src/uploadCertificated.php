@@ -19,9 +19,9 @@ $empresa = '6';*/
 $registro = 0;
 
 /* Ruta del servicio de integracion Pruebas*/
-$ws = "https://cfdi33-pruebas.buzoncfdi.mx:1443/Timbrado.asmx?wsdl";
+//$ws = "https://cfdi33-pruebas.buzoncfdi.mx:1443/Timbrado.asmx?wsdl";
 /* Ruta del servicio de integracion Productivo*/
-//$ws = "https://timbracfdi33.mx:1443/Timbrado.asmx?wsdl";
+$ws = "https://timbracfdi33.mx:1443/Timbrado.asmx?wsdl";
 
 
 $process = new Certificate ();
@@ -51,8 +51,8 @@ if($val > 0){
   try {
     $params = array();
     /*Nombre del usuario integrador asignado, para efecto de pruebas utilizaremos 'mvpNUXmQfK8='*/
-    $params['usuarioIntegrador'] = 'mvpNUXmQfK8=';
-    //$params['usuarioIntegrador'] = '8E5CyvqyxsyGkK0DbKbA8g==';
+    //$params['usuarioIntegrador'] = 'mvpNUXmQfK8=';
+    $params['usuarioIntegrador'] = '8E5CyvqyxsyGkK0DbKbA8g==';
     /* Rfc emisor a registrar 64*/
     $params['rfcEmisor'] = $rfc;
     /*Archivo .cer en base 64, sello digital del emisor*/

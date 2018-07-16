@@ -1,28 +1,90 @@
 {
-   "empresa":"2",
    "comprobante":{
-      "header":{
-         "Serie":"B",
-         "Folio":"27",
-         "Fecha":"2018-05-24T23:50:57",
-         "FormaPago":"99",
-         "SubTotal":"6,886.09",
-         "Descuento":"870.29",
-         "Moneda":"MXN",
-         "Total":"6,015.80",
-         "TipoDeComprobante":"N",
-         "MetodoPago":"PUE",
-         "LugarExpedicion":"06700"
-      },
-      "emisor":{
-         "Rfc":"BON150210EN4",
-         "Nombre":"BON&EFFICACE SA DE CV",
-         "RegimenFiscal":"601"
-      },
-      "receptor":{
-         "Rfc":"GOLA890119C52",
-         "Nombre":"GONZALEZ LIMA ALIX VIRGINIA",
-         "UsoCFDI":"P01"
+      "complemento":{
+         "nomina12":{
+            "OtrosPagos":[
+               {
+                  "header":{
+                     "TipoOtroPago":"002",
+                     "Clave":"D600",
+                     "Concepto":"SUBSIDIO AL EMPLEO.",
+                     "Importe":"125.10"
+                  },
+                  "subsidio":{
+                     "SubsidioCausado":"125.10"
+                  }
+               }
+            ],
+            "deduccion":{
+               "TotalImpuestosRetenidos":"258.13",
+               "TotalOtrasDeducciones":"86.94"
+            },
+            "detalleDeduccion":[
+               {
+                  "TipoDeduccion":"002",
+                  "Clave":"D001",
+                  "Concepto":"ISR",
+                  "Importe":"258.13"
+               },
+               {
+                  "TipoDeduccion":"001",
+                  "Clave":"D003",
+                  "Concepto":"CUOTA IMSS",
+                  "Importe":"45.81"
+               },
+               {
+                  "TipoDeduccion":"003",
+                  "Clave":"D004",
+                  "Concepto":"CESANTÍA Y VEJEZ",
+                  "Importe":"41.13"
+               }
+            ],
+            "detallePercepcion":[
+               {
+                  "TipoPercepcion":"001",
+                  "Clave":"P001",
+                  "Concepto":"SUELDOS",
+                  "ImporteGravado":"3488.35",
+                  "ImporteExento":"0.00"
+               }
+            ],
+            "emisor":{
+               "RegistroPatronal":"Y6064672105"
+            },
+            "header":{
+               "FechaFinalPago":"2018-05-31",
+               "FechaInicialPago":"2018-05-16",
+               "FechaPago":"2018-05-31",
+               "NumDiasPagados":"15",
+               "TipoNomina":"O",
+               "TotalDeducciones":"345.07",
+               "TotalPercepciones":"3488.35",
+               "Version":"1.2"
+            },
+            "percepcion":{
+               "TotalExento":"0.00",
+               "TotalGravado":"0.00",
+               "TotalSueldos":"3488.35"
+            },
+            "receptor":{
+               "Antigüedad":"P212W",
+               "Banco":"127",
+               "ClaveEntFed":"DIF",
+               "CuentaBancaria":"01720107116667",
+               "Curp":"CULN891010MDFRPM08",
+               "Departamento":"STAFF",
+               "FechaInicioRelLaboral":"2009-04-20",
+               "NumEmpleado":"8289",
+               "NumSeguridadSocial":"30078907547",
+               "PeriodicidadPago":"04",
+               "RiesgoPuesto":"1",
+               "SalarioBaseCotApor":"243.71",
+               "SalarioDiarioIntegrado":"232.56",
+               "TipoContrato":"2",
+               "TipoJornada":"01",
+               "TipoRegimen":"02"
+            }
+         }
       },
       "conceptos":[
          {
@@ -30,114 +92,34 @@
             "Cantidad":"1",
             "ClaveUnidad":"ACT",
             "Descripcion":"Pago de nómina",
-            "ValorUnitario":"6,886.09",
-            "Importe":"6,886.09",
-            "Descuento":"870.29"
+            "ValorUnitario":"3613.45",
+            "Importe":"3613.45",
+            "Descuento":"345.07"
          }
       ],
-      "complemento":{
-         "nomina12":{
-            "header":{
-               "xmlns:nomina12":"http:\/\/www.sat.gob.mx\/nomina12",
-               "Version":"1.2",
-               "TipoNomina":"O",
-               "FechaPago":"2018-05-14",
-               "FechaInicialPago":"2018-05-01",
-               "FechaFinalPago":"2018-05-15",
-               "NumDiasPagados":"15",
-               "TotalPercepciones":"6,886.09",
-               "TotalDeducciones":"870.29",
-               "xsi:schemaLocation":"http:\/\/www.sat.gob.mx\/nomina12 http:\/\/www.sat.gob.mx\/informacion_fiscal\/factura_electronica\/Documents\/Complementoscfdi\/nomina12.xsd"
-            },
-            "emisor":{
-               "RegistroPatronal":"Y6064672105",
-               "RfcPatronOrigen":"BON150210EN4"
-            },
-            "receptor":{
-               "Curp":"GOLA890119HOCNML01",
-               "FechaInicioRelLaboral":"2015-09-01",
-               "Antigüedad":"P139W",
-               "TipoContrato":"02",
-               "TipoJornada":"01",
-               "TipoRegimen":"02",
-               "NumEmpleado":"8405",
-               "Departamento":"SOPORTE OPERACIÓN DE SUCURSALES HELP DESK",
-               "PeriodicidadPago":"04",
-               "Sindicalizado":"No",
-               "SalarioBaseCotApor":"441.81",
-               "Banco":"127",
-               "ClaveEntFed":"DIF",
-               "NumSeguridadSocial":"23058943350",
-               "RiesgoPuesto":"1",
-               "SalarioDiarioIntegrado":"421.60"
-            },
-            "percepcion":{
-               "TotalSueldos":"6,886.09",
-               "TotalGravado":"6,272.29",
-               "TotalExento":"613.80"
-            },
-            "detallePercepcion":[
-               {
-                  "TipoPercepcion":"001",
-                  "Clave":"P001",
-                  "Concepto":"SUELDOS, SALARIOS  RAYAS Y JORNALES",
-                  "ImporteGravado":"6,323.93",
-                  "ImporteExento":"0.00"
-               },
-               {
-                  "TipoPercepcion":"001",
-                  "Clave":"P020",
-                  "Concepto":"AUSENTISMO (FALTAS)",
-                  "ImporteGravado":"491.83",
-                  "ImporteExento":"0.00"
-               },
-               {
-                  "TipoPercepcion":"001",
-                  "Clave":"P009",
-                  "Concepto":"DIA FESTIVO TRABAJADO",
-                  "ImporteGravado":"440.19",
-                  "ImporteExento":"0.00"
-               },
-               {
-                  "TipoPercepcion":"001",
-                  "Clave":"P009",
-                  "Concepto":"DIA FESTIVO TRABAJADO",
-                  "ImporteGravado":"0.00",
-                  "ImporteExento":"403.00"
-               },
-               {
-                  "TipoPercepcion":"020",
-                  "Clave":"P022",
-                  "Concepto":"PRIMA DOMINICAL",
-                  "ImporteGravado":"0.00",
-                  "ImporteExento":"210.80"
-               }
-            ],
-            "deduccion":{
-               "TotalOtrasDeducciones":"158.11",
-               "TotalImpuestosRetenidos":"712.18"
-            },
-            "detalleDeduccion":[
-               {
-                  "TipoDeduccion":"002",
-                  "Clave":"D001",
-                  "Concepto":"ISR",
-                  "Importe":"712.18"
-               },
-               {
-                  "TipoDeduccion":"001",
-                  "Clave":"D003",
-                  "Concepto":"IMSS",
-                  "Importe":"88.52"
-               },
-               {
-                  "TipoDeduccion":"003",
-                  "Clave":"D004",
-                  "Concepto":"APORTACIONES A RETIRO, CESANTIA EN EDAD AVANZADA Y VEJEZ",
-                  "Importe":"69.59"
-               }
-            ]
-         }
+      "emisor":{
+         "Nombre":"SALINAS",
+         "RegimenFiscal":"601",
+         "Rfc":"AAA010101AAA"
+      },
+      "header":{
+         "Descuento":"345.07",
+         "Fecha":"2018-06-29T16:24:45",
+         "Folio":"921",
+         "FormaPago":"99",
+         "LugarExpedicion":"06700",
+         "MetodoPago":"PUE",
+         "Moneda":"MXN",
+         "Serie":"A",
+         "SubTotal":"3613.45",
+         "TipoDeComprobante":"N",
+         "Total":"3268.38"
+      },
+      "receptor":{
+         "Nombre":"CRUZ LOPEZ NOEMI",
+         "Rfc":"CULN891010EI9",
+         "UsoCFDI":"G01"
       }
-   }
+   },
+   "empresa":"9999"
 }

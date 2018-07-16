@@ -1,5 +1,5 @@
 <?php
-$rutaFile = "../uploads/2/BON150210EN4/BON150210EN4_ADMON_Y_LOGISTICA/";
+$rutaFile = "uploadsFiles/1/CFDIS_SMS20181/";
 
 if(is_dir($rutaFile)){
   if($dir = opendir($rutaFile)){
@@ -27,8 +27,8 @@ if(is_dir($rutaFile)){
               $UUID = $tfd['UUID'];
           }
 
-          rename("../uploads/2/BON150210EN4/BON150210EN4_ADMON_Y_LOGISTICA/{$UUID}.pdf", "../uploads/2/BON150210EN4/BON150210EN4_ADMON_Y_LOGISTICA/{$UUID}_{$numEmpleado}_{$fechaFin}.pdf");
-          rename("{$rutaFile}{$UUID}.xml", "{$rutaFile}{$UUID}_{$numEmpleado}_{$fechaFin}.xml");
+          //rename("../uploads/2/BON150210EN4/BON150210EN4_ADMON_Y_LOGISTICA/{$UUID}.pdf", "../uploads/2/BON150210EN4/BON150210EN4_ADMON_Y_LOGISTICA/{$UUID}_{$numEmpleado}_{$fechaFin}.pdf");
+          rename("{$rutaFile}{$archivo}", "{$rutaFile}{$UUID}_{$numEmpleado}_{$fechaFin}.xml");
         }
       }
     }

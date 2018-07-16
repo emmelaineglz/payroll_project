@@ -67,7 +67,11 @@ if($json) {
       $pdf->AddPage();
       $pdf->SetFont('Arial','B',16);
       $pdf->HeaderPay($xml);
-      $pdf->HeaderEmisor($xml->emisor);
+      if($rfc === "MIN120828HI0"){
+        $pdf->HeaderMin();
+      }elseif($rfc === "BON150210EN4"){
+        $pdf->HeaderBon();
+      }
       $pdf->HeaderNomina($xml->receptor, $nomina);
       $pdf->percep_deducc($nomina->percepcion, $nomina->detallePercepcion, $nomina->deduccion, $nomina->detalleDeduccion, $nomina->header->NumDiasPagados, $subsidio);
       $pdf->Totales($xml);
@@ -111,18 +115,18 @@ function complementoNomina($nominaData) {
     $nomina->add(new DetalleDeduccion($deduccion));
   }
 
-  if($nominaData['Incapacidades']){
+  if(!empty($nominaData['Incapacidades'])){
     foreach ($nominaData['Incapacidades'] as $value) {
       $nomina->add(new Incapacidad($value));
     }
   }
-  if($nominaData['OtrosPagos']){
+  if(!empty($nominaData['OtrosPagos'])){
     foreach ($nominaData['OtrosPagos'] as $value) {
       $oPagos = new OtrosPagos($value['header']);
-      if($value['subsidio']){
+      if(!empty($value['subsidio'])){
         $oPagos->add(new SubsidioAlEmpleo($value['subsidio']));
       }
-      if($value['compensacion']){
+      if(!empty($value['compensacion'])){
         $oPagos->add(new CompensacionSaldosAFavor($value['compensacion']));
       }
       $nomina->add($oPagos);

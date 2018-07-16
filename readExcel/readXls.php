@@ -5,7 +5,7 @@ use Box\Spout\Reader\ReaderFactory;
 use Box\Spout\Common\Type;
 use Carbon\Carbon;
 
-$filePath = '../uploads/excel/TIMBRA_ITALIKA_VIRGIN_FALTANTES.xlsx';
+$filePath = '../uploads/excel/TIMBRA_FAPRICO_JUNIO_2018_1.xlsx';
 
 $reader = ReaderFactory::create(Type::XLSX); // for XLSX files
 //$reader = ReaderFactory::create(Type::CSV); // for CSV files
@@ -16,17 +16,18 @@ $reader->open($filePath);
 
 foreach ($reader->getSheetIterator() as $sheet) {
     foreach ($sheet->getRowIterator() as $row) {
+      //var_dump($row);
       $nomina12_otrosPagos_header = [];
       $nomina12_otrosPagos_subsidio = [];
       $header = [
         "Serie" => (string)$row[0],
         "Folio" => (string)$row[1],
-        "Fecha" => "2018-05-25T23:50:57",
+        "Fecha" => "2018-06-06T22:50:57",
         "FormaPago" => (string)$row[8],
-        "SubTotal" => (string)number_format(round($row[73],2),2, '.', ''),
-        "Descuento" => (string)number_format(round($row[91],2),2, '.', ''),
+        "SubTotal" => (string)number_format($row[78],2, '.', ''),
+        "Descuento" => (string)number_format($row[97],2, '.', ''),
         "Moneda" => $row[10],
-        "Total" => (string)number_format(round($row[92],2),2, '.', ''),
+        "Total" => (string)number_format((float)$row[98],2, '.', ''),
         "TipoDeComprobante" => $row[6],
         "MetodoPago" => $row[9],
         "LugarExpedicion" => "06700"
@@ -46,9 +47,9 @@ foreach ($reader->getSheetIterator() as $sheet) {
         "Cantidad" => (string)$row[13],
         "ClaveUnidad" => (string)$row[14],
         "Descripcion" => $row[15],
-        "ValorUnitario" => (string)number_format(round($row[73],2),2, '.', ''),
-        "Importe" => (string)number_format(round(($row[13] * $row[73]),2),2, '.', ''),
-        "Descuento" => (string)number_format(round($row[91],2),2, '.', '')
+        "ValorUnitario" => (string)number_format(round($row[78],2),2, '.', ''),
+        "Importe" => (string)number_format(round(($row[13] * $row[78]),2),2, '.', ''),
+        "Descuento" => (string)number_format(round($row[97],2),2, '.', '')
       ];
 
       $nomina12_header = [
@@ -59,40 +60,43 @@ foreach ($reader->getSheetIterator() as $sheet) {
           "FechaInicialPago" => $row[39]->format('Y-m-d'),
           "FechaFinalPago" => $row[40]->format('Y-m-d'),
           "NumDiasPagados" => (string)$row[41],
-          "TotalPercepciones" => (!empty($row[72]))? (string)number_format(round(($row[73] - $row[72]),2),2, '.', '') : (string)number_format(round($row[73],2),2, '.', ''),
-          "TotalDeducciones" => (string)number_format(round($row[91],2),2, '.', ''),
+          "TotalPercepciones" => (!empty($row[77]))? (string)number_format(round(($row[78] - $row[77]),2),2, '.', '') : (string)number_format(round($row[78],2),2, '.', ''),
+          "TotalDeducciones" => (string)number_format(round($row[97],2),2, '.', ''),
           "xsi:schemaLocation" => (string)"http://www.sat.gob.mx/nomina12 http://www.sat.gob.mx/informacion_fiscal/factura_electronica/Documents/Complementoscfdi/nomina12.xsd"
       ];
-      if(!empty($row[72])){
-        $nomina12_header["TotalOtrosPagos"] = (string)number_format(round($row[72],2),2, '.', '');
+      if(!empty($row[77])){
+        $nomina12_header["TotalOtrosPagos"] = (string)number_format(round($row[77],2),2, '.', '');
       }
 
       $nomina12_emisor = [
         "RegistroPatronal" => (string)$row[4],
         "RfcPatronOrigen" => (string)$row[2]
       ];
+
       $nomina12_receptor = [
         "Curp" => (string)$row[17],
         "FechaInicioRelLaboral" => $row[21]->format('Y-m-d'),
         "Antigüedad" => calcAntiguedad($row[39], $row[21]),
-        "TipoContrato" => "0$row[22]",
-        "TipoJornada" => "0$row[24]",
-        "TipoRegimen" => "0$row[25]",
+        "TipoContrato" => "$row[22]",
+        "TipoJornada" => "$row[24]",
+        "TipoRegimen" => "$row[25]",
         "NumEmpleado" => (string)$row[26],
         "Departamento" => (string)$row[28],
         "PeriodicidadPago" => (string)$row[31],
         "Sindicalizado" => (string)$row[23],
         "SalarioBaseCotApor" => (string)$row[34],
-        "Banco" => (string)$row[32],
         "ClaveEntFed" => (string)$row[36],
         "NumSeguridadSocial" => (string)$row[18],
-        "RiesgoPuesto" => "1",
+        "RiesgoPuesto" => "2",
         "SalarioDiarioIntegrado" => (string)number_format(round($row[35],2),2, '.', '')
       ];
+      if(!empty($row[32])){
+        $nomina12_receptor["Banco"] = (string)$row[32];
+      }
       $nomina12_percepcion = [
-        "TotalSueldos" => (string)number_format(round($row[69],2),2, '.', ''),
-        "TotalGravado" => (string)number_format(round($row[70],2),2, '.', ''),
-        "TotalExento" => (string)number_format(round($row[71],2),2, '.', '')
+        "TotalSueldos" => (string)number_format(round($row[74],2),2, '.', ''),
+        "TotalGravado" => (string)number_format(round($row[75],2),2, '.', ''),
+        "TotalExento" => (string)number_format(round($row[76],2),2, '.', '')
       ];
 
       $nomina12_detallePercepcion = [];
@@ -356,162 +360,223 @@ foreach ($reader->getSheetIterator() as $sheet) {
           "ImporteExento" => "0.00"
         ]);
       }
+      if(!empty($row[69])){
+        array_push($nomina12_detallePercepcion,
+        [
+          "TipoPercepcion" => "029",
+          "Clave" => "P029",
+          "Concepto" => "VALES DESPENSA",
+          "ImporteGravado" => "0.00",
+          "ImporteExento" => (string)number_format(round($row[69],2),2, '.', '')
+
+        ]);
+      }
+      if(!empty($row[70])){
+        array_push($nomina12_detallePercepcion,
+        [
+          "TipoPercepcion" => "029",
+          "Clave" => "P029",
+          "Concepto" => "VALES DESPENSA",
+          "ImporteGravado" => (string)number_format(round($row[70],2),2, '.', ''),
+          "ImporteExento" => "0.00"
+        ]);
+      }
+      if(!empty($row[71])){
+        array_push($nomina12_detallePercepcion,
+        [
+          "TipoPercepcion" => "005",
+          "Clave" => "P005",
+          "Concepto" => "FONDO DE AHORRO EMPRESA",
+          "ImporteGravado" => "0.00",
+          "ImporteExento" => (string)number_format(round($row[71],2),2, '.', '')
+
+        ]);
+      }
+      if(!empty($row[72])){
+        array_push($nomina12_detallePercepcion,
+        [
+          "TipoPercepcion" => "005",
+          "Clave" => "P005",
+          "Concepto" => "FONDO DE AHORRO EMPRESA",
+          "ImporteGravado" => (string)number_format(round($row[72],2),2, '.', ''),
+          "ImporteExento" => "0.00"
+        ]);
+      }
+      if(!empty($row[73])){
+        array_push($nomina12_detallePercepcion,
+        [
+          "TipoPercepcion" => "038",
+          "Clave" => "P038",
+          "Concepto" => "PREMIO DE PRODUCTIVIDAD",
+          "ImporteGravado" => (string)number_format(round($row[73],2),2, '.', ''),
+          "ImporteExento" => "0.00"
+        ]);
+      }
       $nomina12_deduccion = [
-        "TotalOtrasDeducciones" => (string)number_format(round($row[90],2),2, '.', ''),
-        "TotalImpuestosRetenidos" => (string)number_format(round($row[75],2),2, '.', '')
+        "TotalOtrasDeducciones" => (string)number_format(round($row[95],2),2, '.', ''),
+        "TotalImpuestosRetenidos" => (string)number_format(round($row[80],2),2, '.', '')
       ];
 
       $nomina12_detalleDeduccion = [];
-      if(!empty($row[75])){
+      if(!empty($row[80])){
         array_push($nomina12_detalleDeduccion,
         [
           "TipoDeduccion" => "002",
           "Clave" => "D001",
           "Concepto" => "ISR",
-          "Importe" => (string)number_format(round($row[75],2),2, '.', '')
-        ]);
-      }
-      if(!empty($row[76])){
-        array_push($nomina12_detalleDeduccion,
-        [
-          "TipoDeduccion" => "001",
-          "Clave" => "D003",
-          "Concepto" => "IMSS",
-          "Importe" => (string)number_format(round($row[76],2),2, '.', '')
-        ]);
-      }
-      if(!empty($row[77])){
-        array_push($nomina12_detalleDeduccion,
-        [
-          "TipoDeduccion" => "003",
-          "Clave" => "D004",
-          "Concepto" => "APORTACIONES A RETIRO, CESANTIA EN EDAD AVANZADA Y VEJEZ",
-          "Importe" => (string)number_format(round($row[77],2),2, '.', '')
-        ]);
-      }
-      if(!empty($row[78])){
-        array_push($nomina12_detalleDeduccion,
-        [
-          "TipoDeduccion" => "010",
-          "Clave" => "D005",
-          "Concepto" => "CREDITO INFONAVIT",
-          "Importe" => (string)number_format(round($row[78],2),2, '.', '')
-        ]);
-      }
-      if(!empty($row[79])){
-        array_push($nomina12_detalleDeduccion,
-        [
-          "TipoDeduccion" => "010",
-          "Clave" => "D009",
-          "Concepto" => "SEGURO DE VIVIENDA",
-          "Importe" => (string)number_format(round($row[79],2),2, '.', '')
-        ]);
-      }
-      if(!empty($row[80])){
-        array_push($nomina12_detalleDeduccion,
-        [
-          "TipoDeduccion" => "006",
-          "Clave" => "D013",
-          "Concepto" => "INCAPACIDAD MATERNIDAD",
           "Importe" => (string)number_format(round($row[80],2),2, '.', '')
         ]);
       }
       if(!empty($row[81])){
         array_push($nomina12_detalleDeduccion,
         [
-          "TipoDeduccion" => "006",
-          "Clave" => "D015",
-          "Concepto" => "INCAPACIDAD RIESGO TRABAJO",
+          "TipoDeduccion" => "001",
+          "Clave" => "D003",
+          "Concepto" => "IMSS",
           "Importe" => (string)number_format(round($row[81],2),2, '.', '')
         ]);
       }
       if(!empty($row[82])){
         array_push($nomina12_detalleDeduccion,
         [
-          "TipoDeduccion" => "006",
-          "Clave" => "D014",
-          "Concepto" => "INCAPACIDAD ENFER GRAL",
+          "TipoDeduccion" => "003",
+          "Clave" => "D004",
+          "Concepto" => "APORTACIONES A RETIRO, CESANTIA EN EDAD AVANZADA Y VEJEZ",
           "Importe" => (string)number_format(round($row[82],2),2, '.', '')
         ]);
       }
       if(!empty($row[83])){
         array_push($nomina12_detalleDeduccion,
         [
-          "TipoDeduccion" => "004",
-          "Clave" => "D010",
-          "Concepto" => "DESC. AXEDES",
+          "TipoDeduccion" => "010",
+          "Clave" => "D005",
+          "Concepto" => "CREDITO INFONAVIT",
           "Importe" => (string)number_format(round($row[83],2),2, '.', '')
         ]);
       }
       if(!empty($row[84])){
         array_push($nomina12_detalleDeduccion,
         [
-          "TipoDeduccion" => "004",
-          "Clave" => "D011",
-          "Concepto" => "DESC PRESTAMO QUANT",
+          "TipoDeduccion" => "010",
+          "Clave" => "D009",
+          "Concepto" => "SEGURO DE VIVIENDA",
           "Importe" => (string)number_format(round($row[84],2),2, '.', '')
         ]);
       }
       if(!empty($row[85])){
         array_push($nomina12_detalleDeduccion,
         [
-          "TipoDeduccion" => "011",
-          "Clave" => "D316",
-          "Concepto" => "CREDITO FONACOT",
+          "TipoDeduccion" => "006",
+          "Clave" => "D013",
+          "Concepto" => "INCAPACIDAD MATERNIDAD",
           "Importe" => (string)number_format(round($row[85],2),2, '.', '')
         ]);
       }
       if(!empty($row[86])){
         array_push($nomina12_detalleDeduccion,
         [
-          "TipoDeduccion" => "013",
-          "Clave" => "D328",
-          "Concepto" => "DESC PAGO IMPROC.",
+          "TipoDeduccion" => "006",
+          "Clave" => "D015",
+          "Concepto" => "INCAPACIDAD RIESGO TRABAJO",
           "Importe" => (string)number_format(round($row[86],2),2, '.', '')
         ]);
       }
       if(!empty($row[87])){
         array_push($nomina12_detalleDeduccion,
         [
-          "TipoDeduccion" => "020",
-          "Clave" => "D336",
-          "Concepto" => "DIAS NO TRABAJADOS",
+          "TipoDeduccion" => "006",
+          "Clave" => "D014",
+          "Concepto" => "INCAPACIDAD ENFER GRAL",
           "Importe" => (string)number_format(round($row[87],2),2, '.', '')
         ]);
       }
       if(!empty($row[88])){
         array_push($nomina12_detalleDeduccion,
         [
-          "TipoDeduccion" => "007",
-          "Clave" => "D403",
-          "Concepto" => "PENSION ALIMENTICIA",
+          "TipoDeduccion" => "004",
+          "Clave" => "D010",
+          "Concepto" => "DESC. AXEDES",
           "Importe" => (string)number_format(round($row[88],2),2, '.', '')
         ]);
       }
       if(!empty($row[89])){
         array_push($nomina12_detalleDeduccion,
         [
-          "TipoDeduccion" => "015",
-          "Clave" => "D399",
-          "Concepto" => "DESCUENTO GAFETE",
+          "TipoDeduccion" => "004",
+          "Clave" => "D011",
+          "Concepto" => "DESC PRESTAMO QUANT",
           "Importe" => (string)number_format(round($row[89],2),2, '.', '')
         ]);
       }
-      if(!empty($row[72])){
+      if(!empty($row[90])){
+        array_push($nomina12_detalleDeduccion,
+        [
+          "TipoDeduccion" => "011",
+          "Clave" => "D316",
+          "Concepto" => "CREDITO FONACOT",
+          "Importe" => (string)number_format(round($row[90],2),2, '.', '')
+        ]);
+      }
+      if(!empty($row[91])){
+        array_push($nomina12_detalleDeduccion,
+        [
+          "TipoDeduccion" => "013",
+          "Clave" => "D328",
+          "Concepto" => "DESC PAGO IMPROC.",
+          "Importe" => (string)number_format(round($row[91],2),2, '.', '')
+        ]);
+      }
+      if(!empty($row[92])){
+        array_push($nomina12_detalleDeduccion,
+        [
+          "TipoDeduccion" => "020",
+          "Clave" => "D336",
+          "Concepto" => "DIAS NO TRABAJADOS",
+          "Importe" => (string)number_format(round($row[92],2),2, '.', '')
+        ]);
+      }
+      if(!empty($row[93])){
+        array_push($nomina12_detalleDeduccion,
+        [
+          "TipoDeduccion" => "007",
+          "Clave" => "D403",
+          "Concepto" => "PENSION ALIMENTICIA",
+          "Importe" => (string)number_format(round($row[93],2),2, '.', '')
+        ]);
+      }
+      if(!empty($row[94])){
+        array_push($nomina12_detalleDeduccion,
+        [
+          "TipoDeduccion" => "015",
+          "Clave" => "D399",
+          "Concepto" => "DESCUENTO GAFETE",
+          "Importe" => (string)number_format(round($row[94],2),2, '.', '')
+        ]);
+      }
+      if(!empty($row[96])){
+        array_push($nomina12_detalleDeduccion,
+        [
+          "TipoDeduccion" => "004",
+          "Clave" => "D004",
+          "Concepto" => "FONDO DE AHORRO",
+          "Importe" => (string)number_format(round($row[96],2),2, '.', '')
+        ]);
+      }
+      if(!empty($row[77])){
         $TotrosPagos = true;
         $nomina12_otrosPagos_header = [
           "TipoOtroPago" => "002",
           "Clave" => "P600",
           "Concepto" => "SUBSIDIO AL EMPLEO",
-          "Importe" => (string)number_format(round($row[72],2),2, '.', '')
+          "Importe" => (string)number_format(round($row[77],2),2, '.', '')
         ];
         $nomina12_otrosPagos_subsidio = [
-          "SubsidioCausado" => (string)number_format(round($row[72],2),2, '.', '')
+          "SubsidioCausado" => (string)number_format(round($row[77],2),2, '.', '')
         ];
       }
 
       // AQui termina el ciclo de cada row
-      $comprobante['empresa'] = "1";
+      $comprobante['empresa'] = "9999";
       $comprobante['comprobante']['header'] = $header;
       $comprobante['comprobante']['emisor'] = $emisor;
       $comprobante['comprobante']['receptor'] = $receptor;
