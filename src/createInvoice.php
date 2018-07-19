@@ -20,8 +20,8 @@ use Charles\CFDI\Node\Complemento\Nomina\Deduccion\DetalleDeduccion;
 use Charles\CFDI\Node\Complemento\Nomina\Percepcion\DetallePercepcion;
 
 
-//$json = file_get_contents("php://input");
-$json = file_get_contents('../uploads/ejemplo.json');
+$json = file_get_contents("php://input");
+//$json = file_get_contents('../uploads/ejemplo.json');
 $ruta = "../uploads/";
 /* Ruta del servicio de integracion Pruebas*/
 //$ws = "https://cfdi33-pruebas.buzoncfdi.mx:1443/Timbrado.asmx?wsdl";
@@ -55,10 +55,11 @@ if($json) {
       $cfdi->add(new Concepto($concepto));
     }
     if($compobanteComplemento) {
-      $nomina = complementoNomina($compobanteComplemento['nomina12']);
+      $complementoValidado = validarNodos($compobanteComplemento['nomina12']);
+      $nomina = complementoNomina($complementoValidado);
       $cfdi->add($nomina);
     }
-  //  echo $cfdi;
+    //echo $cfdi;
     /* El servicio recibe el comprobante (xml) codificado en Base64, el rfc del emisor deberá ser 'AAA010101AAA' para efecto de pruebas*/
     $base64Comprobante = base64_encode($cfdi);
     try {
@@ -196,4 +197,23 @@ function complementoNomina($nominaData) {
     }
   }
   return $nomina;
+}
+
+function validarNodos($nominaData) {
+  $parsedData = removerAtributoVacio($nominaData, 'deduccion', 'TotalImpuestosRetenidos');
+  return $parsedData;
+}
+
+function removerAtributoVacio($data, $nodo, $attr) {
+  if(
+    isset($data[$nodo][$attr]) && (
+      $data[$nodo][$attr] == '' ||
+      $data[$nodo][$attr] == '0.00' ||
+      $data[$nodo][$attr] == '0.0' ||
+      $data[$nodo][$attr] == '0'
+    )
+  ) {
+    unset($data[$nodo][$attr]);
+  }
+  return $data;
 }
