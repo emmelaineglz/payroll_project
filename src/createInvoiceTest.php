@@ -18,7 +18,7 @@ use Charles\CFDI\Node\Complemento\Nomina\OtrosPagos\SubsidioAlEmpleo;
 use Charles\CFDI\Node\Complemento\Nomina\OtrosPagos\CompensacionSaldosAFavor;
 use Charles\CFDI\Node\Complemento\Nomina\Deduccion\DetalleDeduccion;
 use Charles\CFDI\Node\Complemento\Nomina\Percepcion\DetallePercepcion;
-
+use Charles\CFDI\Node\Complemento\Nomina\Percepcion\HorasExtras;
 
 $json = file_get_contents("php://input");
 //$json = file_get_contents('../uploads/ejemplo.json');
