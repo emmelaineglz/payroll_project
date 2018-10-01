@@ -18,6 +18,7 @@ use Charles\CFDI\Node\Complemento\Nomina\OtrosPagos\SubsidioAlEmpleo;
 use Charles\CFDI\Node\Complemento\Nomina\OtrosPagos\CompensacionSaldosAFavor;
 use Charles\CFDI\Node\Complemento\Nomina\Deduccion\DetalleDeduccion;
 use Charles\CFDI\Node\Complemento\Nomina\Percepcion\DetallePercepcion;
+use Charles\CFDI\Node\Complemento\Nomina\Percepcion\HorasExtras;
 
 
 $json = file_get_contents("php://input");
@@ -171,7 +172,12 @@ function complementoNomina($nominaData) {
 
   $nomina->add(new Percepcion($nominaPercepcion));
   foreach ($nominaDetallePercepcion as $percepcion) {
-    $nomina->add(new DetallePercepcion($percepcion));
+    if($percepcion['TipoPercepcion'] === '019' && isset($percepcion['HorasExtras'])) {
+      $percepcionHorasExtra = generarNodoHorasExtras($percepcion);
+      $nomina->add($percepcionHorasExtra);
+    } else {
+      $nomina->add(new DetallePercepcion($percepcion));
+    }
   }
 
   $nomina->add(new Deduccion($nominaDeduccion));
@@ -217,4 +223,26 @@ function removerAtributoVacio($data, $nodo, $attr) {
     unset($data[$nodo][$attr]);
   }
   return $data;
+}
+
+function generarNodoHorasExtras($percepcion) {
+  $percepcionHorasExtra['detallePercepcion'] = [
+    "TipoPercepcion" => $percepcion['TipoPercepcion'],
+    "Clave" => $percepcion['Clave'],
+    "Concepto" => $percepcion['Concepto'],
+    "ImporteGravado" => $percepcion['ImporteGravado'],
+    "ImporteExento" => $percepcion['ImporteExento'],
+  ];
+
+  $percepcionHorasExtra['horasExtra'] = [
+    "Dias" => $percepcion['HorasExtras']['Dias'],
+    "TipoHoras" => $percepcion['HorasExtras']['TipoHoras'],
+    "HorasExtra" => $percepcion['HorasExtras']['HorasExtra'],
+    "ImportePagado" => $percepcion['HorasExtras']['ImportePagado'],
+  ];
+
+  $detallePercepcion = new DetallePercepcion($percepcionHorasExtra['detallePercepcion']);
+  $detallePercepcion->add(new HorasExtras($percepcionHorasExtra['horasExtra']));
+
+  return $detallePercepcion;
 }
