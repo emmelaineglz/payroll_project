@@ -3,20 +3,20 @@
    "comprobante":{
       "header":{
          "Serie":"A",
-         "Folio":"3038",
-         "Fecha":"2018-06-12T22:50:57",
+         "Folio":"3040",
+         "Fecha":"2018-07-15T22:50:57",
          "FormaPago":"99",
          "SubTotal":"2430107.00",
          "Descuento":"861606.47",
          "Moneda":"MXN",
-         "Total":"1568500.53",
+         "Total":"0.00",
          "TipoDeComprobante":"N",
          "MetodoPago":"PUE",
-         "LugarExpedicion":"06700"
+         "LugarExpedicion":""
       },
       "emisor":{
          "Rfc":"AAA010101AAA",
-         "Nombre":"FAPRICO S. DE R.L. DE C.V.",
+         "Nombre":"",
          "RegimenFiscal":"601"
       },
       "receptor":{
@@ -113,11 +113,17 @@
                   "ImporteExento":"3185.31"
                },
                {
-                  "TipoPercepcion":"005",
-                  "Clave":"P005",
-                  "Concepto":"FONDO DE AHORRO EMPRESA",
-                  "ImporteGravado":"7814.69",
-                  "ImporteExento":"0.00"
+                  "TipoPercepcion":"019",
+                  "Clave":"P019",
+                  "Concepto":"HORAS EXTRAS DOBLES",
+                  "ImporteGravado":"0.00",
+                  "ImporteExento":"678.97",
+                  "HorasExtras": {
+                      "Dias": "2",
+                      "TipoHoras": "01",
+                      "HorasExtra": "5",
+                      "ImportePagado": "345.97"
+                  }
                },
                {
                   "TipoPercepcion":"038",

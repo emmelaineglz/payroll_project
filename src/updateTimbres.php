@@ -2,7 +2,7 @@
 include "parserXml.php";
 
 $Usuario='root';
-$Password='05asl13';
+$Password='20edo18';
 $Servidor='127.0.0.1';
 $BaseDeDatos="onenom";
 
