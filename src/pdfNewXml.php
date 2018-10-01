@@ -44,6 +44,47 @@ class FacturaPdfXml extends FPDF {
       $this->Cell(40, 4, $data['LugarExpedicion'], 0, 0, 'L');
     }
 
+    public function HeaderHei() {
+      $this->SetDrawColor(26, 84, 251);
+      $this->SetLineWidth(0.5);
+      $this->Line(10, 33, 200, 33);
+      $this->Ln();
+      $this->Ln();
+      $this->SetFont('Arial','B',9);
+      $this->SetTextColor(5, 5, 5);
+      $this->Cell(30, 2, "Datos del Emisor", 0, 0, 'L');
+      $this->Ln();
+      $this->SetDrawColor(26, 84, 251);
+      $this->SetLineWidth(0.5);
+      $this->Line(10, 39, 200, 39);
+      $this->Ln();
+      $this->Ln();
+      $this->SetFont('Arial','B',7);
+      $this->Cell(25, 4, "Razon Social", 0, 0, 'L');
+      $this->Cell(40, 4, "HEITEN SA DE CV", 0, 0, 'L');
+      $this->Ln();
+      $this->Cell(25, 4, "RFC", 0, 0, 'L');
+      $this->Cell(40, 4, "HEI1501217Y9", 0, 0, 'L');
+      $this->Cell(25, 4, "Regimen Fiscal", 0, 0, 'L');
+      $this->Cell(50, 4, "General de Ley Personas Morales", 0, 0, 'L');
+      $this->Cell(25, 4, "Registro Patronal", 0, 0, 'L');
+      $this->Cell(40, 4, "Y6064143107", 0, 0, 'L');
+      $this->Ln();
+      $this->Cell(25, 4, "Colonia", 0, 0, 'L');
+      $this->Cell(40, 4, "ROMA NORTE", 0, 0, 'L');
+      $this->Cell(25, 4, "Calle y Numero", 0, 0, 'L');
+      $this->Cell(50, 4, "MEDELLIN 79", 0, 0, 'L');
+      $this->Cell(25, 4, "Codigo Postal", 0, 0, 'L');
+      $this->Cell(40, 4, "06700", 0, 0, 'L');
+      $this->Ln();
+      $this->Cell(25, 4, "Estado", 0, 0, 'L');
+      $this->Cell(40, 4, "Ciudad de Mexico", 0, 0, 'L');
+      $this->Cell(25, 4, "Delegacion", 0, 0, 'L');
+      $this->Cell(50, 4, "Cuauhtemoc", 0, 0, 'L');
+      $this->Cell(25, 4, "Pais", 0, 0, 'L');
+      $this->Cell(40, 4, "Mexico", 0, 0, 'L');
+		}
+
     public function HeaderBon() {
       $this->SetDrawColor(26, 84, 251);
       $this->SetLineWidth(0.5);

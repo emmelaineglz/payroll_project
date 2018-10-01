@@ -2,20 +2,21 @@
 include "../vendor/autoload.php";
 include "Certificate.php";
 
-$cer = $_FILES['certificate']['tmp_name'];
+/*$cer = $_FILES['certificate']['tmp_name'];
 $cer_name = $_FILES['certificate']['name'];
 $key = $_FILES['key']['tmp_name'];
 $key_name = $_FILES['key']['name'];
 $pass = $_POST['pass'];
 $rfc = $_POST['rfc'];
 $empresa = $_POST['empresa'];
-/*$cer = '../uploads/00001000000401961599_MIN120828HI0.cer';
-$cer_name = '00001000000401961599_MIN120828HI0.cer';
-$key = '../uploads/MIN120828HI0_MIN120828HI0.key';
-$key_name = 'MIN120828HI0_MIN120828HI0.key';
-$pass = 'Merc2017';
-$rfc = 'MIN120828HI0';
-$empresa = '6';*/
+*/
+$cer = '../uploads/5/HEITEN_1/CSD_HEITEN_S.A._DE_C.V._HEI1501217Y9_20180821_163706s.cer';
+$cer_name = 'CSD_HEITEN_S.A._DE_C.V._HEI1501217Y9_20180821_163706s.cer';
+$key = '../uploads/5/HEITEN_1/CSD_HEITEN_S.A._DE_C.V._HEI1501217Y9_20180821_163706.key';
+$key_name = 'CSD_HEITEN_S.A._DE_C.V._HEI1501217Y9_20180821_163706.key';
+$pass = 'heiten15';
+$rfc = 'HEI1501217Y9';
+$empresa = '5';
 $registro = 0;
 
 /* Ruta del servicio de integracion Pruebas*/
@@ -68,7 +69,8 @@ if($val > 0){
   catch (SoapFault $fault){
     echo "SOAPFault: ".$fault->faultcode."-".$fault->faultstring."\n";
   }
-
+print_r($respon);
+print_r($params);
   $numeroExcepcion = $respon->RegistraEmisorResult->anyType[1];
   $descripcionResultado = $respon->RegistraEmisorResult->anyType[2];
 
