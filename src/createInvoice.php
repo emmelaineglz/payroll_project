@@ -179,11 +179,6 @@ function complementoNomina($nominaData) {
     $nomina->add(new DetalleDeduccion($deduccion));
   }
 
-  if(!empty($nominaData['Incapacidades'])){
-    foreach ($nominaData['Incapacidades'] as $value) {
-      $nomina->add(new Incapacidad($value));
-    }
-  }
   if(!empty($nominaData['OtrosPagos'])){
     foreach ($nominaData['OtrosPagos'] as $value) {
       $oPagos = new OtrosPagos($value['header']);
@@ -194,6 +189,12 @@ function complementoNomina($nominaData) {
         $oPagos->add(new CompensacionSaldosAFavor($value['compensacion']));
       }
       $nomina->add($oPagos);
+    }
+  }
+
+  if(!empty($nominaData['Incapacidades'])){
+    foreach ($nominaData['Incapacidades'] as $value) {
+      $nomina->add(new Incapacidad($value));
     }
   }
   return $nomina;

@@ -1,7 +1,7 @@
 <?php
 include "../vendor/autoload.php";
 include "Certificate.php";
-include "pdfNew.php";
+//include "pdfNew.php";
 
 use Charles\CFDI\CFDI;
 use Charles\CFDI\Node\Emisor;
@@ -21,8 +21,13 @@ use Charles\CFDI\Node\Complemento\Nomina\Percepcion\DetallePercepcion;
 
 
 $json = file_get_contents("php://input");
-//$json = file_get_contents('/Applications/XAMPP/htdocs/payroll_project/uploads/ejemplo.json');
+//$json = file_get_contents('../uploads/ejemplo.json');
 $ruta = "../uploads/";
+/* Ruta del servicio de integracion Pruebas*/
+$ws = "https://cfdi33-pruebas.buzoncfdi.mx:1443/Timbrado.asmx?wsdl";
+/* Ruta del servicio de integracion Productivo*/
+//$ws = "https://timbracfdi33.mx:1443/Timbrado.asmx?wsdl";
+$response = '';
 
 if($json) {
   $jsonData = json_decode($json, true);
@@ -36,6 +41,7 @@ if($json) {
     $compobanteComplemento = $comprobante['complemento'];
 
     $rfc = $compobanteEmisor['Rfc'];
+    //$empresa = $jsonData['empresa'];
     $rutaCer = "{$ruta}{$empresa}/{$rfc}/{$rfc}_C.pem";
     $cerFile = file_get_contents($rutaCer);
     $keyFile = file_get_contents("{$ruta}{$empresa}/{$rfc}/{$rfc}_K.pem");
@@ -53,40 +59,95 @@ if($json) {
       $nomina = complementoNomina($complementoValidado);
       $cfdi->add($nomina);
     }
-    $num = rand(5, 999999);
-    $nameXml = "{$rfc}_{$num}";
+    //echo $cfdi;
+    /* El servicio recibe el comprobante (xml) codificado en Base64, el rfc del emisor deberá ser 'AAA010101AAA' para efecto de pruebas*/
+    $base64Comprobante = base64_encode($cfdi);
+    try {
+      $params = array();
+      /** Usuario Integrador para pruebas **/
+      $params['usuarioIntegrador'] = 'mvpNUXmQfK8=';
+      /** Usuario Integrador para Productivo **/
+      //$params['usuarioIntegrador'] = '8E5CyvqyxsyGkK0DbKbA8g==';
+      $params['xmlComprobanteBase64'] = $base64Comprobante;
+      $params['idComprobante'] = rand(5, 999999);
 
-    if($cfdi){
-      file_put_contents("{$ruta}{$empresa}/{$rfc}/{$nameXml}.xml", $cfdi);
-      /* Generamos archivo PDF */
-      $pdf = new FacturaPdf();
-      $xml = json_decode($json);
-      $xml = $xml->comprobante;
-      $nomina = $xml->complemento->nomina12;
-      $subsidio = (!empty($nomina->OtrosPagos))? $nomina->OtrosPagos[0]->subsidio->SubsidioCausado : '';
+      $client = new SoapClient($ws,$params);
+      $response = $client->__soapCall('TimbraCFDI', array('parameters' => $params));
+    } catch (SoapFault $fault){
+      echo "SOAPFault: ".$fault->faultcode."-".$fault->faultstring."\n";
+    }
 
-      $pdf->AddPage();
-      $pdf->SetFont('Arial','B',16);
-      $pdf->HeaderPay($xml);
-      if($rfc === "MIN120828HI0"){
-        $pdf->HeaderMin();
-      }elseif($rfc === "BON150210EN4"){
-        $pdf->HeaderBon();
+    $tipoExcepcion = $response->TimbraCFDIResult->anyType[0];
+    $numeroExcepcion = $response->TimbraCFDIResult->anyType[1];
+    $descripcionResultado = $response->TimbraCFDIResult->anyType[2];
+    $xmlTimbrado = $response->TimbraCFDIResult->anyType[3];
+    $codigoQr = $response->TimbraCFDIResult->anyType[4];
+    $cadenaOriginal = $response->TimbraCFDIResult->anyType[5];
+
+    if($xmlTimbrado != ''){
+
+      $xml_READ = simplexml_load_string($xmlTimbrado);
+      $ns = $xml_READ->getNamespaces(true);
+      $xml_READ->registerXPathNamespace('c', $ns['cfdi']);
+      $comprobante = $xml_READ->xpath('//c:Comprobante');
+      foreach ($comprobante as $comp) {
+          $FechaEmision = $comp['Fecha'];
       }
-      $pdf->HeaderNomina($xml->receptor, $nomina);
-      $pdf->percep_deducc($nomina->percepcion, $nomina->detallePercepcion, $nomina->deduccion, $nomina->detalleDeduccion, $nomina->header->NumDiasPagados, $subsidio);
-      $pdf->Totales($xml);
-      //$pdf->FooterNomina($selloCFD, $selloSAT, $cadenaOriginal, $image, $UUID, $noCertificadoSAT, $FechaTimbrado);
-      $archivo = "{$ruta}{$empresa}//{$rfc}/{$nameXml}.pdf";
-      $pdf->Output('F', $archivo);
-      $ruta_xml = "http://159.89.38.133/payroll_project/uploads/{$empresa}/{$rfc}/{$nameXml}.xml";
-      $ruta_pdf = "http://159.89.38.133/payroll_project/uploads/{$empresa}/{$rfc}/{$nameXml}.pdf";
 
-      $mesage = ($comprobanteHeader['Total'] == "0.00" || $comprobanteHeader['Total'] == "0")? "Este comprobante no se timbra por valores en cero" : "Timbrado Exitoso";
-      $responseFinal = ["status" => true, "message" => $mesage, "url_xml" => $ruta_xml];
+      $xml_READ->registerXPathNamespace('t', $ns['tfd']);
+      $atributos = $xml_READ->xpath('//t:TimbreFiscalDigital');
+      foreach ($atributos as $tfd) {
+          $selloCFD = $tfd['SelloCFD'];
+        	$FechaTimbrado = $tfd['FechaTimbrado'];
+        	$UUID = $tfd['UUID'];
+        	$noCertificadoSAT = $tfd['NoCertificadoSAT'];
+        	$versionSAT = $tfd['Version'];
+        	$selloSAT = $tfd['SelloSAT'];
+      }
+
+      $xml_READ->registerXPathNamespace('n', $ns['nomina12']);
+      $receptor = $xml_READ->xpath('//n:Receptor');
+      foreach ($receptor as $recep) {
+          $numEmpleado = $recep['NumEmpleado'];
+      }
+
+      $header = $xml_READ->xpath('//n:Nomina');
+      foreach ($header as $head) {
+          $fechaFin = $head['FechaFinalPago'];
+      }
+
+      /*Guardamos comprobante timbrado*/
+      file_put_contents("{$ruta}{$empresa}/{$rfc}/{$UUID}_{$numEmpleado}_{$fechaFin}.xml", $xmlTimbrado);
+      /*Guardamos codigo qr*/
+      //file_put_contents("{$ruta}{$empresa}/{$rfc}/codigoQr.jpg", $codigoQr);
+      /*Guardamos cadena original del complemento de certificacion del SAT*/
+      //file_put_contents("{$ruta}{$empresa}/{$rfc}/cadenaOriginal.txt", $cadenaOriginal);
+      $image = "{$ruta}{$empresa}/{$rfc}/codigoQr_{$UUID}.jpg";
+      /* Generamos archivo PDF */
+      $ruta_xml = "http://159.89.38.133/payroll_project/uploads/{$empresa}/{$rfc}/{$UUID}_{$numEmpleado}_{$fechaFin}.xml";
+      $serie = $comprobanteHeader['Serie'];
+      $folio = $comprobanteHeader['Folio'];
+      $responseFinal = [
+        "status" => true,
+        "message" => "Timbrado Exitoso. ". $serie. $folio,
+        "url_xml" => $ruta_xml,
+        "serie" => $serie,
+        "folio" => $folio,
+        "cadenaOriginal" => (string)$cadenaOriginal,
+        "uuid" => (string)$UUID,
+        "fechaTimbre" => (string)$FechaTimbrado,
+        "selloSAT" => (string)$selloSAT,
+        "selloCFD" => (string)$selloCFD,
+        "noCertif" => (string)$noCertificadoSAT,
+        "fechaEmision" => (string)$FechaEmision
+      ];
       echo json_encode($responseFinal);
     } else {
-      $responseFinal = ["status" => false, "message" => 'Fallo la generacion del XML'];
+      $num = rand(5, 999999);
+      $nameXml = "{$rfc}_{$num}";
+      file_put_contents("{$ruta}{$empresa}/{$rfc}/{$nameXml}.xml", $cfdi);
+      $ruta_xmlE = "http://159.89.38.133/payroll_project/uploads/{$empresa}/{$rfc}/{$nameXml}.xml";
+      $responseFinal = ["status" => false, "message" => $descripcionResultado, "url_xml" => $ruta_xmlE];
       echo json_encode($responseFinal);
     }
   } else {
@@ -133,12 +194,6 @@ function complementoNomina($nominaData) {
         $oPagos->add(new CompensacionSaldosAFavor($value['compensacion']));
       }
       $nomina->add($oPagos);
-    }
-  }
-
-  if(!empty($nominaData['Incapacidades'])){
-    foreach ($nominaData['Incapacidades'] as $value) {
-      $nomina->add(new Incapacidad($value));
     }
   }
   return $nomina;
