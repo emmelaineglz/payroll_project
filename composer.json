@@ -1,0 +1,26 @@
+{
+    "name": "root/payroll_project",
+    "description": "Timbrado de nómina",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Ethel Gonzaález",
+            "email": "emmelaine.glz@gmail.com"
+        }
+    ],
+    "require": {
+        "orlandocharles/cfdi": "^0.0.8",
+        "symfony/process": "^3.4",
+        "nesbot/carbon": "^1.23",
+        "cangelis/pdf": "^2.2",
+        "setasign/fpdf": "1.8.1",
+        "endroid/qr-code": "2.x-dev"
+    },
+    "repositories": [
+       {
+         "type": "vcs",
+         "url": "https://github.com/emmelaineglz/cfdi"
+       }
+    ],
+    "minimum-stability": "dev"
+}

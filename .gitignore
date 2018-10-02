@@ -1,0 +1,7 @@
+vendor/
+cfdi/
+composer.lock
+uploads/*
+src/Timbrado/
+readExcel/ejemplos/*
+readExcel/uploadsFiles/*
