@@ -172,7 +172,9 @@ function complementoNomina($nominaData) {
 
   $nomina->add(new Percepcion($nominaPercepcion));
   foreach ($nominaDetallePercepcion as $percepcion) {
-    if(($percepcion['ImporteGravado'] != "0.00" && $percepcion['ImporteExento'] === "0.00") || ($percepcion['ImporteGravado'] === "0.00" && $percepcion['ImporteExento'] != "0.00")){
+    if(($percepcion['ImporteGravado'] != "0.00" && $percepcion['ImporteExento'] === "0.00")
+    || ($percepcion['ImporteGravado'] === "0.00" && $percepcion['ImporteExento'] != "0.00")
+    || ($percepcion['ImporteGravado'] != "0.00" && $percepcion['ImporteExento'] != "0.00")){
       if($percepcion['TipoPercepcion'] === '019' && isset($percepcion['HorasExtras'])) {
         $percepcionHorasExtra = generarNodoHorasExtras($percepcion);
         $nomina->add($percepcionHorasExtra);
