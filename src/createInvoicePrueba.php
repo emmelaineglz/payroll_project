@@ -24,43 +24,37 @@ use Charles\CFDI\Node\Complemento\Nomina\Percepcion\HorasExtras;
 $json = file_get_contents("php://input");
 //$json = file_get_contents('../uploads/ejemplo.json');
 $ruta = "../uploads/";
-$ruta2 = "../uploads/aTimbrar.json";
-file_put_contents($ruta2, $json);
 /* Ruta del servicio de integracion Pruebas*/
-//$ws = "https://cfdi33-pruebas.buzoncfdi.mx:1443/Timbrado.asmx?wsdl";
+$ws = "https://cfdi33-pruebas.buzoncfdi.mx:1443/Timbrado.asmx?wsdl";
 /* Ruta del servicio de integracion Productivo*/
-$ws = "https://timbracfdi33.mx:1443/Timbrado.asmx?wsdl";
+//$ws = "https://timbracfdi33.mx:1443/Timbrado.asmx?wsdl";
 $response = '';
 
 if($json) {
   $jsonData = json_decode($json, true);
   if($jsonData['comprobante'] && $jsonData['empresa']) {
     $comprobante = $jsonData['comprobante'];
-    $empresa = $jsonData['empresa'];
+    //$empresa = $jsonData['empresa'];
+    $empresa = '9999';
     $comprobanteHeader = $comprobante['header'];
     $compobanteEmisor = $comprobante['emisor'];
     $compobanteReceptor = $comprobante['receptor'];
     $compobanteConceptos = $comprobante['conceptos'];
     $compobanteComplemento = $comprobante['complemento'];
 
-    $rfc = $compobanteEmisor['Rfc'];
+    //$rfc = $compobanteEmisor['Rfc'];
+    $rfc = 'AAA010101AAA';
     //$empresa = $jsonData['empresa'];
     $rutaCer = "{$ruta}{$empresa}/{$rfc}/{$rfc}_C.pem";
     $cerFile = file_get_contents($rutaCer);
     $keyFile = file_get_contents("{$ruta}{$empresa}/{$rfc}/{$rfc}_K.pem");
     $cert = new Certificate();
     $comprobanteHeader['NoCertificado'] = $cert->getSerial($rutaCer);
-    
-    if($comprobanteHeader['Descuento'] == '0.00' || $comprobanteHeader['Descuento'] == '0') {
-        unset($comprobanteHeader['Descuento']);
-    }
+
     $cfdi = new CFDI($comprobanteHeader, $cerFile, $keyFile);
     $cfdi->add(new Emisor($compobanteEmisor));
     $cfdi->add(new Receptor($compobanteReceptor));
     foreach ($compobanteConceptos as $concepto) {
-      if($concepto['Descuento'] == '0.00' || $concepto['Descuento'] == '0') {
-        unset($concepto['Descuento']);
-      }
       $cfdi->add(new Concepto($concepto));
     }
     if($compobanteComplemento) {
@@ -74,9 +68,9 @@ if($json) {
     try {
       $params = array();
       /** Usuario Integrador para pruebas **/
-      //$params['usuarioIntegrador'] = 'mvpNUXmQfK8=';
+      $params['usuarioIntegrador'] = 'mvpNUXmQfK8=';
       /** Usuario Integrador para Productivo **/
-      $params['usuarioIntegrador'] = '8E5CyvqyxsyGkK0DbKbA8g==';
+      //$params['usuarioIntegrador'] = '8E5CyvqyxsyGkK0DbKbA8g==';
       $params['xmlComprobanteBase64'] = $base64Comprobante;
       $params['idComprobante'] = rand(5, 999999);
 
@@ -192,11 +186,9 @@ function complementoNomina($nominaData) {
     }
   }
 
-  if(validarDeducciones($nominaDeduccion)) {
-    $nomina->add(new Deduccion($nominaDeduccion));
-    foreach ($nominaDetalleDeduccion as $deduccion) {
-      $nomina->add(new DetalleDeduccion($deduccion));
-    }
+  $nomina->add(new Deduccion($nominaDeduccion));
+  foreach ($nominaDetalleDeduccion as $deduccion) {
+    $nomina->add(new DetalleDeduccion($deduccion));
   }
 
   if(!empty($nominaData['OtrosPagos'])){
@@ -220,18 +212,8 @@ function complementoNomina($nominaData) {
   return $nomina;
 }
 
-function validarDeducciones ($nominaDeduccion) {
-  if (!isset($nominaDeduccion['TotalImpuestosRetenidos']) && !isset($nominaDeduccion['TotalOtrasDeducciones'])) {
-      return false;
-    } else {
-      return true;
-    }
-}
-
 function validarNodos($nominaData) {
   $parsedData = removerAtributoVacio($nominaData, 'deduccion', 'TotalImpuestosRetenidos');
-  $parsedData = removerAtributoVacio($parsedData, 'deduccion', 'TotalOtrasDeducciones');
-  $parsedData = removerAtributoVacio($parsedData, 'header', 'TotalDeducciones');
   return $parsedData;
 }
 
