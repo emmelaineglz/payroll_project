@@ -5,6 +5,7 @@ $basePath = dirname(__DIR__);
 include "{$basePath}/vendor/autoload.php";
 include "parserXml.php";
 include "pdfNewXml.php";
+include "obtenerEmpresa.php";
 
 /*$empresa = "9999";
 $rfc = "AAA010101AAA";
@@ -14,10 +15,10 @@ $empresa = base64_decode($_GET["e"]);
 $rfc = base64_decode($_GET["r"]);
 $archivo = base64_decode($_GET["a"]);
 
-$arrayRfcs = ["MIN120828HI0", "BON150210EN4", "HEI1501217Y9"];
+/*$arrayRfcs = ["MIN120828HI0", "BON150210EN4", "HEI1501217Y9", "FAP141125CR3"];
 if (!in_array($rfc, $arrayRfcs)) {
   die('No existe la configuracion de la empresa!');
-}
+}*/
 
 $rutaFile = "{$basePath}/uploads/{$empresa}/{$rfc}/";
 $data = "{$rutaFile}{$archivo}";
@@ -38,13 +39,20 @@ $subsidio = (!empty($arrayXml[12]['otrosPagos'])) ? $arrayXml[12]['otrosPagos'][
 $pdf->AddPage();
 $pdf->SetFont('Arial','B',16);
 $pdf->HeaderPay($headerXml);
-if($rfc === "MIN120828HI0"){
+
+$headerEmpresa = json_decode(obtenerDatosEmpresa($empresa));
+$pdf->HeaderG($headerEmpresa->cfdiFiscal);
+
+/*if($rfc === "MIN120828HI0"){
   $pdf->HeaderMin();
 }elseif($rfc === "BON150210EN4"){
   $pdf->HeaderBon();
 }elseif($rfc === "HEI1501217Y9"){
   $pdf->HeaderHei();
-}
+}elseif($rfc === "FAP141125CR3"){
+	$pdf->HeaderFap();
+}*/
+
 $pdf->HeaderNomina($arrayXml[2]['receptor'], $arrayXml[4]['headerNomina'], $arrayXml[6]['receptorNomina']);
 $pdf->percep_deducc($arrayXml[7]['percepcion'], $arrayXml[8]['detallePercepcion'], $arrayXml[9]['deduccion'], $arrayXml[10]['detalleDeduccion'], $arrayXml[4]['headerNomina']['NumDiasPagados'], $subsidio);
 $pdf->Totales($arrayXml[0]['header']);
