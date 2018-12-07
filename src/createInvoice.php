@@ -18,6 +18,7 @@ use Charles\CFDI\Node\Complemento\Nomina\OtrosPagos\SubsidioAlEmpleo;
 use Charles\CFDI\Node\Complemento\Nomina\OtrosPagos\CompensacionSaldosAFavor;
 use Charles\CFDI\Node\Complemento\Nomina\Deduccion\DetalleDeduccion;
 use Charles\CFDI\Node\Complemento\Nomina\Percepcion\DetallePercepcion;
+use Charles\CFDI\Node\Complemento\Nomina\Percepcion\DetallePercepcionPPP;
 use Charles\CFDI\Node\Complemento\Nomina\Percepcion\HorasExtras;
 
 
@@ -173,6 +174,7 @@ function complementoNomina($nominaData) {
   $nominaDetalleDeduccion = $nominaData['detalleDeduccion'];
   $nominaPercepcion = $nominaData['percepcion'];
   $nominaDetallePercepcion = $nominaData['detallePercepcion'];
+  $nominaDetallePercepcionPPP = isset($nominaData['detallePercepcionPPP']) ? $nominaData['detallePercepcionPPP'] : [];
 
   $nomina = new Nomina($nominaHeader);
   $nomina->add(new EmisorN($nominaEmisor));
@@ -189,6 +191,12 @@ function complementoNomina($nominaData) {
       } else {
         $nomina->add(new DetallePercepcion($percepcion));
       }
+    }
+  }
+
+  if($nominaDetallePercepcionPPP) {
+    foreach ($nominaDetallePercepcionPPP as $percepcionPPP) {
+      $nomina->add(new DetallePercepcionPPP($percepcionPPP));
     }
   }
 
