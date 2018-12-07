@@ -1,5 +1,6 @@
 <?php
 include "../vendor/autoload.php";
+include "../config/config.php";
 include "Certificate.php";
 //include "pdfNew.php";
 
@@ -134,7 +135,7 @@ if($json) {
       //file_put_contents("{$ruta}{$empresa}/{$rfc}/cadenaOriginal.txt", $cadenaOriginal);
       $image = "{$ruta}{$empresa}/{$rfc}/codigoQr_{$UUID}.jpg";
       /* Generamos archivo PDF */
-      $ruta_xml = "http://159.89.38.133/payroll_project/uploads/{$empresa}/{$rfc}/{$UUID}_{$numEmpleado}_{$fechaFin}.xml";
+      $ruta_xml = HOST."/payroll_project/uploads/{$empresa}/{$rfc}/{$UUID}_{$numEmpleado}_{$fechaFin}.xml";
       $serie = $comprobanteHeader['Serie'];
       $folio = $comprobanteHeader['Folio'];
       $responseFinal = [
@@ -156,7 +157,7 @@ if($json) {
       $num = rand(5, 999999);
       $nameXml = "{$rfc}_{$num}";
       file_put_contents("{$ruta}{$empresa}/{$rfc}/{$nameXml}.xml", $cfdi);
-      $ruta_xmlE = "http://159.89.38.133/payroll_project/uploads/{$empresa}/{$rfc}/{$nameXml}.xml";
+      $ruta_xmlE = HOST."/payroll_project/uploads/{$empresa}/{$rfc}/{$nameXml}.xml";
       $responseFinal = ["status" => false, "message" => $descripcionResultado, "url_xml" => $ruta_xmlE];
       echo json_encode($responseFinal);
     }

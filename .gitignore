@@ -5,3 +5,4 @@ uploads/*
 src/Timbrado/
 readExcel/ejemplos/*
 readExcel/uploadsFiles/*
+config/config.php

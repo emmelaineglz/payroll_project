@@ -1,5 +1,6 @@
 <?php
 include "../vendor/autoload.php";
+include "../config/config.php";
 include "Certificate.php";
 include "pdfNew.php";
 
@@ -81,8 +82,8 @@ if($json) {
       //$pdf->FooterNomina($selloCFD, $selloSAT, $cadenaOriginal, $image, $UUID, $noCertificadoSAT, $FechaTimbrado);
       $archivo = "{$ruta}{$empresa}//{$rfc}/{$nameXml}.pdf";
       $pdf->Output('F', $archivo);
-      $ruta_xml = "http://159.89.38.133/payroll_project/uploads/{$empresa}/{$rfc}/{$nameXml}.xml";
-      $ruta_pdf = "http://159.89.38.133/payroll_project/uploads/{$empresa}/{$rfc}/{$nameXml}.pdf";
+      $ruta_xml = HOST."/payroll_project/uploads/{$empresa}/{$rfc}/{$nameXml}.xml";
+      $ruta_pdf = HOST."/payroll_project/uploads/{$empresa}/{$rfc}/{$nameXml}.pdf";
 
       $mesage = ($comprobanteHeader['Total'] == "0.00" || $comprobanteHeader['Total'] == "0")? "Este comprobante no se timbra por valores en cero" : "Timbrado Exitoso";
       $responseFinal = ["status" => true, "message" => $mesage, "url_xml" => $ruta_xml];
