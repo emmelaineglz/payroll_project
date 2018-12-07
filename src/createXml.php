@@ -18,6 +18,7 @@ use Charles\CFDI\Node\Complemento\Nomina\OtrosPagos\SubsidioAlEmpleo;
 use Charles\CFDI\Node\Complemento\Nomina\OtrosPagos\CompensacionSaldosAFavor;
 use Charles\CFDI\Node\Complemento\Nomina\Deduccion\DetalleDeduccion;
 use Charles\CFDI\Node\Complemento\Nomina\Percepcion\DetallePercepcion;
+use Charles\CFDI\Node\Complemento\Nomina\Percepcion\DetallePercepcionPPP;
 use Charles\CFDI\Node\Complemento\Nomina\Percepcion\HorasExtras;
 
 
@@ -104,6 +105,7 @@ function complementoNomina($nominaData) {
   $nominaDetalleDeduccion = $nominaData['detalleDeduccion'];
   $nominaPercepcion = $nominaData['percepcion'];
   $nominaDetallePercepcion = $nominaData['detallePercepcion'];
+  $nominaDetallePercepcionPPP = isset($nominaData['detallePercepcionPPP']) ? $nominaData['detallePercepcionPPP'] : [];
 
   $nomina = new Nomina($nominaHeader);
   $nomina->add(new EmisorN($nominaEmisor));
@@ -121,9 +123,17 @@ function complementoNomina($nominaData) {
     }
   }
 
-  $nomina->add(new Deduccion($nominaDeduccion));
-  foreach ($nominaDetalleDeduccion as $deduccion) {
-    $nomina->add(new DetalleDeduccion($deduccion));
+  if($nominaDetallePercepcionPPP) {
+    foreach ($nominaDetallePercepcionPPP as $percepcionPPP) {
+      $nomina->add(new DetallePercepcionPPP($percepcionPPP));
+    }
+  }
+
+  if(validarDeducciones($nominaDeduccion)) {
+    $nomina->add(new Deduccion($nominaDeduccion));
+    foreach ($nominaDetalleDeduccion as $deduccion) {
+      $nomina->add(new DetalleDeduccion($deduccion));
+    }
   }
 
   if(!empty($nominaData['Incapacidades'])){
@@ -152,8 +162,18 @@ function complementoNomina($nominaData) {
   return $nomina;
 }
 
+function validarDeducciones ($nominaDeduccion) {
+  if (!isset($nominaDeduccion['TotalImpuestosRetenidos']) && !isset($nominaDeduccion['TotalOtrasDeducciones'])) {
+      return false;
+    } else {
+      return true;
+    }
+}
+
 function validarNodos($nominaData) {
   $parsedData = removerAtributoVacio($nominaData, 'deduccion', 'TotalImpuestosRetenidos');
+  $parsedData = removerAtributoVacio($parsedData, 'deduccion', 'TotalOtrasDeducciones');
+  $parsedData = removerAtributoVacio($parsedData, 'header', 'TotalDeducciones');
   return $parsedData;
 }
 
