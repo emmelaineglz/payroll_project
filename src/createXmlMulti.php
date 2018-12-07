@@ -1,5 +1,6 @@
 <?php
 include "../vendor/autoload.php";
+include "../config/config.php";
 include "Certificate.php";
 include "pdfNew.php";
 
@@ -76,8 +77,8 @@ if($json){
         //$pdf->FooterNomina($selloCFD, $selloSAT, $cadenaOriginal, $image, $UUID, $noCertificadoSAT, $FechaTimbrado);
         $archivo = "{$ruta}{$empresa}//{$rfc}/{$nameXml}.pdf";
         $pdf->Output('F', $archivo);
-        $ruta_xml = "http://159.89.38.133/payroll_project/uploads/{$empresa}/{$rfc}/{$nameXml}.xml";
-        $ruta_pdf = "http://159.89.38.133/payroll_project/uploads/{$empresa}/{$rfc}/{$nameXml}.pdf";
+        $ruta_xml = HOST."/payroll_project/uploads/{$empresa}/{$rfc}/{$nameXml}.xml";
+        $ruta_pdf = HOST."/payroll_project/uploads/{$empresa}/{$rfc}/{$nameXml}.pdf";
         $responseFinal = ["status" => true, "message" => "Timbrado Exitoso", "url_xml" => $ruta_xml, "url_pdf" => $ruta_pdf];
         echo json_encode($responseFinal);
       } else {
