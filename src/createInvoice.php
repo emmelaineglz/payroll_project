@@ -178,7 +178,9 @@ function complementoNomina($nominaData) {
   $nominaDetallePercepcionPPP = isset($nominaData['detallePercepcionPPP']) ? $nominaData['detallePercepcionPPP'] : [];
 
   $nomina = new Nomina($nominaHeader);
-  $nomina->add(new EmisorN($nominaEmisor));
+  if($nominaDetallePercepcionPPP === []){
+    $nomina->add(new EmisorN($nominaEmisor));
+  }
   $nomina->add(new ReceptorN($nominaReceptor));
 
   $nomina->add(new Percepcion($nominaPercepcion));
