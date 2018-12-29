@@ -40,7 +40,7 @@ $pdf->AddPage();
 $pdf->SetFont('Arial','B',16);
 $pdf->HeaderPay($headerXml);
 
-$headerEmpresa = json_decode(obtenerDatosEmpresa($empresa));
+$headerEmpresa = json_decode(obtenerDatosEmpresa($empresa, $rfc));
 $pdf->HeaderG($headerEmpresa->cfdiFiscal);
 
 /*if($rfc === "MIN120828HI0"){

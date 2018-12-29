@@ -26,7 +26,7 @@ use Charles\CFDI\Node\Complemento\Nomina\Percepcion\HorasExtras;
 $json = file_get_contents("php://input");
 //$json = file_get_contents('../uploads/ejemplo.json');
 $ruta = "../uploads/";
-$ruta2 = "../uploads/aTimbrar.json";
+$ruta2 = "../uploads/aTimbrarAsim.json";
 file_put_contents($ruta2, $json);
 /* Ruta del servicio de integracion Pruebas*/
 //$ws = "https://cfdi33-pruebas.buzoncfdi.mx:1443/Timbrado.asmx?wsdl";
@@ -53,14 +53,14 @@ if($json) {
     $cert = new Certificate();
     $comprobanteHeader['NoCertificado'] = $cert->getSerial($rutaCer);
     
-    if($comprobanteHeader['Descuento'] == '0.00' || $comprobanteHeader['Descuento'] == '0') {
+    if($comprobanteHeader['Descuento'] == '0.00' || $comprobanteHeader['Descuento'] == '0' || $comprobanteHeader['Descuento'] == '') {
         unset($comprobanteHeader['Descuento']);
     }
     $cfdi = new CFDI($comprobanteHeader, $cerFile, $keyFile);
     $cfdi->add(new Emisor($compobanteEmisor));
     $cfdi->add(new Receptor($compobanteReceptor));
     foreach ($compobanteConceptos as $concepto) {
-      if($concepto['Descuento'] == '0.00' || $concepto['Descuento'] == '0') {
+      if($concepto['Descuento'] == '0.00' || $concepto['Descuento'] == '0' || $comprobanteHeader['Descuento'] == '') {
         unset($concepto['Descuento']);
       }
       $cfdi->add(new Concepto($concepto));
@@ -176,6 +176,16 @@ function complementoNomina($nominaData) {
   $nominaPercepcion = $nominaData['percepcion'];
   $nominaDetallePercepcion = $nominaData['detallePercepcion'];
   $nominaDetallePercepcionPPP = isset($nominaData['detallePercepcionPPP']) ? $nominaData['detallePercepcionPPP'] : [];
+
+  if($nominaReceptor['NumSeguridadSocial'] == '') {
+    unset($nominaReceptor['NumSeguridadSocial']);
+  }
+  if($nominaReceptor['RiesgoPuesto'] == '') {
+    unset($nominaReceptor['RiesgoPuesto']);
+  }
+  if($nominaEmisor['RegistroPatronal'] == '') {
+    unset($nominaEmisor['RegistroPatronal']);
+  }
 
   $nomina = new Nomina($nominaHeader);
   if($nominaDetallePercepcionPPP === []){

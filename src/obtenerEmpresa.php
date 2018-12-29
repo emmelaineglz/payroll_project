@@ -1,5 +1,5 @@
 <?php
-function obtenerDatosEmpresa ($empresa) {
+function obtenerDatosEmpresa ($empresa, $rfc) {
     $Usuario="root";
     $Password="20edo18";
     $Servidor="localhost:3306";
@@ -30,11 +30,18 @@ function obtenerDatosEmpresa ($empresa) {
         "codigoPostal" => $row['cpPPP'],
         "registroPatronal" => $row['registroPatronal']
     ];
-    
+    if($cfdiFiscal['rfc'] == $rfc) {
+        $responseFinal['cfdiFiscal'] = $cfdiFiscal;
+        return json_encode($responseFinal);
+    }
 
-    $responseFinal['cfdiFiscal'] = $cfdiFiscal;
-    $responseFinal['cfdiAsimilados'] = $cfdiAsimilados;
-    $responseFinal['cfdiPPP'] = $cfdiPPP;
+    if($cfdiAsimilados['rfc'] == $rfc) {
+        $responseFinal['cfdiFiscal'] = $cfdiAsimilados;
+        return json_encode($responseFinal);
+    }
 
-    return json_encode($responseFinal);
+    if($cfdiPPP['rfc'] == $rfc) {
+        $responseFinal['cfdiFiscal'] = $cfdiPPP;
+        return json_encode($responseFinal);
+    }
 }
