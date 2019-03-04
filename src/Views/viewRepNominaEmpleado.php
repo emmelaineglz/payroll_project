@@ -7,6 +7,7 @@ include "../pdfRepNominaEmpleado.php";
 
 //$requestJson = file_get_contents("/Applications/XAMPP/htdocs/payroll_project/uploads/ejemploNominaEmpleado.json");
 $requestJson = file_get_contents("php://input");
+file_put_contents("../../uploads/resumenNEmp.json", $requestJson);
 $jsonData = json_decode($requestJson, true);
 
 $pdf = new ReportePdfNomina();
@@ -31,5 +32,6 @@ foreach ($jsonData['empleados'] as $value) {
     $pdf->Headcount($arrayHC['headcount'], $value['percepciones'], $value['deducciones'], $value['TotalPercepciones'], $value['TotalDeducciones'], $value['NetoPagado']);
     $countEmp ++;
 }
-$archivo = "../uploads/reportes/reporteEmpleadosNomina.pdf";
+$archivo = "../../uploads/reportes/reporteEmpleadosNomina.pdf";
+//$archivo = "/Applications/XAMPP/htdocs/payroll_project/uploads/reporteEmpleadosNomina.pdf";
 $pdf->Output('F', $archivo);
