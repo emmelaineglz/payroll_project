@@ -7,17 +7,18 @@ include "../pdfRepNominaEmpleado.php";
 
 //$requestJson = file_get_contents("/Applications/XAMPP/htdocs/payroll_project/uploads/ejemploNominaEmpleado.json");
 $requestJson = file_get_contents("php://input");
+file_put_contents("../../uploads/resumenNEmp.json", $requestJson);
 $jsonData = json_decode($requestJson, true);
 
 $pdf = new ReportePdfNomina();
-$pdf->AddPage('L');
+$pdf->AddPage('P');
 $pdf->SetFont('Arial','B',16);
 $pdf->HeaderP($jsonData['header']);
 
 $countEmp = 0;
 foreach ($jsonData['empleados'] as $value) {
     if ($countEmp === 3) {
-        $pdf->AddPage('L');
+        $pdf->AddPage('P');
         $countEmp = 0;
     }
     $arrayHC['headcount'] = [];
@@ -28,8 +29,11 @@ foreach ($jsonData['empleados'] as $value) {
     $arrayHC['headcount']['SueldoDiario'] = $value['SueldoDiario'];
     $arrayHC['headcount']['SDI'] = $value['SDI'];
     $arrayHC['headcount']['DiasPagados'] = $value['DiasPagados'];
+    $arrayHC['headcount']['NSS'] = $value['NSS'];
+    $arrayHC['headcount']['RFC'] = $value['RFC'];
     $pdf->Headcount($arrayHC['headcount'], $value['percepciones'], $value['deducciones'], $value['TotalPercepciones'], $value['TotalDeducciones'], $value['NetoPagado']);
     $countEmp ++;
 }
-$archivo = "../uploads/reportes/reporteEmpleadosNomina.pdf";
+$archivo = "../../uploads/reportes/reporteEmpleadosNomina.pdf";
+//$archivo = "/Applications/XAMPP/htdocs/payroll_project/uploads/reporteEmpleadosNomina.pdf";
 $pdf->Output('F', $archivo);
