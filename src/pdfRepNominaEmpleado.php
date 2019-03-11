@@ -113,7 +113,7 @@ class ReportePdfNomina extends FPDF {
         $this->SetXY($this->GetX()+20+40+15, $currentY);
         $this->MultiCell(35, 4, "", 0, 'C');
         $this->SetXY($this->GetX()+35+20+40+15, $currentY);
-        $this->MultiCell(40, 4, $this->reduceText($value['Concepto'], 42).$space, 0, 'L');
+        $this->MultiCell(40, 4, $this->reduceText($value['Concepto'], 42), 0, 'L');
         $this->SetXY($this->GetX()+40+35+20+40+15, $currentY);
         $this->MultiCell(20, 4, number_format($value['Importe'], 2), 0, 'R');
       }
