@@ -27,12 +27,15 @@ foreach ($jsonData['empleados'] as $value) {
     $arrayHC['headcount']['Nombre'] = $value['Nombre'];
     $arrayHC['headcount']['Puesto'] = $value['Puesto'];
     $arrayHC['headcount']['FecIngreso'] = $value['FecIngreso'];
+    $arrayHC['headcount']['FecBaja'] = $value['FecBaja'];
     $arrayHC['headcount']['SueldoDiario'] = $value['SueldoDiario'];
+    $arrayHC['headcount']['SueldoMensual'] = $value['SueldoMensual'];
     $arrayHC['headcount']['SDI'] = $value['SDI'];
     $arrayHC['headcount']['DiasPagados'] = $value['DiasPagados'];
+    $arrayHC['headcount']['AniosLaborados'] = $value['AniosLaborados'];
+    $arrayHC['headcount']['Antiguedad'] = $value['Antiguedad'];
     $arrayHC['headcount']['NSS'] = $value['NSS'];
     $arrayHC['headcount']['RFC'] = $value['RFC'];
-    $arrayHC['headcount']['SueldoMensual'] = $value['SueldoMensual'];
     $pdf->Headcount($arrayHC['headcount'], $value['percepciones'], $value['deducciones'], $value['TotalPercepciones'], $value['TotalDeducciones'], $value['NetoPagado']);
     $pdf->FooterP($jsonData['header']);
     $countEmp ++;
