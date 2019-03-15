@@ -19,7 +19,7 @@ class FacturaPdfXml extends FPDF {
       $this->SetFillColor(191, 191, 192);
 			//$this->Cell(190, 5, "Comprobante Fiscal Digital por Internet", 0, 0, 'R');
       $this->Ln();
-      $this->Cell(153, 5, "RECIBO DE NOMINA", 0, 0, 'R');
+      $this->Cell(153, 5, utf8_decode("RECIBO DE NÓMINA"), 0, 0, 'R');
       $this->Ln();
       $this->SetFont('Arial','B',7);
       $this->SetTextColor(5, 5, 5);
@@ -81,170 +81,6 @@ class FacturaPdfXml extends FPDF {
       $this->Cell(40, 4, "Mexico", 0, 0, 'L');
 		}
 
-    public function HeaderHei() {
-      $this->SetDrawColor(26, 84, 251);
-      $this->SetLineWidth(0.5);
-      $this->Line(10, 33, 200, 33);
-      $this->Ln();
-      $this->Ln();
-      $this->SetFont('Arial','B',9);
-      $this->SetTextColor(5, 5, 5);
-      $this->Cell(30, 2, "Datos del Emisor", 0, 0, 'L');
-      $this->Ln();
-      $this->SetDrawColor(26, 84, 251);
-      $this->SetLineWidth(0.5);
-      $this->Line(10, 39, 200, 39);
-      $this->Ln();
-      $this->Ln();
-      $this->SetFont('Arial','B',7);
-      $this->Cell(25, 4, "Razon Social", 0, 0, 'L');
-      $this->Cell(40, 4, "HEITEN SA DE CV", 0, 0, 'L');
-      $this->Ln();
-      $this->Cell(25, 4, "RFC", 0, 0, 'L');
-      $this->Cell(40, 4, "HEI1501217Y9", 0, 0, 'L');
-      $this->Cell(25, 4, "Regimen Fiscal", 0, 0, 'L');
-      $this->Cell(50, 4, "General de Ley Personas Morales", 0, 0, 'L');
-      $this->Cell(25, 4, "Registro Patronal", 0, 0, 'L');
-      $this->Cell(40, 4, "Y6064143107", 0, 0, 'L');
-      $this->Ln();
-      $this->Cell(25, 4, "Colonia", 0, 0, 'L');
-      $this->Cell(40, 4, "ROMA NORTE", 0, 0, 'L');
-      $this->Cell(25, 4, "Calle y Numero", 0, 0, 'L');
-      $this->Cell(50, 4, "MEDELLIN 79", 0, 0, 'L');
-      $this->Cell(25, 4, "Codigo Postal", 0, 0, 'L');
-      $this->Cell(40, 4, "06700", 0, 0, 'L');
-      $this->Ln();
-      $this->Cell(25, 4, "Estado", 0, 0, 'L');
-      $this->Cell(40, 4, "Ciudad de Mexico", 0, 0, 'L');
-      $this->Cell(25, 4, "Delegacion", 0, 0, 'L');
-      $this->Cell(50, 4, "Cuauhtemoc", 0, 0, 'L');
-      $this->Cell(25, 4, "Pais", 0, 0, 'L');
-      $this->Cell(40, 4, "Mexico", 0, 0, 'L');
-		}
-
-    public function HeaderBon() {
-      $this->SetDrawColor(26, 84, 251);
-      $this->SetLineWidth(0.5);
-      $this->Line(10, 33, 200, 33);
-      $this->Ln();
-      $this->Ln();
-      $this->SetFont('Arial','B',9);
-      $this->SetTextColor(5, 5, 5);
-      $this->Cell(30, 2, "Datos del Emisor", 0, 0, 'L');
-      $this->Ln();
-      $this->SetDrawColor(26, 84, 251);
-      $this->SetLineWidth(0.5);
-      $this->Line(10, 39, 200, 39);
-      $this->Ln();
-      $this->Ln();
-      $this->SetFont('Arial','B',7);
-      $this->Cell(25, 4, "Razon Social", 0, 0, 'L');
-      $this->Cell(40, 4, "BON&EFFICACE SA DE CV", 0, 0, 'L');
-      $this->Ln();
-      $this->Cell(25, 4, "RFC", 0, 0, 'L');
-      $this->Cell(40, 4, "BON150210EN4", 0, 0, 'L');
-      $this->Cell(25, 4, "Regimen Fiscal", 0, 0, 'L');
-      $this->Cell(50, 4, "General de Ley Personas Morales", 0, 0, 'L');
-      $this->Cell(25, 4, "Registro Patronal", 0, 0, 'L');
-      $this->Cell(40, 4, "Y6064672105", 0, 0, 'L');
-      $this->Ln();
-      $this->Cell(25, 4, "Colonia", 0, 0, 'L');
-      $this->Cell(40, 4, "ROMA NORTE", 0, 0, 'L');
-      $this->Cell(25, 4, "Calle y Numero", 0, 0, 'L');
-      $this->Cell(50, 4, "GUANAJUATO", 0, 0, 'L');
-      $this->Cell(25, 4, "Codigo Postal", 0, 0, 'L');
-      $this->Cell(40, 4, "06700", 0, 0, 'L');
-      $this->Ln();
-      $this->Cell(25, 4, "Estado", 0, 0, 'L');
-      $this->Cell(40, 4, "Ciudad de Mexico", 0, 0, 'L');
-      $this->Cell(25, 4, "Delegacion", 0, 0, 'L');
-      $this->Cell(50, 4, "Cuauhtemoc", 0, 0, 'L');
-      $this->Cell(25, 4, "Pais", 0, 0, 'L');
-      $this->Cell(40, 4, "Mexico", 0, 0, 'L');
-		}
-
-    public function HeaderMin() {
-      $this->SetDrawColor(26, 84, 251);
-      $this->SetLineWidth(0.5);
-      $this->Line(10, 33, 200, 33);
-      $this->Ln();
-      $this->Ln();
-      $this->SetFont('Arial','B',9);
-      $this->SetTextColor(5, 5, 5);
-      $this->Cell(30, 2, "Datos del Emisor", 0, 0, 'L');
-      $this->Ln();
-      $this->SetDrawColor(26, 84, 251);
-      $this->SetLineWidth(0.5);
-      $this->Line(10, 39, 200, 39);
-      $this->Ln();
-      $this->Ln();
-      $this->SetFont('Arial','B',7);
-      $this->Cell(25, 4, "Razon Social", 0, 0, 'L');
-      $this->Cell(40, 4, "MERCATO INNOVATIVO S.A. DE C.V", 0, 0, 'L');
-      $this->Ln();
-      $this->Cell(25, 4, "RFC", 0, 0, 'L');
-      $this->Cell(40, 4, "MIN120828HI0", 0, 0, 'L');
-      $this->Cell(25, 4, "Regimen Fiscal", 0, 0, 'L');
-      $this->Cell(50, 4, "General de Ley Personas Morales", 0, 0, 'L');
-      $this->Cell(25, 4, "Registro Patronal", 0, 0, 'L');
-      $this->Cell(40, 4, "Y5453275108", 0, 0, 'L');
-      $this->Ln();
-      $this->Cell(25, 4, "Colonia", 0, 0, 'L');
-      $this->Cell(40, 4, "ROMA NORTE", 0, 0, 'L');
-      $this->Cell(25, 4, "Calle y Numero", 0, 0, 'L');
-      $this->Cell(50, 4, "MEDELLIN 79", 0, 0, 'L');
-      $this->Cell(25, 4, "Codigo Postal", 0, 0, 'L');
-      $this->Cell(40, 4, "06700", 0, 0, 'L');
-      $this->Ln();
-      $this->Cell(25, 4, "Estado", 0, 0, 'L');
-      $this->Cell(40, 4, "Ciudad de Mexico", 0, 0, 'L');
-      $this->Cell(25, 4, "Delegacion", 0, 0, 'L');
-      $this->Cell(50, 4, "Cuauhtemoc", 0, 0, 'L');
-      $this->Cell(25, 4, "Pais", 0, 0, 'L');
-      $this->Cell(40, 4, "Mexico", 0, 0, 'L');
-		}
-
-    public function HeaderFap() {
-      $this->SetDrawColor(26, 84, 251);
-      $this->SetLineWidth(0.5);
-      $this->Line(10, 33, 200, 33);
-      $this->Ln();
-      $this->Ln();
-      $this->SetFont('Arial','B',9);
-      $this->SetTextColor(5, 5, 5);
-      $this->Cell(30, 2, "Datos del Emisor", 0, 0, 'L');
-      $this->Ln();
-      $this->SetDrawColor(26, 84, 251);
-      $this->SetLineWidth(0.5);
-      $this->Line(10, 39, 200, 39);
-      $this->Ln();
-      $this->Ln();
-      $this->SetFont('Arial','B',7);
-      $this->Cell(25, 4, "Razon Social", 0, 0, 'L');
-      $this->Cell(40, 4, "FAPRICO S DE RL DE CV", 0, 0, 'L');
-      $this->Ln();
-      $this->Cell(25, 4, "RFC", 0, 0, 'L');
-      $this->Cell(40, 4, "FAP141125CR3", 0, 0, 'L');
-      $this->Cell(25, 4, "Regimen Fiscal", 0, 0, 'L');
-      $this->Cell(50, 4, "General de Ley Personas Morales", 0, 0, 'L');
-      $this->Cell(25, 4, "Registro Patronal", 0, 0, 'L');
-      $this->Cell(40, 4, "Y5455140102", 0, 0, 'L');
-      $this->Ln();
-      $this->Cell(25, 4, "Colonia", 0, 0, 'L');
-      $this->Cell(40, 4, "Granada", 0, 0, 'L');
-      $this->Cell(25, 4, "Calle y Numero", 0, 0, 'L');
-      $this->Cell(50, 4, "Ejercito Nacional No.769 Piso 19", 0, 0, 'L');
-      $this->Cell(25, 4, "Codigo Postal", 0, 0, 'L');
-      $this->Cell(40, 4, "11520", 0, 0, 'L');
-      $this->Ln();
-      $this->Cell(25, 4, "Estado", 0, 0, 'L');
-      $this->Cell(40, 4, "Ciudad de Mexico", 0, 0, 'L');
-      $this->Cell(25, 4, "Delegacion", 0, 0, 'L');
-      $this->Cell(50, 4, "Miguel Hidalgo", 0, 0, 'L');
-      $this->Cell(25, 4, "Pais", 0, 0, 'L');
-      $this->Cell(40, 4, "Mexico", 0, 0, 'L');
-    }
-
     public function HeaderNomina ($receptor, $headerNomina, $receptorNomina) {
       $this->SetDrawColor(26, 84, 251);
       $this->SetLineWidth(0.5);
@@ -277,8 +113,8 @@ class FacturaPdfXml extends FPDF {
       $this->Cell(30, 4, "Periodicidad", 0, 0, 'L');
       $this->Cell(25, 4, $receptorNomina['PeriodicidadPago'], 0, 0, 'R');
       $this->Ln();
-      $this->Cell(33, 4, "Antigüedad", 0, 0, 'L');
-      $this->Cell(36, 4, $receptorNomina['Antigüedad'], 0, 0, 'L');
+      $this->Cell(33, 4, "Fecha Ingreso", 0, 0, 'L');
+      $this->Cell(36, 4, $receptorNomina['FechaInicioRelLaboral'], 0, 0, 'L');
       $this->Cell(23, 4, "Tipo Contrato", 0, 0, 'L');
       $this->Cell(43, 4, $receptorNomina['TipoContrato'], 0, 0, 'L');
       $this->Cell(30, 4, "Salario Diario", 0, 0, 'L');
@@ -317,7 +153,7 @@ class FacturaPdfXml extends FPDF {
       $this->SetTextColor(5, 5, 5);
       $this->Cell(20, 4, "CANTIDAD", 0, 0, 'C');
       $this->Cell(20, 4, "UNIDAD", 0, 0, 'C');
-      $this->Cell(95, 4, "DESCRIPCION", 0, 0, 'L');
+      $this->Cell(95, 4, utf8_decode("DESCRIPCIÓN"), 0, 0, 'L');
       $this->Cell(35, 4, "VALOR UNITARIO", 0, 0, 'R');
       $this->Cell(20, 4, "IMPORTE", 0, 0, 'R');
       $this->Ln();
@@ -395,7 +231,7 @@ class FacturaPdfXml extends FPDF {
         $currentY = $this->GetY();
 	      $this->MultiCell(6, 4, $value['TipoPercepcion'], 0, 'C');
         $this->SetXY($this->GetX()+6, $currentY);
-	      $this->MultiCell(48, 4, $this->reduceText($value['Concepto'], 42), 0);
+	      $this->MultiCell(48, 4, utf8_decode($this->reduceText($value['Concepto'], 42)), 0);
         $this->SetXY($this->GetX()+48+6, $currentY);
 	      $this->MultiCell(8, 4, ($value['Clave'] == 'P001')? $dias." Dias" : '' , 0, 'R');
         $this->SetXY($this->GetX()+48+6+8, $currentY);
@@ -426,7 +262,7 @@ class FacturaPdfXml extends FPDF {
         $this->SetXY($this->GetX()+48+6+8+16+16+7+6, $currentY);
         $this->MultiCell(7, 4, $value['Clave'], 0);
         $this->SetXY($this->GetX()+48+6+8+16+16+7+6+7, $currentY);
-        $this->MultiCell(53, 4, $this->reduceText($value['Concepto'], 45), 0, 'L');
+        $this->MultiCell(53, 4, utf8_decode($this->reduceText($value['Concepto'], 45)), 0, 'L');
         $this->SetXY($this->GetX()+48+6+8+16+16+7+6+7+53, $currentY);
         $this->MultiCell(10, 4, "", 0);
         $this->SetXY($this->GetX()+48+6+8+16+16+7+6+7+53+8, $currentY);
@@ -504,6 +340,38 @@ class FacturaPdfXml extends FPDF {
       $this->Cell(39, 4, number_format($total, 2), 0, 0, 'R');
       $this->Ln(5);
       $this->Cell(191, 4, num2letras($total, 0, 0).' '. substr(strrchr($total, "."), 1)."/100 M. N.", 0, 0, 'R');
+    }
+
+    public function BlockSubsidio ($subsidio, $causado, $isr) {
+      $this->Ln();
+      $this->SetDrawColor(26, 84, 251);
+      $this->SetFont('Arial','B',7);
+      $this->SetTextColor(5, 5, 5);
+      $this->Cell(10, 4, "", 0, 0, 'L');
+      $this->Cell(30, 4, "CONCEPTO", 0, 0, 'L');
+      $this->Cell(30, 4, "IMPORTE", 0, 0, 'R');
+      $this->Cell(100, 4, "", 0, 0, 'L');
+      $this->Ln(6);
+      $this->Cell(10, 4, "", 0, 0, 'L');
+      $this->Cell(30, 4, "Subsidio correspondido", 0, 0, 'L');
+      $this->Cell(30, 4, "$".number_format($causado, 2), 0, 0, 'R');
+      $this->Cell(100, 4, "", 0, 0, 'L');
+      $this->Ln(4);
+      $this->Cell(10, 4, "", 0, 0, 'L');
+      $this->Cell(30, 4, "Subsidio pagado", 0, 0, 'L');
+      $this->Cell(30, 4, "$".number_format($subsidio, 2), 0, 0, 'R');
+      $this->Cell(100, 4, "", 0, 0, 'L');
+      $this->Ln(4);
+      $this->Cell(10, 4, "", 0, 0, 'L');
+      $this->Cell(30, 4, "ISR determinado", 0, 0, 'L');
+      $this->Cell(30, 4, "$0.00", 0, 0, 'R');
+      $this->Cell(100, 4, "", 0, 0, 'L');
+      $this->Ln(4);
+      $this->Cell(10, 4, "", 0, 0, 'L');
+      $this->Cell(30, 4, "ISR retenido", 0, 0, 'L');
+      $this->Cell(30, 4, "$".number_format($isr, 2), 0, 0, 'R');
+      $this->Cell(100, 4, "", 0, 0, 'L');
+      $this->Ln();
     }
 }
 

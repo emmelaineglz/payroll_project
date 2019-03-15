@@ -37,10 +37,11 @@ function parseXML($xmlFile) {
 	$deduccionesNomina = getNodeData($xml, 'Deducciones', 'deduccion', 'n');
 	$detalleDeduccionesNomina = getNodeData($xml, 'Deduccion', 'detalleDeduccion', 'n');
 	$incapacidadesNomina = getNodeData($xml, 'Incapacidad', 'incapacidades', 'n');
-  $otrosPagosNomina = getNodeData($xml, 'OtroPago', 'otrosPagos', 'n');
+  	$otrosPagosNomina = getNodeData($xml, 'OtroPago', 'otrosPagos', 'n');
+  	$subsidioNomina = getNodeData($xml, 'SubsidioAlEmpleo', 'subsidioAlEmpleo', 'n');  
 	$timbreFiscal = getNodeData($xml, 'TimbreFiscalDigital', 'timbreFiscal', 't');
 
-  $fileXml = [$header, $emisor, $receptor, $conceptos, $headerNomina, $emisorNomina, $receptorNomina, $percepcionesNomina, $detallePercepcionesNomina, $deduccionesNomina, $detalleDeduccionesNomina, $incapacidadesNomina, $otrosPagosNomina, $timbreFiscal];
+  $fileXml = [$header, $emisor, $receptor, $conceptos, $headerNomina, $emisorNomina, $receptorNomina, $percepcionesNomina, $detallePercepcionesNomina, $deduccionesNomina, $detalleDeduccionesNomina, $incapacidadesNomina, $otrosPagosNomina, $subsidioNomina, $timbreFiscal];
   return $fileXml;
 }
 
