@@ -23,6 +23,9 @@ foreach ($jsonData['empleados'] as $value) {
     $pdf->SetFont('Arial','B',16);
     $pdf->HeaderP($jsonData['header']);
     $arrayHC['headcount'] = [];
+    $arrayHC1['ingresos'] = [];
+    $arrayHC1['ingresos']['BaseExento'] = $value['BaseExento'];
+    $arrayHC1['ingresos']['Campo51'] = $value['Campo51'];
     $arrayHC['headcount']['Gafete'] = $value['Gafete'];
     $arrayHC['headcount']['Nombre'] = $value['Nombre'];
     $arrayHC['headcount']['Puesto'] = $value['Puesto'];
@@ -36,8 +39,10 @@ foreach ($jsonData['empleados'] as $value) {
     $arrayHC['headcount']['Antiguedad'] = $value['Antiguedad'];
     $arrayHC['headcount']['NSS'] = $value['NSS'];
     $arrayHC['headcount']['RFC'] = $value['RFC'];
+    $arrayHC['headcount']['UMA'] = $jsonData['header']['UMA'];
+    $arrayHC['headcount']['SMG'] = $jsonData['header']['SMG'];
     $pdf->Headcount($arrayHC['headcount'], $value['percepciones'], $value['deducciones'], $value['TotalPercepciones'], $value['TotalDeducciones'], $value['NetoPagado']);
-    $pdf->FooterP($jsonData['header']);
+    $pdf->FooterP($jsonData['header'], $arrayHC1['ingresos']);
     $countEmp ++;
 }
 $archivo = "../../uploads/reportes/reporteFiniquitos.pdf";
