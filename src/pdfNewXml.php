@@ -348,11 +348,6 @@ class FacturaPdfXml extends FPDF {
       $this->SetFont('Arial','B',7);
       $this->SetTextColor(5, 5, 5);
       $this->Cell(10, 4, "", 0, 0, 'L');
-      $this->Cell(30, 4, "CONCEPTO", 0, 0, 'L');
-      $this->Cell(30, 4, "IMPORTE", 0, 0, 'R');
-      $this->Cell(100, 4, "", 0, 0, 'L');
-      $this->Ln(6);
-      $this->Cell(10, 4, "", 0, 0, 'L');
       $this->Cell(30, 4, "Subsidio correspondido", 0, 0, 'L');
       $this->Cell(30, 4, "$".number_format($causado, 2), 0, 0, 'R');
       $this->Cell(100, 4, "", 0, 0, 'L');
