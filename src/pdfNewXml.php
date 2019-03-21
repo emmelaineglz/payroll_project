@@ -25,18 +25,18 @@ class FacturaPdfXml extends FPDF {
       $this->SetTextColor(5, 5, 5);
       $this->Cell(60, 4, "", 0, 0, 'L');
       $this->Cell(60, 4, "", 0, 0, 'L');
-      $this->Cell(40, 4, "Numero", 0, 0, 'L');
+      $this->Cell(40, 4, "", 0, 0, 'L');
       $this->Cell(40, 4, "Forma de Pago", 0, 0, 'L');
       $this->Ln();
       $this->Cell(60, 4, "", 0, 0, 'L');
       $this->Cell(60, 4, "", 0, 0, 'L');
-      $this->Cell(40, 4, $data['Serie']."-".$data['Folio'], 0, 0, 'L');
+      $this->Cell(40, 4, "", 0, 0, 'L');
       $this->Cell(30, 4, $data['FormaPago'], 0, 0, 'L');
       $this->Ln();
       $this->Cell(60, 4, "", 0, 0, 'L');
       $this->Cell(60, 4, "", 0, 0, 'L');
-      $this->Cell(40, 4, "Fecha y Hora de emision", 0, 0, 'L');
-      $this->Cell(45, 4, "Lugar de expedicion", 0, 0, 'L');
+      $this->Cell(40, 4, utf8_decode("Fecha y Hora de emisión"), 0, 0, 'L');
+      $this->Cell(45, 4, utf8_decode("Lugar de expedición"), 0, 0, 'L');
       $this->Ln();
       $this->Cell(60, 4, "", 0, 0, 'L');
       $this->Cell(60, 4, "", 0, 0, 'L');
@@ -44,7 +44,7 @@ class FacturaPdfXml extends FPDF {
       $this->Cell(40, 4, $data['LugarExpedicion'], 0, 0, 'L');
     }
 
-    public function HeaderG($data) {
+    public function HeaderG($data, $regPatronal = '') {
       $this->SetDrawColor(26, 84, 251);
       $this->SetLineWidth(0.5);
       $this->Line(10, 33, 200, 33);
@@ -60,26 +60,51 @@ class FacturaPdfXml extends FPDF {
       $this->Ln();
       $this->Ln();
       $this->SetFont('Arial','B',7);
-      $this->Cell(25, 4, "Razon Social", 0, 0, 'L');
+      $this->Cell(25, 4, utf8_decode("Razón Social:"), 0, 0, 'L');
       $this->Cell(40, 4, $data->razonSocial, 0, 0, 'L');
       $this->Ln();
-      $this->Cell(25, 4, "RFC", 0, 0, 'L');
+      $this->Cell(25, 4, "RFC:", 0, 0, 'L');
       $this->Cell(40, 4, $data->rfc, 0, 0, 'L');
-      $this->Cell(25, 4, "Regimen Fiscal", 0, 0, 'L');
+      $this->Cell(25, 4, utf8_decode("Régimen Fiscal:"), 0, 0, 'L');
       $this->Cell(50, 4, "General de Ley Personas Morales", 0, 0, 'L');
-      $this->Cell(25, 4, "Registro Patronal", 0, 0, 'L');
-      $this->Cell(40, 4, $data->registroPatronal, 0, 0, 'L');
+      $this->Cell(25, 4, "Registro Patronal:", 0, 0, 'L');
+      $this->Cell(40, 4, $regPatronal, 0, 0, 'L');
       $this->Ln();
-      $this->Cell(25, 4, "Domicilio", 0, 0, 'L');
+      $this->Cell(25, 4, "Domicilio:", 0, 0, 'L');
       $this->Cell(180, 4, $data->domicilio, 0, 'L');
       $this->Ln();
-      $this->Cell(25, 4, "Estado", 0, 0, 'L');
-      $this->Cell(40, 4, "Ciudad de Mexico", 0, 0, 'L');
-      $this->Cell(25, 4, "Codigo Postal", 0, 0, 'L');
+      $this->Cell(25, 4, "Estado:", 0, 0, 'L');
+      $this->Cell(40, 4, utf8_decode("Ciudad de México"), 0, 0, 'L');
+      $this->Cell(25, 4, "Codigo Postal:", 0, 0, 'L');
       $this->Cell(50, 4, $data->codigoPostal, 0, 0, 'L');
-      $this->Cell(25, 4, "Pais", 0, 0, 'L');
-      $this->Cell(40, 4, "Mexico", 0, 0, 'L');
-		}
+      $this->Cell(25, 4, "Pais:", 0, 0, 'L');
+      $this->Cell(40, 4, utf8_decode("México"), 0, 0, 'L');
+    }
+    
+    public function riesgoPuesto ($riesgo) {
+      $array = ['Clase I', 'Clase II', 'Clase III', 'Clase IV', 'Clase V'];
+      return $array[$riesgo-1];
+    }
+
+    public function tipoJornada ($jornada) {
+      $array = ['01'=>'Diurna', '02'=>'Nocturna', '03'=>'Mixta', '04'=>'Por hora', '05'=>'Reducida', '06'=>'Continuada', '07'=>'Partida', '08'=>'Por turnos', '99'=>'Otra jornada' ];
+      return $array[$jornada];
+    }
+
+    public function periodicidad ($perio) {
+      $array = ['01'=>'Diario', '02'=>'Semanal', '03'=>'Catorcenal', '04'=>'Quincenal', '05'=>'Mensual', '06'=>'Bimestral', '07'=>'Unidad obra', '08'=>'Comisión', '09'=>'Precio alzado', '99'=>'Otra periodicidad' ];
+      return $array[$perio];
+    }
+
+    public function tipoContrato ($contrato) {
+      $array = ['01'=>'Por tiempo indeterminado', '02'=>'Para obra determinada', '03'=>'Por tiempo determinado', '04'=>'Por temporada', '05'=>'Sujeto a prueba', '06'=>'Con capacitación inicial', '07'=>'Por pago de hora laborada', '08'=>'Por comisión laboral', '09'=>'No existe relación de trabajo', '10'=>'Jubilación, pensión, retiro.', '99'=>'Otra contrato' ];
+      return $array[$contrato];
+    }
+
+    public function tipoRegimen ($regimen) {
+      $array = ['02'=>'Sueldos', '03'=>'Jubilados', '04'=>'Pensionados', '05'=>'Asimilados Miembros Sociedades Cooperativas Produccion', '06'=>'Asimilados Integrantes Sociedades Asociaciones Civiles', '07'=>'Asimilados Miembros consejos', '08'=>'Asimilados comisionistas', '09'=>'Asimilados Honorarios', '10'=>'Asimilados acciones', '11'=>'Asimilados otros', '99'=>'Otro régimen' ];
+      return $array[$regimen];
+    }
 
     public function HeaderNomina ($receptor, $headerNomina, $receptorNomina) {
       $this->SetDrawColor(26, 84, 251);
@@ -96,48 +121,48 @@ class FacturaPdfXml extends FPDF {
       $this->Line(10, 66, 200, 66);
       $this->Ln();
       $this->SetFont('Arial','B',7);
-      $this->cell(33, 4, "Nombre", 0, 0, 'L');
-      $this->Cell(50, 4, $receptor['Nombre'], 0, 0, 'L');
+      $this->cell(33, 4, "Nombre:", 0, 0, 'L');
+      $this->Cell(50, 4, utf8_decode($receptor['Nombre']), 0, 0, 'L');
       $this->Ln();
-      $this->Cell(33, 4, "No Empleado", 0, 0, 'L');
-      $this->Cell(36, 4, $receptorNomina['NumEmpleado'], 0, 0, 'L');
-      $this->Cell(23, 4, "IMSS", 0, 0, 'L');
-      $this->Cell(43, 4, $receptorNomina['NumSeguridadSocial'], 0, 0, 'L');
-      $this->Cell(30, 4, "Dias", 0, 0, 'L');
+      $this->Cell(35, 4, "No Empleado:", 0, 0, 'L');
+      $this->Cell(34, 4, $receptorNomina['NumEmpleado'], 0, 0, 'L');
+      $this->Cell(33, 4, "No. de Seguridad Social:", 0, 0, 'L');
+      $this->Cell(33, 4, $receptorNomina['NumSeguridadSocial'], 0, 0, 'L');
+      $this->Cell(30, 4, utf8_decode("No. de días pagados:"), 0, 0, 'L');
       $this->Cell(25, 4, $headerNomina['NumDiasPagados'], 0, 0, 'R');
       $this->Ln();
-      $this->Cell(33, 4, "Riesgo Puesto", 0, 0, 'L');
-      $this->Cell(36, 4, $receptorNomina['RiesgoPuesto'], 0, 0, 'L');
-      $this->Cell(23, 4, "Jornada", 0, 0, 'L');
-      $this->Cell(43, 4, $receptorNomina['TipoJornada'], 0, 0, 'L');
-      $this->Cell(30, 4, "Periodicidad", 0, 0, 'L');
-      $this->Cell(25, 4, $receptorNomina['PeriodicidadPago'], 0, 0, 'R');
+      $this->Cell(35, 4, "Riesgo Puesto:", 0, 0, 'L');
+      $this->Cell(34, 4, $this->riesgoPuesto($receptorNomina['RiesgoPuesto']), 0, 0, 'L');
+      $this->Cell(33, 4, "Tipo de Jornada:", 0, 0, 'L');
+      $this->Cell(33, 4, $this->tipoJornada($receptorNomina['TipoJornada']), 0, 0, 'L');
+      $this->Cell(30, 4, "Periodicidad de Pago:", 0, 0, 'L');
+      $this->Cell(25, 4, utf8_decode($this->periodicidad($receptorNomina['PeriodicidadPago'])), 0, 0, 'R');
       $this->Ln();
-      $this->Cell(33, 4, "Fecha Ingreso", 0, 0, 'L');
-      $this->Cell(36, 4, $receptorNomina['FechaInicioRelLaboral'], 0, 0, 'L');
-      $this->Cell(23, 4, "Tipo Contrato", 0, 0, 'L');
-      $this->Cell(43, 4, $receptorNomina['TipoContrato'], 0, 0, 'L');
-      $this->Cell(30, 4, "Salario Diario", 0, 0, 'L');
+      $this->Cell(35, 4, utf8_decode("Fecha Inicio relación laboral:"), 0, 0, 'L');
+      $this->Cell(34, 4, $receptorNomina['FechaInicioRelLaboral'], 0, 0, 'L');
+      $this->Cell(33, 4, "Tipo Contrato:", 0, 0, 'L');
+      $this->Cell(33, 4, $this->tipoContrato($receptorNomina['TipoContrato']), 0, 0, 'L');
+      $this->Cell(30, 4, "Salario Diario:", 0, 0, 'L');
       $this->Cell(25, 4, $receptorNomina['SalarioDiarioIntegrado'], 0, 0, 'R');
       $this->Ln();
-      $this->Cell(33, 4, "RFC", 0, 0, 'L');
-      $this->Cell(36, 4, $receptor['Rfc'], 0, 0, 'L');
-      $this->Cell(23, 4, "Fecha Pago", 0, 0, 'L');
-      $this->Cell(43, 4, $headerNomina['FechaPago'], 0, 0, 'L');
-      $this->Cell(30, 4, "S.B.C", 0, 0, 'L');
+      $this->Cell(35, 4, "RFC:", 0, 0, 'L');
+      $this->Cell(34, 4, $receptor['Rfc'], 0, 0, 'L');
+      $this->Cell(33, 4, "Fecha Pago:", 0, 0, 'L');
+      $this->Cell(33, 4, $headerNomina['FechaPago'], 0, 0, 'L');
+      $this->Cell(30, 4, "Salario Base:", 0, 0, 'L');
       $this->Cell(25, 4, $receptorNomina['SalarioBaseCotApor'], 0, 0, 'R');
       $this->Ln();
-      $this->Cell(33, 4, "CURP", 0, 0, 'L');
-      $this->Cell(36, 4, $receptorNomina['Curp'], 0, 0, 'L');
-      $this->Cell(23, 4, "Fecha Inicio", 0, 0, 'L');
-      $this->Cell(43, 4, $headerNomina['FechaInicialPago'], 0, 0, 'L');
-      $this->Cell(30, 4, "Tipo Regimen", 0, 0, 'L');
-      $this->Cell(25, 4, $receptorNomina['TipoRegimen'], 0, 0, 'R');
+      $this->Cell(35, 4, "CURP:", 0, 0, 'L');
+      $this->Cell(34, 4, $receptorNomina['Curp'], 0, 0, 'L');
+      $this->Cell(33, 4, "Fecha Inicial de pago:", 0, 0, 'L');
+      $this->Cell(33, 4, $headerNomina['FechaInicialPago'], 0, 0, 'L');
+      $this->Cell(30, 4, utf8_decode("Régimen de contratación:"), 0, 0, 'L');
+      $this->Cell(25, 4, utf8_decode($this->tipoRegimen($receptorNomina['TipoRegimen'])), 0, 0, 'R');
       $this->Ln();
-      $this->Cell(33, 4, "", 0, 0, 'L');
-      $this->Cell(36, 4, "", 0, 0, 'L');
-      $this->Cell(23, 4, "Fecha Fin", 0, 0, 'L');
-      $this->Cell(43, 4, $headerNomina['FechaFinalPago'], 0, 0, 'L');
+      $this->Cell(35, 4, "", 0, 0, 'L');
+      $this->Cell(34, 4, "", 0, 0, 'L');
+      $this->Cell(33, 4, "Fecha Final de pago:", 0, 0, 'L');
+      $this->Cell(33, 4, $headerNomina['FechaFinalPago'], 0, 0, 'L');
       $this->Cell(30, 4, "", 0, 0, 'L');
       $this->Cell(25, 4, "", 0, 0, 'R');
       $this->Ln();
@@ -348,22 +373,17 @@ class FacturaPdfXml extends FPDF {
       $this->SetFont('Arial','B',7);
       $this->SetTextColor(5, 5, 5);
       $this->Cell(10, 4, "", 0, 0, 'L');
-      $this->Cell(30, 4, "Subsidio correspondido", 0, 0, 'L');
+      $this->Cell(30, 4, "Subsidio causado:", 0, 0, 'L');
       $this->Cell(30, 4, "$".number_format($causado, 2), 0, 0, 'R');
       $this->Cell(100, 4, "", 0, 0, 'L');
       $this->Ln(4);
       $this->Cell(10, 4, "", 0, 0, 'L');
-      $this->Cell(30, 4, "Subsidio pagado", 0, 0, 'L');
+      $this->Cell(30, 4, "Subsidio al Empleo:", 0, 0, 'L');
       $this->Cell(30, 4, "$".number_format($subsidio, 2), 0, 0, 'R');
       $this->Cell(100, 4, "", 0, 0, 'L');
       $this->Ln(4);
       $this->Cell(10, 4, "", 0, 0, 'L');
-      $this->Cell(30, 4, "ISR determinado", 0, 0, 'L');
-      $this->Cell(30, 4, "$0.00", 0, 0, 'R');
-      $this->Cell(100, 4, "", 0, 0, 'L');
-      $this->Ln(4);
-      $this->Cell(10, 4, "", 0, 0, 'L');
-      $this->Cell(30, 4, "ISR retenido", 0, 0, 'L');
+      $this->Cell(30, 4, "ISR:", 0, 0, 'L');
       $this->Cell(30, 4, "$".number_format($isr, 2), 0, 0, 'R');
       $this->Cell(100, 4, "", 0, 0, 'L');
       $this->Ln();

@@ -27,8 +27,9 @@ $arrayXml = parseXML($data);
 $UUID = $arrayXml[13]['timbreFiscal']['UUID'];
 $numEmpleado = $arrayXml[6]['receptorNomina']['NumEmpleado'];
 $fechaFin = $arrayXml[4]['headerNomina']['FechaFinalPago'];
+$regPatronal = $arrayXml[5]['emisorNomina']['RegistroPatronal'];
 $headerXml = $arrayXml[0]['header'];
-$cadenaOriginalCertificada = getCadenaOriginalCertificacion($arrayXml[13]['timbreFiscal']);
+$cadenaOriginalCertificada = getCadenaOriginalCertificacion($arrayXml[14]['timbreFiscal']);
 $codigoQR = getQRCode($rfc,$arrayXml[2]['receptor']['Rfc'], $headerXml['Total'], $UUID, $basePath);
 
 $pdf = new FacturaPdfXml();
@@ -40,7 +41,7 @@ $pdf->SetFont('Arial','B',16);
 $pdf->HeaderPay($headerXml);
 
 $headerEmpresa = json_decode(obtenerDatosEmpresa($empresa, $rfc));
-$pdf->HeaderG($headerEmpresa->cfdiFiscal);
+$pdf->HeaderG($headerEmpresa->cfdiFiscal, $regPatronal);
 $pdf->HeaderNomina($arrayXml[2]['receptor'], $arrayXml[4]['headerNomina'], $arrayXml[6]['receptorNomina']);
 $pdf->percep_deducc($arrayXml[7]['percepcion'], $arrayXml[8]['detallePercepcion'], $arrayXml[9]['deduccion'], $arrayXml[10]['detalleDeduccion'], $arrayXml[4]['headerNomina']['NumDiasPagados'], $subsidio);
 $pdf->Totales($arrayXml[0]['header']);
