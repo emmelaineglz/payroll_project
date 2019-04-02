@@ -223,7 +223,7 @@ function complementoNomina($nominaData) {
   if(!empty($nominaData['OtrosPagos'])){
     foreach ($nominaData['OtrosPagos'] as $value) {
       $oPagos = new OtrosPagos($value['header']);
-      if(!empty($value['subsidio'])){
+      if(!empty($value['subsidio']['SubsidioCausado'])){
         $oPagos->add(new SubsidioAlEmpleo($value['subsidio']));
       }
       if(!empty($value['compensacion'])){
