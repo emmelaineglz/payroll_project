@@ -138,13 +138,11 @@ class ReportePdfNomina extends FPDF {
     $this->Cell(50, 4, "$".number_format($tPerc, 2), 0, 0, 'R');
     $this->Cell(10, 4, "", 0, 0, 'L');
     $this->Ln(12);
-    $this->Line(10, 114, 200, 114);
     $this->Cell(10, 4, "", 0, 0, 'L');
     $this->Cell(60, 4, "DEDUCCIONES", 0, 0, 'L');
     $this->Cell(60, 4, "", 0, 0, 'C');
     $this->Cell(50, 4, "IMPORTES", 0, 0, 'R');
     $this->Cell(10, 4, "", 0, 0, 'L');
-    $this->Line(10, 122, 200, 122);
     $this->Ln(8);
     
     foreach ($detDeduccion as $value) {

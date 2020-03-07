@@ -26,7 +26,7 @@ use Charles\CFDI\Node\Complemento\Nomina\Percepcion\HorasExtras;
 $json = file_get_contents("php://input");
 //$json = file_get_contents('/Applications/XAMPP/htdocs/payroll_project/uploads/ejemplo.json');
 $ruta = "../uploads/";
-file_put_contents($ruta."exampleAguinaldo.json", $json);
+file_put_contents($ruta."exampleVar.json", $json);
 
 if($json) {
   $jsonData = json_decode($json, true);
