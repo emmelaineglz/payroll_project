@@ -59,6 +59,10 @@ if($json) {
     $cfdi = new CFDI($comprobanteHeader, $cerFile, $keyFile);
     $cfdi->add(new Emisor($compobanteEmisor));
     $cfdi->add(new Receptor($compobanteReceptor));
+
+    $ruta3 = "../uploads/aTimbrarNew.json";
+    file_put_contents($ruta3, $cfdi);
+
     foreach ($compobanteConceptos as $concepto) {
       if($concepto['Descuento'] == '0.00' || $concepto['Descuento'] == '0' || $comprobanteHeader['Descuento'] == '') {
         unset($concepto['Descuento']);
@@ -183,13 +187,16 @@ function complementoNomina($nominaData) {
   if($nominaReceptor['RiesgoPuesto'] == '') {
     unset($nominaReceptor['RiesgoPuesto']);
   }
-  if($nominaEmisor['RegistroPatronal'] == '') {
-    unset($nominaEmisor['RegistroPatronal']);
+  if($nominaReceptor['SalarioBaseCotApor'] == '0.00') {
+    unset($nominaReceptor['SalarioBaseCotApor']);
+  }
+  if($nominaReceptor['SalarioDiarioIntegrado'] == '0.00') {
+    unset($nominaReceptor['SalarioDiarioIntegrado']);
   }
 
   $nomina = new Nomina($nominaHeader);
-  if($nominaDetallePercepcionPPP === []){
-    $nomina->add(new EmisorN($nominaEmisor));
+  if($nominaDetallePercepcionPPP === [] && $nominaEmisor['RegistroPatronal'] != ''){
+   $nomina->add(new EmisorN($nominaEmisor));
   }
   $nomina->add(new ReceptorN($nominaReceptor));
 
