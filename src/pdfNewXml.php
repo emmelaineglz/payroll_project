@@ -217,7 +217,7 @@ class FacturaPdfXml extends FPDF {
       $this->Ln();
     }
 
-    public function percep_deducc ($percepcion, $detPercepcion, $deduccion, $detDeduccion, $dias, $subsidio){
+    public function percep_deducc ($percepcion, $detPercepcion, $deduccion, $detDeduccion, $dias, $subsidio, $oPrestaciones){
       $this->SetDrawColor(26, 84, 251);
       $this->SetLineWidth(0.5);
       $this->Line(10, 100, 108, 100);
@@ -265,7 +265,7 @@ class FacturaPdfXml extends FPDF {
         $this->MultiCell(18, 4, number_format($value['ImporteExento'], 2), 0, 'R');
 
       }
-      if(!empty($subsidio)){
+      if(!empty($subsidio) && $subsidio > 0){
         $currentY = $this->GetY();
 	      $this->MultiCell(6, 4, "002", 0, 'C');
         $this->SetXY($this->GetX()+6, $currentY);
@@ -276,6 +276,19 @@ class FacturaPdfXml extends FPDF {
 	      $this->MultiCell(18, 4, "0.00", 0, 'R');
         $this->SetXY($this->GetX()+48+6+8+18, $currentY);
         $this->MultiCell(18, 4, number_format($subsidio, 2), 0, 'R');
+      }
+
+      if(!empty($oPrestaciones) && $oPrestaciones > 0){
+        $currentY = $this->GetY();
+        $this->MultiCell(6, 4, "999", 0, 'C');
+        $this->SetXY($this->GetX()+6, $currentY);
+        $this->MultiCell(48, 4, "OTRAS PRESTACIONES", 0);
+        $this->SetXY($this->GetX()+48+6, $currentY);
+        $this->MultiCell(8, 4, "P056" , 0, 'R');
+        $this->SetXY($this->GetX()+48+6+8, $currentY);
+        $this->MultiCell(18, 4, "0.00", 0, 'R');
+        $this->SetXY($this->GetX()+48+6+8+18, $currentY);
+        $this->MultiCell(18, 4, number_format($oPrestaciones, 2), 0, 'R');
       }
 
       $currentY = 109;
@@ -300,7 +313,7 @@ class FacturaPdfXml extends FPDF {
       $this->SetLineWidth(0.5);
       //$this->Line(10, $this->GetX(), 108, $this->GetX());*/
   
-      $totalExc = (!empty($subsidio))? ($percepcion['TotalExento'] + $subsidio) : $percepcion['TotalExento'];
+      $totalExc = (!empty($subsidio))? ($percepcion['TotalExento'] + $subsidio + $oPrestaciones) : $percepcion['TotalExento'];
       $this->Ln();
       $this->Ln();
       $this->Ln();

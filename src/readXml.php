@@ -33,7 +33,23 @@ $cadenaOriginalCertificada = getCadenaOriginalCertificacion($arrayXml[14]['timbr
 $codigoQR = getQRCode($rfc,$arrayXml[2]['receptor']['Rfc'], $headerXml['Total'], $UUID, $basePath);
 
 $pdf = new FacturaPdfXml();
-$subsidio = (!empty($arrayXml[12]['otrosPagos'])) ? $arrayXml[12]['otrosPagos']['Importe'] : 0;
+$subsidio = 0;
+$oPrestaciones = 0;
+
+if(!empty($arrayXml[12]['otrosPagos'])) {
+	$data = $arrayXml[12]['otrosPagos'];
+	foreach ($data as $value) {
+		if($value['Clave'] === 'D600') {
+			$subsidio = $value['Importe'];
+		} else {
+			$subsidio = $data['Importe'];
+		}
+		if($value['Clave'] === 'P056') {
+			$oPrestaciones = $value['Importe'];
+		}
+	}
+}
+
 $sCausado = (!empty($arrayXml[13]['subsidioAlEmpleo'])) ? $arrayXml[13]['subsidioAlEmpleo']['SubsidioCausado'] : 0;
 $isr = (!empty($arrayXml[9]['deduccion']['TotalImpuestosRetenidos'])) ? $arrayXml[9]['deduccion']['TotalImpuestosRetenidos'] : 0;
 $pdf->AddPage();
@@ -43,7 +59,7 @@ $pdf->HeaderPay($headerXml);
 $headerEmpresa = json_decode(obtenerDatosEmpresa($empresa, $rfc));
 $pdf->HeaderG($headerEmpresa->cfdiFiscal, $regPatronal);
 $pdf->HeaderNomina($arrayXml[2]['receptor'], $arrayXml[4]['headerNomina'], $arrayXml[6]['receptorNomina']);
-$pdf->percep_deducc($arrayXml[7]['percepcion'], $arrayXml[8]['detallePercepcion'], $arrayXml[9]['deduccion'], $arrayXml[10]['detalleDeduccion'], $arrayXml[4]['headerNomina']['NumDiasPagados'], $subsidio);
+$pdf->percep_deducc($arrayXml[7]['percepcion'], $arrayXml[8]['detallePercepcion'], $arrayXml[9]['deduccion'], $arrayXml[10]['detalleDeduccion'], $arrayXml[4]['headerNomina']['NumDiasPagados'], $subsidio, $oPrestaciones);
 $pdf->Totales($arrayXml[0]['header']);
 $pdf->BlockSubsidio($subsidio, $sCausado, $isr);
 if(!empty($arrayXml[14]['timbreFiscal'])){

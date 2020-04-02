@@ -20,6 +20,7 @@ use Charles\CFDI\Node\Complemento\Nomina\OtrosPagos\CompensacionSaldosAFavor;
 use Charles\CFDI\Node\Complemento\Nomina\Deduccion\DetalleDeduccion;
 use Charles\CFDI\Node\Complemento\Nomina\Percepcion\DetallePercepcion;
 use Charles\CFDI\Node\Complemento\Nomina\Percepcion\DetallePercepcionPPP;
+use Charles\CFDI\Node\Complemento\Nomina\Percepcion\DetPercIndenmizacion;
 use Charles\CFDI\Node\Complemento\Nomina\Percepcion\HorasExtras;
 
 
@@ -108,6 +109,8 @@ function complementoNomina($nominaData) {
   $nominaPercepcion = $nominaData['percepcion'];
   $nominaDetallePercepcion = $nominaData['detallePercepcion'];
   $nominaDetallePercepcionPPP = isset($nominaData['detallePercepcionPPP']) ? $nominaData['detallePercepcionPPP'] : [];
+  $nominaPercIndemnizacion = isset($nominaData['percIndemnizacion']) || $nominaData['percIndemnizacion'] != null ? $nominaData['percIndemnizacion'] : [];
+
 
   $nomina = new Nomina($nominaHeader);
   if($nominaDetallePercepcionPPP === []){
@@ -130,6 +133,12 @@ function complementoNomina($nominaData) {
   if($nominaDetallePercepcionPPP) {
     foreach ($nominaDetallePercepcionPPP as $percepcionPPP) {
       $nomina->add(new DetallePercepcionPPP($percepcionPPP));
+    }
+  }
+
+  if($nominaPercIndemnizacion) {
+    foreach ($nominaPercIndemnizacion as $indem) {
+      $nomina->add(new DetPercIndenmizacion($indem));
     }
   }
 
