@@ -20,11 +20,12 @@ use Charles\CFDI\Node\Complemento\Nomina\OtrosPagos\CompensacionSaldosAFavor;
 use Charles\CFDI\Node\Complemento\Nomina\Deduccion\DetalleDeduccion;
 use Charles\CFDI\Node\Complemento\Nomina\Percepcion\DetallePercepcion;
 use Charles\CFDI\Node\Complemento\Nomina\Percepcion\DetallePercepcionPPP;
+use Charles\CFDI\Node\Complemento\Nomina\Percepcion\DetPercIndenmizacion;
 use Charles\CFDI\Node\Complemento\Nomina\Percepcion\HorasExtras;
 
 
 $json = file_get_contents("php://input");
-//$json = file_get_contents('../uploads/ejemplo.json');
+//$json = file_get_contents('../uploads/aTimbrarAsim.json');
 $ruta = "../uploads/";
 $ruta2 = "../uploads/aTimbrarAsim.json";
 file_put_contents($ruta2, $json);
@@ -180,6 +181,7 @@ function complementoNomina($nominaData) {
   $nominaPercepcion = $nominaData['percepcion'];
   $nominaDetallePercepcion = $nominaData['detallePercepcion'];
   $nominaDetallePercepcionPPP = isset($nominaData['detallePercepcionPPP']) ? $nominaData['detallePercepcionPPP'] : [];
+  $nominaPercIndemnizacion = isset($nominaData['percIndemnizacion']) ? $nominaData['percIndemnizacion'][0] : [];
 
   if($nominaReceptor['NumSeguridadSocial'] == '') {
     unset($nominaReceptor['NumSeguridadSocial']);
@@ -218,6 +220,10 @@ function complementoNomina($nominaData) {
     foreach ($nominaDetallePercepcionPPP as $percepcionPPP) {
       $nomina->add(new DetallePercepcionPPP($percepcionPPP));
     }
+  }
+
+  if(count($nominaPercIndemnizacion) > 0) {
+    $nomina->add(new DetPercIndenmizacion($nominaPercIndemnizacion));
   }
 
   if(validarDeducciones($nominaDeduccion)) {
@@ -259,6 +265,7 @@ function validarDeducciones ($nominaDeduccion) {
 function validarNodos($nominaData) {
   $parsedData = removerAtributoVacio($nominaData, 'deduccion', 'TotalImpuestosRetenidos');
   $parsedData = removerAtributoVacio($parsedData, 'deduccion', 'TotalOtrasDeducciones');
+  $parsedData = removerAtributoVacio($parsedData, 'percepcion', 'TotalSeparacionIndemnizacion');
   $parsedData = removerAtributoVacio($parsedData, 'header', 'TotalDeducciones');
   return $parsedData;
 }

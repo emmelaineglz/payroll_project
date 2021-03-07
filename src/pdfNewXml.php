@@ -73,12 +73,12 @@ class FacturaPdfXml extends FPDF {
       $this->Cell(25, 4, "Domicilio:", 0, 0, 'L');
       $this->Cell(180, 4, $data->domicilio, 0, 'L');
       $this->Ln();
-      $this->Cell(25, 4, "Estado:", 0, 0, 'L');
-      $this->Cell(40, 4, utf8_decode("Ciudad de México"), 0, 0, 'L');
       $this->Cell(25, 4, "Codigo Postal:", 0, 0, 'L');
-      $this->Cell(50, 4, $data->codigoPostal, 0, 0, 'L');
+      $this->Cell(40, 4, $data->codigoPostal, 0, 0, 'L');
       $this->Cell(25, 4, "Pais:", 0, 0, 'L');
-      $this->Cell(40, 4, utf8_decode("México"), 0, 0, 'L');
+      $this->Cell(50, 4, utf8_decode("México"), 0, 0, 'L');
+      $this->Cell(25, 4, "", 0, 0, 'L');
+      $this->Cell(40, 4, "", 0, 0, 'L');
     }
     
     public function riesgoPuesto ($riesgo) {
