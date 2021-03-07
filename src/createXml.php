@@ -25,9 +25,9 @@ use Charles\CFDI\Node\Complemento\Nomina\Percepcion\HorasExtras;
 
 
 $json = file_get_contents("php://input");
-//$json = file_get_contents('/Applications/XAMPP/htdocs/payroll_project/uploads/ejemplo.json');
+//$json = file_get_contents(HOST."/payroll_project/uploads/exampleVar2.json");
 $ruta = "../uploads/";
-file_put_contents($ruta."exampleVar.json", $json);
+file_put_contents($ruta."exampleVar2.json", $json);
 
 if($json) {
   $jsonData = json_decode($json, true);
@@ -109,8 +109,9 @@ function complementoNomina($nominaData) {
   $nominaPercepcion = $nominaData['percepcion'];
   $nominaDetallePercepcion = $nominaData['detallePercepcion'];
   $nominaDetallePercepcionPPP = isset($nominaData['detallePercepcionPPP']) ? $nominaData['detallePercepcionPPP'] : [];
-  $nominaPercIndemnizacion = isset($nominaData['percIndemnizacion']) || $nominaData['percIndemnizacion'] != null ? $nominaData['percIndemnizacion'] : [];
+  $nominaPercIndemnizacion = isset($nominaData['percIndemnizacion']) ? $nominaData['percIndemnizacion'][0] : [];
 
+  //var_dump($nominaPercepcion);
 
   $nomina = new Nomina($nominaHeader);
   if($nominaDetallePercepcionPPP === []){
@@ -136,10 +137,8 @@ function complementoNomina($nominaData) {
     }
   }
 
-  if($nominaPercIndemnizacion) {
-    foreach ($nominaPercIndemnizacion as $indem) {
-      $nomina->add(new DetPercIndenmizacion($indem));
-    }
+  if(count($nominaPercIndemnizacion) > 0) {
+    $nomina->add(new DetPercIndenmizacion($nominaPercIndemnizacion));
   }
 
   if(validarDeducciones($nominaDeduccion)) {
