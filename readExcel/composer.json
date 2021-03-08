@@ -1,0 +1,13 @@
+{
+    "name": "root/read-excel",
+    "authors": [
+        {
+            "name": "Ethel Gonzalez",
+            "email": "ethel.gonzalez@gigigo.com.mx"
+        }
+    ],
+    "require": {
+        "box/spout": "^2.7",
+        "nesbot/carbon": "^1.28"
+    }
+}
