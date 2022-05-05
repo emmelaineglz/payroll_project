@@ -33,7 +33,7 @@ class ReportePdfNomina extends FPDF {
     $this->Cell(15, 4, $request['FechaInicial'], 0, 0, 'L');
     $this->Cell(20, 4, "", 0, 0, 'L');
     $this->Cell(15, 4, "FECHA:", 0, 0, 'L');
-    $this->Cell(15, 4, "2018-11-06", 0, 0, 'L');
+    $this->Cell(15, 4, date('Y-m-d '), 0, 0, 'L');
     $this->Cell(80, 4, "", 0, 0, 'L');
     $this->Ln();
     $this->Cell(70, 4, "", 0, 0, 'L');
@@ -85,7 +85,7 @@ class ReportePdfNomina extends FPDF {
     $this->Cell(50, 4, utf8_decode("Descripción"), 0, 0, 'L');
     $this->Cell(20, 4, "Importe", 0, 0, 'R');
     
-    $this->SetFont('Arial','',5);
+    $this->SetFont('Arial','',7);
     $this->SetTextColor(5, 5, 5);
     $this->Ln();
     $this->Ln();

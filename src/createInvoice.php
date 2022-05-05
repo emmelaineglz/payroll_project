@@ -1,4 +1,10 @@
 <?php
+set_time_limit(900);
+/*
+ini_set('display_errors', true);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+*/
 include "../vendor/autoload.php";
 include "../config/config.php";
 include "Certificate.php";
@@ -34,7 +40,6 @@ file_put_contents($ruta2, $json);
 /* Ruta del servicio de integracion Productivo*/
 $ws = "https://timbracfdi33.mx:1443/Timbrado.asmx?wsdl";
 $response = '';
-
 if($json) {
   $jsonData = json_decode($json, true);
   if($jsonData['comprobante'] && $jsonData['empresa']) {
@@ -63,7 +68,6 @@ if($json) {
 
     $ruta3 = "../uploads/aTimbrarNew.json";
     file_put_contents($ruta3, $cfdi);
-
     foreach ($compobanteConceptos as $concepto) {
       if($concepto['Descuento'] == '0.00' || $concepto['Descuento'] == '0' || $comprobanteHeader['Descuento'] == '') {
         unset($concepto['Descuento']);
@@ -86,9 +90,9 @@ if($json) {
       $params['usuarioIntegrador'] = '8E5CyvqyxsyGkK0DbKbA8g==';
       $params['xmlComprobanteBase64'] = $base64Comprobante;
       $params['idComprobante'] = rand(5, 999999);
-
       $client = new SoapClient($ws,$params);
       $response = $client->__soapCall('TimbraCFDI', array('parameters' => $params));
+//      var_dump($response);
     } catch (SoapFault $fault){
       echo "SOAPFault: ".$fault->faultcode."-".$fault->faultstring."\n";
     }
@@ -140,7 +144,7 @@ if($json) {
       //file_put_contents("{$ruta}{$empresa}/{$rfc}/cadenaOriginal.txt", $cadenaOriginal);
       $image = "{$ruta}{$empresa}/{$rfc}/codigoQr_{$UUID}.jpg";
       /* Generamos archivo PDF */
-      $ruta_xml = HOST."/payroll_project/uploads/{$empresa}/{$rfc}/{$UUID}_{$numEmpleado}_{$fechaFin}.xml";
+      $ruta_xml = HOST."payroll_project/uploads/{$empresa}/{$rfc}/{$UUID}_{$numEmpleado}_{$fechaFin}.xml";
       $serie = $comprobanteHeader['Serie'];
       $folio = $comprobanteHeader['Folio'];
       $responseFinal = [
@@ -157,18 +161,18 @@ if($json) {
         "noCertif" => (string)$noCertificadoSAT,
         "fechaEmision" => (string)$FechaEmision
       ];
-      echo json_encode($responseFinal);
+      echo die(json_encode($responseFinal));
     } else {
       $num = rand(5, 999999);
       $nameXml = "{$rfc}_{$num}";
       file_put_contents("{$ruta}{$empresa}/{$rfc}/{$nameXml}.xml", $cfdi);
-      $ruta_xmlE = HOST."/payroll_project/uploads/{$empresa}/{$rfc}/{$nameXml}.xml";
+      $ruta_xmlE = HOST."payroll_project/uploads/{$empresa}/{$rfc}/{$nameXml}.xml";
       $responseFinal = ["status" => false, "message" => $descripcionResultado, "url_xml" => $ruta_xmlE];
-      echo json_encode($responseFinal);
+      echo die(json_encode($responseFinal));
     }
   } else {
     $responseFinal = ["status" => false, "message" => 'La estructura del Json, es incorrecta'];
-      echo json_encode($responseFinal);
+      echo die(json_encode($responseFinal));
   }
 }
 
@@ -197,9 +201,10 @@ function complementoNomina($nominaData) {
   }
 
   $nomina = new Nomina($nominaHeader);
-  if($nominaDetallePercepcionPPP === [] && $nominaEmisor['RegistroPatronal'] != ''){
+  if(($nominaDetallePercepcionPPP === [] && $nominaEmisor['RegistroPatronal'] != '') || isset($nominaEmisor['Curp'])){
    $nomina->add(new EmisorN($nominaEmisor));
   }
+  
   $nomina->add(new ReceptorN($nominaReceptor));
 
   $nomina->add(new Percepcion($nominaPercepcion));

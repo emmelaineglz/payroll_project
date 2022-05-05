@@ -20,29 +20,31 @@ if($json) {
 		}
 	}
 }*/
-
 function parseXML($xmlFile) {
 	$xml = simplexml_load_file($xmlFile, "SimpleXMLElement", LIBXML_NOCDATA);
-	registerNamespaces($xml);
+	if($xml) {
+		registerNamespaces($xml);
 
-	$header = getNodeData($xml, 'Comprobante', 'header', 'c');
-	$emisor = getNodeData($xml, 'Emisor', 'emisor', 'c');
-	$receptor = getNodeData($xml, 'Receptor', 'receptor', 'c');
-	$conceptos = getNodeData($xml, 'Concepto', 'conceptos', 'c');
-	$headerNomina = getNodeData($xml, 'Nomina', 'headerNomina', 'n');
-	$emisorNomina = getNodeData($xml, 'Emisor', 'emisorNomina', 'n');
-	$receptorNomina = getNodeData($xml, 'Receptor', 'receptorNomina', 'n');
-	$percepcionesNomina = getNodeData($xml, 'Percepciones', 'percepcion', 'n');
-	$detallePercepcionesNomina = getNodeData($xml, 'Percepcion', 'detallePercepcion', 'n');
-	$deduccionesNomina = getNodeData($xml, 'Deducciones', 'deduccion', 'n');
-	$detalleDeduccionesNomina = getNodeData($xml, 'Deduccion', 'detalleDeduccion', 'n');
-	$incapacidadesNomina = getNodeData($xml, 'Incapacidad', 'incapacidades', 'n');
-  	$otrosPagosNomina = getNodeData($xml, 'OtroPago', 'otrosPagos', 'n');
-  	$subsidioNomina = getNodeData($xml, 'SubsidioAlEmpleo', 'subsidioAlEmpleo', 'n');  
-	$timbreFiscal = getNodeData($xml, 'TimbreFiscalDigital', 'timbreFiscal', 't');
-
-  $fileXml = [$header, $emisor, $receptor, $conceptos, $headerNomina, $emisorNomina, $receptorNomina, $percepcionesNomina, $detallePercepcionesNomina, $deduccionesNomina, $detalleDeduccionesNomina, $incapacidadesNomina, $otrosPagosNomina, $subsidioNomina, $timbreFiscal];
-  return $fileXml;
+		$header = getNodeData($xml, 'Comprobante', 'header', 'c');
+		$emisor = getNodeData($xml, 'Emisor', 'emisor', 'c');
+		$receptor = getNodeData($xml, 'Receptor', 'receptor', 'c');
+		$conceptos = getNodeData($xml, 'Concepto', 'conceptos', 'c');
+		$headerNomina = getNodeData($xml, 'Nomina', 'headerNomina', 'n');
+		$emisorNomina = getNodeData($xml, 'Emisor', 'emisorNomina', 'n');
+		$receptorNomina = getNodeData($xml, 'Receptor', 'receptorNomina', 'n');
+		$percepcionesNomina = getNodeData($xml, 'Percepciones', 'percepcion', 'n');
+		$detallePercepcionesNomina = getNodeData($xml, 'Percepcion', 'detallePercepcion', 'n');
+		$deduccionesNomina = getNodeData($xml, 'Deducciones', 'deduccion', 'n');
+		$detalleDeduccionesNomina = getNodeData($xml, 'Deduccion', 'detalleDeduccion', 'n');
+		$incapacidadesNomina = getNodeData($xml, 'Incapacidad', 'incapacidades', 'n');
+		  $otrosPagosNomina = getNodeData($xml, 'OtroPago', 'otrosPagos', 'n');
+		  $subsidioNomina = getNodeData($xml, 'SubsidioAlEmpleo', 'subsidioAlEmpleo', 'n');  
+		$timbreFiscal = getNodeData($xml, 'TimbreFiscalDigital', 'timbreFiscal', 't');
+	
+	  $fileXml = [$header, $emisor, $receptor, $conceptos, $headerNomina, $emisorNomina, $receptorNomina, $percepcionesNomina, $detallePercepcionesNomina, $deduccionesNomina, $detalleDeduccionesNomina, $incapacidadesNomina, $otrosPagosNomina, $subsidioNomina, $timbreFiscal];
+	  return $fileXml;
+	}
+	return false;
 }
 
 function getNodeData($xml, $nodeName, $nodeAlias = '', $type = '') {

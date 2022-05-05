@@ -1,4 +1,6 @@
 <?php
+set_time_limit(900);
+
 include "../vendor/autoload.php";
 include "../config/config.php";
 include "Certificate.php";
