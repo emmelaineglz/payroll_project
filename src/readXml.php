@@ -1,34 +1,49 @@
 <?php
-//ini_set('display_errors', true);
+
+/*ini_set('display_errors', true);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+*/
+
 $basePath = dirname(__DIR__);
 
 include "{$basePath}/vendor/autoload.php";
 include "parserXml.php";
 include "pdfNewXml.php";
 include "obtenerEmpresa.php";
+
 /*$empresa = "9999";
 $rfc = "AAA010101AAA";
 $archivo = "3e7dc291-16c0-4620-9244-0e8ff4c4f50f.xml";*/
 
-$empresa = base64_decode($_GET["e"]);
-//$rfc = base64_decode($_GET["r"]);
-$archivo = base64_decode($_GET["a"]);
+$empresa = trim(base64_decode($_GET["e"]));
+$rfc = str_replace(" ", "", base64_decode($_GET["r"]));
+$archivo = trim(base64_decode($_GET["a"]));
 
 /*$arrayRfcs = ["MIN120828HI0", "BON150210EN4", "HEI1501217Y9", "FAP141125CR3"];
 if (!in_array($rfc, $arrayRfcs)) {
   die('No existe la configuracion de la empresa!');
 }*/
 
-//$rutaFile = "{$basePath}/uploads/{$empresa}/{$rfc}/";
-$data = json_decode(obtenerXmlPorRfc($empresa, $archivo));
-$varios = $data->varios;
-$rfc = $data->rfc;
-$arrayXml = parseXML($data->src);
+$getData = obtenerDatosEmpresa($empresa, $rfc, $archivo);
 
-$UUID = $arrayXml[13]['timbreFiscal']['UUID'];
+if ($getData === NULL) {
+	$rutaFile = trim("{$basePath}/uploads/{$empresa}/{$rfc}/");
+	$data = "{$rutaFile}{$archivo}";
+	$arrayXml = parseXML($data);
+	$varios = 'NO';
+	$rfc = $rfc;
+} else {
+	$data = $getData[cfdiFiscal];
+	$varios = $data[varios];
+	$rfc = $data[rfc];
+	$arrayXml = parseXML($data[src]);
+}
+
+$UUID = ($arrayXml[13]) ? $arrayXml[13]['timbreFiscal']['UUID'] : $arrayXml[14]['timbreFiscal']['UUID'];
 $numEmpleado = $arrayXml[6]['receptorNomina']['NumEmpleado'];
 $fechaFin = $arrayXml[4]['headerNomina']['FechaFinalPago'];
-$regPatronal = $arrayXml[5]['emisorNomina']['RegistroPatronal'];
+$regPatronal = ($arrayXml[5]) ? $arrayXml[5]['emisorNomina']['RegistroPatronal'] : '';
 $headerXml = $arrayXml[0]['header'];
 $cadenaOriginalCertificada = getCadenaOriginalCertificacion($arrayXml[14]['timbreFiscal']);
 $codigoQR = getQRCode($rfc,$arrayXml[2]['receptor']['Rfc'], $headerXml['Total'], $UUID, $basePath);
@@ -38,12 +53,12 @@ $subsidio = 0;
 $oPrestaciones = 0;
 
 if(!empty($arrayXml[12]['otrosPagos'])) {
-	$data = $arrayXml[12]['otrosPagos'];
-	foreach ($data as $value) {
+	$dataP = $arrayXml[12]['otrosPagos'];
+	foreach ($dataP as $value) {
 		if($value['Clave'] === 'D600') {
 			$subsidio = $value['Importe'];
 		} else {
-			$subsidio = $data['Importe'];
+			$subsidio = $dataP['Importe'];
 		}
 		if($value['Clave'] === 'P056') {
 			$oPrestaciones = $value['Importe'];
@@ -57,10 +72,10 @@ $pdf->AddPage();
 $pdf->SetFont('Arial','B',16);
 $pdf->HeaderPay($headerXml);
 
-$headerEmpresa = json_decode(obtenerDatosEmpresa($empresa, $rfc, $varios));
-$pdf->HeaderG($headerEmpresa->cfdiFiscal, $regPatronal);
+// $headerEmpresa = json_decode(obtenerDatosEmpresa( $empresa, $rfc, $archivo) );
+$pdf->HeaderG($data, $regPatronal);
 $pdf->HeaderNomina($arrayXml[2]['receptor'], $arrayXml[4]['headerNomina'], $arrayXml[6]['receptorNomina']);
-$pdf->percep_deducc($arrayXml[7]['percepcion'], $arrayXml[8]['detallePercepcion'], $arrayXml[9]['deduccion'], $arrayXml[10]['detalleDeduccion'], $arrayXml[4]['headerNomina']['NumDiasPagados'], $subsidio, $oPrestaciones);
+$pdf->percep_deducc($arrayXml[7]['percepcion'], $arrayXml[8]['detallePercepcion'], $arrayXml[9]['deduccion'], $arrayXml[10]['detalleDeduccion'], $arrayXml[4]['headerNomina']['NumDiasPagados'], $subsidio, $oPrestaciones); 
 $pdf->Totales($arrayXml[0]['header']);
 $pdf->BlockSubsidio($subsidio, $sCausado, $isr);
 if(!empty($arrayXml[14]['timbreFiscal'])){

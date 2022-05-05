@@ -11,16 +11,19 @@
     "require": {
         "orlandocharles/cfdi": "^0.0.10",
         "symfony/process": "^3.4",
-        "nesbot/carbon": "^1.23",
+        "nesbot/carbon": "^2.0.0",
         "cangelis/pdf": "^2.2",
         "setasign/fpdf": "1.8.1",
-        "endroid/qr-code": "2.x-dev"
+        "endroid/qr-code": "2.x-dev",
+        "box/spout": "^3.1@dev"
     },
     "repositories": [
-       {
-         "type": "vcs",
-         "url": "https://github.com/emmelaineglz/cfdi"
-       }
+        {
+            "type": "vcs",
+            "url": "https://github.com/emmelaineglz/cfdi"
+        }
     ],
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "require-dev": {
+    }
 }

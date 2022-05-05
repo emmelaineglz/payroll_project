@@ -8,6 +8,8 @@
     ],
     "require": {
         "box/spout": "^2.7",
-        "nesbot/carbon": "^1.28"
+        "nesbot/carbon": "^2.0.0"
+    },
+    "require-dev": {
     }
 }
