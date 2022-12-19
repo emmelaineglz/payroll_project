@@ -14,11 +14,12 @@ class FacturaPdfXml extends FPDF {
       return strlen($text) > $maxWidth ? substr($text, 0, $maxWidth)."..." : $text;
   }
 
-  public function HeaderPay($data){
+  public function HeaderPay($data, $imageLogo){
       $this->SetFont('Arial','B',10);
       $this->SetFillColor(26, 84, 251);
-			//$this->Cell(190, 5, "Comprobante Fiscal Digital por Internet", 0, 0, 'R');
-      //$this->Ln();
+      if(file_exists($imageLogo)) {
+        $this->Image($imageLogo, 10, 5, -750);
+      }
       $this->Cell(185, 5, utf8_decode("RECIBO CFDI DE NÓMINA"), 0, 0, 'R');
       $this->Ln(6);
       $this->SetFont('Arial','B',7);

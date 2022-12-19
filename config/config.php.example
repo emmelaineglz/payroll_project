@@ -1,3 +1,4 @@
 <?php
 
 define('HOST', "http://acceso.onenom.com.mx");
+define('PATH_LOGO', "");

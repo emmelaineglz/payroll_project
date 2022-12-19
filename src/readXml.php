@@ -11,6 +11,7 @@ include "{$basePath}/vendor/autoload.php";
 include "parserXml.php";
 include "pdfNewXml.php";
 include "obtenerEmpresa.php";
+include "../config/config.php";
 
 /*$empresa = "9999";
 $rfc = "AAA010101AAA";
@@ -74,7 +75,10 @@ $sCausado = (!empty($arrayXml[13]['subsidioAlEmpleo'])) ? $arrayXml[13]['subsidi
 $isr = (!empty($arrayXml[9]['deduccion']['TotalImpuestosRetenidos'])) ? $arrayXml[9]['deduccion']['TotalImpuestosRetenidos'] : 0;
 $pdf->AddPage();
 $pdf->SetFont('Arial','B',16);
-$pdf->HeaderPay($headerXml);
+$pathLogo = PATH_LOGO;
+$imageLogo = "{$empresa}_{$arrayXml[1]['emisor']['Rfc']}";
+$logo = "{$pathLogo}{$imageLogo}.png";
+$pdf->HeaderPay($headerXml, $logo);
 
 // $headerEmpresa = json_decode(obtenerDatosEmpresa( $empresa, $rfc, $archivo) );
 $pdf->HeaderG($data, $regPatronal);
