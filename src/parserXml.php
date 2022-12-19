@@ -86,7 +86,7 @@ function getCadenaOriginalCertificacion($timbreFiscal) {
 }
 
 function getQRCode($rfcEmisor, $rfcReceptor, $total, $UUID, $saveInPath) {
-	$cadena = "?re={$rfcEmisor}&rr={$rfcReceptor}&tt={$total}&id={$UUID}";
+	$cadena = "https://verificacfdi.facturaelectronica.sat.gob.mx/?id={$UUID}&re={$rfcEmisor}&rr={$rfcReceptor}&tt={$total}&fe=JYZFNw==";
 	$qrCode = new QrCode($cadena);
 	$qrCode->writeFile($saveInPath.'/uploads/gQR.png');
 	return $saveInPath.'/uploads/gQR.png';

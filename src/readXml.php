@@ -40,7 +40,7 @@ if ($getData === NULL) {
 	$arrayXml = parseXML($data[src]);
 }
 
-$UUID = ($arrayXml[13]) ? $arrayXml[13]['timbreFiscal']['UUID'] : $arrayXml[14]['timbreFiscal']['UUID'];
+$UUID = ($arrayXml[13]['timbreFiscal']['UUID']) ? $arrayXml[13]['timbreFiscal']['UUID'] : $arrayXml[14]['timbreFiscal']['UUID'];
 $numEmpleado = $arrayXml[6]['receptorNomina']['NumEmpleado'];
 $fechaFin = $arrayXml[4]['headerNomina']['FechaFinalPago'];
 $regPatronal = ($arrayXml[5]) ? $arrayXml[5]['emisorNomina']['RegistroPatronal'] : '';
@@ -51,6 +51,7 @@ $codigoQR = getQRCode($rfc,$arrayXml[2]['receptor']['Rfc'], $headerXml['Total'],
 $pdf = new FacturaPdfXml();
 $subsidio = 0;
 $oPrestaciones = 0;
+$iXriesgos = 0;
 
 if(!empty($arrayXml[12]['otrosPagos'])) {
 	$dataP = $arrayXml[12]['otrosPagos'];
@@ -62,6 +63,9 @@ if(!empty($arrayXml[12]['otrosPagos'])) {
 		}
 		if($value['Clave'] === 'P056') {
 			$oPrestaciones = $value['Importe'];
+		}
+		if($value['Clave'] === 'P035') {
+			$iXriesgos = $value['Importe'];
 		}
 	}
 }
@@ -75,7 +79,7 @@ $pdf->HeaderPay($headerXml);
 // $headerEmpresa = json_decode(obtenerDatosEmpresa( $empresa, $rfc, $archivo) );
 $pdf->HeaderG($data, $regPatronal);
 $pdf->HeaderNomina($arrayXml[2]['receptor'], $arrayXml[4]['headerNomina'], $arrayXml[6]['receptorNomina']);
-$pdf->percep_deducc($arrayXml[7]['percepcion'], $arrayXml[8]['detallePercepcion'], $arrayXml[9]['deduccion'], $arrayXml[10]['detalleDeduccion'], $arrayXml[4]['headerNomina']['NumDiasPagados'], $subsidio, $oPrestaciones); 
+$pdf->percep_deducc($arrayXml[7]['percepcion'], $arrayXml[8]['detallePercepcion'], $arrayXml[9]['deduccion'], $arrayXml[10]['detalleDeduccion'], $arrayXml[4]['headerNomina']['NumDiasPagados'], $subsidio, $oPrestaciones, $iXriesgos); 
 $pdf->Totales($arrayXml[0]['header']);
 $pdf->BlockSubsidio($subsidio, $sCausado, $isr);
 if(!empty($arrayXml[14]['timbreFiscal'])){

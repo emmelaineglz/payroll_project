@@ -21,7 +21,8 @@ foreach ($jsonData['empleados'] as $value) {
         $countEmp = 0;
     }
     $pdf->SetFont('Arial','B',16);
-    $pdf->HeaderP($jsonData['header']);
+    //$pdf->HeaderP($jsonData['header']);
+    $pdf->HeaderP($jsonData['header'],$jsonData['empleados'],$value['NetoPagado']);
     $arrayHC['headcount'] = [];
     $arrayHC1['ingresos'] = [];
     $arrayHC1['ingresos']['BaseExento'] = $value['BaseExento'];
