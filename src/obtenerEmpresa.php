@@ -1,7 +1,7 @@
 <?php
 function getAnyRfc ($empresa) {
     $Usuario="admin";
-    $Password="0n3N0m21";
+    $Password="N3xN0m";
     $Servidor="localhost:3306";
     $BaseDeDatos="onenom";
 
@@ -15,7 +15,7 @@ function getAnyRfc ($empresa) {
 
 function obtenerDatosEmpresa ($empresa, $rfc, $archivo) {
     $Usuario="admin";
-    $Password="0n3N0m21";
+    $Password="N3xN0m";
     $Servidor="localhost:3306";
     $BaseDeDatos="onenom";
     $db_xion = mysqli_connect($Servidor,$Usuario,$Password,$BaseDeDatos) or die("Error: El SERVIDOR no puede conectar con la base de datos");
@@ -76,7 +76,7 @@ function obtenerDatosEmpresa ($empresa, $rfc, $archivo) {
 function obtenerXmlPorRfc ($empresa, $archivo) {
     $basePath = dirname(__DIR__);
     $Usuario="admin";
-    $Password="0n3N0m21";
+    $Password="N3xN0m";
     $Servidor="localhost:3306";
     $BaseDeDatos="onenom";
 

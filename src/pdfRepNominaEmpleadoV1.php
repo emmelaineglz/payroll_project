@@ -13,13 +13,11 @@ class ReportePdfNomina extends FPDF {
   }
 
   function HeaderP ($request) {
-    $this->Ln(2);
     $this->SetFont('Arial','B',9);
     $this->SetFillColor(191, 191, 192);
-    $this->Cell(190, 5, utf8_decode("NÓMINA POR EMPLEADO"), 0, 0, 'C');
+    $this->Cell(190, 5, utf8_decode("RESUMEN DE NÓMINA POR EMPLEADO"), 0, 0, 'C');
     $this->Ln(4);
-    $this->Cell(110, 4, "______________________________________________________________________________________________________", 0, 0, 'L');
-    $this->Ln();
+    $this->Ln(4);
     $this->SetFont('Arial','B',7);
     $this->SetTextColor(5, 5, 5);
     $this->Cell(80, 4, $request['Empresa'], 0, 0, 'C');
@@ -30,10 +28,10 @@ class ReportePdfNomina extends FPDF {
     $this->Cell(20, 4, "PROCESO:", 0, 0, 'L');
     $this->Cell(15, 4, $request['Proceso'], 0, 0, 'L');
     $this->Cell(20, 4, "", 0, 0, 'L');
-    $this->Cell(20, 4, "PERIODO:  ", 0, 0, 'L');
+    $this->Cell(15, 4, "PERIODO", 0, 0, 'L');
     $this->Cell(15, 4, $request['Periodo'], 0, 0, 'L');
     $this->Cell(20, 4, "", 0, 0, 'L');
-    $this->Cell(25, 4, "EJERCICIO:", 0, 0, 'L');
+    $this->Cell(20, 4, "EJERCICIO:", 0, 0, 'L');
     $this->Cell(15, 4, $request['Ejercicio'], 0, 0, 'L');
     $this->Cell(25, 4, "", 0, 0, 'L');
     $this->Ln();
@@ -41,15 +39,13 @@ class ReportePdfNomina extends FPDF {
     $this->Cell(20, 4, utf8_decode("T. NÓMINA:"), 0, 0, 'L');
     $this->Cell(15, 4, $request['TNomina'], 0, 0, 'L');
     $this->Cell(20, 4, "", 0, 0, 'L');
-    $this->Cell(20, 4, "REGISTROS:", 0, 0, 'L');
+    $this->Cell(15, 4, "REGISTROS", 0, 0, 'L');
     $this->Cell(15, 4, $request['NoRegistros'], 0, 0, 'L');
     $this->Cell(20, 4, "", 0, 0, 'L');
-    $this->Cell(25, 4, "TOTAL NOMINA:", 0, 0, 'L');
+    $this->Cell(20, 4, "TOTAL NETO:", 0, 0, 'L');
     $this->Cell(15, 4, "$".number_format($request['TotalNeto'],2), 0, 0, 'L');
     $this->Cell(25, 4, "", 0, 0, 'L');
     $this->Ln();
-    $this->SetFont('Arial','B',9);
-    $this->Cell(110, 4, "______________________________________________________________________________________________________", 0, 0, 'L');
     $this->Ln();
   }
 
@@ -86,7 +82,7 @@ class ReportePdfNomina extends FPDF {
     $this->Cell(95, 4, "Percepciones", 0, 0, 'C');
     $this->Cell(95, 4, "Deducciones", 0, 0, 'C');
     $this->Ln(10);
-    $this->SetFont('Arial','',7);
+    $this->SetFont('Arial','',5);
     $this->SetTextColor(5, 5, 5);
     $currentY = 0;
     foreach ($detPercepcion as $value) {
@@ -100,13 +96,13 @@ class ReportePdfNomina extends FPDF {
       }
     }
 
-    $space = 10;
+    $space = 0;
     if (sizeof($detPercepcion) > sizeof($detDeduccion)) {
       $space = 25;
     } else if (sizeof($detPercepcion) < sizeof($detDeduccion)){
       $space = 15;
     } else {
-      $space = 10;
+      $space = 20;
     }
 
 
@@ -124,8 +120,8 @@ class ReportePdfNomina extends FPDF {
     }
 
     $this->SetXY($this->GetX(), $this->GetY()+6);
-    $this->Ln(6);
-    $this->SetFont('Arial','B',9);
+    $this->Ln(4);
+    $this->SetFont('Arial','B',7);
     $this->SetTextColor(5, 5, 5);
     $this->Cell(15, 4, "", 0, 0, 'L');
     $this->Cell(40, 4, "Total Percepciones", 0, 0, 'L');
@@ -134,13 +130,11 @@ class ReportePdfNomina extends FPDF {
     $this->Cell(40, 4, "Total Deducciones", 0, 0, 'L');
     $this->Cell(20, 4, number_format($tDedu, 2), 0, 0, 'R');
     $this->Ln();
-    $this->SetFont('Arial','B',9);
+    $this->SetFont('Arial','B',7);
     $this->SetTextColor(5, 5, 5);
     $this->Cell(110, 4, "", 0, 0, 'L');
     $this->Cell(40, 4, "Neto a Pagar", 0, 0, 'L');
     $this->Cell(20, 4, number_format($netoP, 2), 0, 0, 'R');
-    $this->Ln(10);
-    $this->SetFont('Arial','',5);
-    $this->Cell(110, 4, "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -", 0, 0, 'L');
+    $this->Ln(12);
   }
 }

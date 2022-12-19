@@ -14,7 +14,7 @@ class ReportePdfNomina extends FPDF {
 
   function HeaderP ($request) {
     $this->SetFillColor(191, 191, 192);
-    $this->Cell(190, 5, utf8_decode("FINIQUITO"), 0, 0, 'C');
+    $this->Cell(190, 5, utf8_decode("NUEVO REPORTE FINIQUITO"), 0, 0, 'C');
     $this->Ln(8);
     $this->SetFont('Arial','B',10);
     $this->SetTextColor(5, 5, 5);

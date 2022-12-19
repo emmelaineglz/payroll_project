@@ -113,8 +113,8 @@ class FacturaPdfXml extends FPDF {
       $this->SetFont('Arial','B',7);
       $this->cell(31, 4, "Nombre:", 0, 0, 'L');
       $this->Cell(50, 4, utf8_decode($receptor['Nombre']), 0, 0, 'L');
-      //$this->Cell(28, 4, "Puesto:", 0, 0, 'R');
-      //$this->Cell(25, 4, $receptorNomina['Puesto'], 0, 0, 'L');
+      $this->Cell(28, 4, " ", 0, 0, 'R');
+      $this->Cell(25, 4, $receptorNomina['Puesto'], 0, 0, 'L');
       $this->Ln();
       $this->Cell(31, 4, "No Empleado:", 0, 0, 'L');
       $this->Cell(50, 4, $receptorNomina['NumEmpleado'], 0, 0, 'L');

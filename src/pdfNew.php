@@ -20,7 +20,7 @@ class FacturaPdf extends FPDF {
       $this->SetFillColor(191, 191, 192);
 			//$this->Cell(190, 5, "Comprobante Fiscal Digital por Internet", 0, 0, 'R');
       $this->Ln();
-      $this->Cell(153, 5, "RECIBO DE NOMINA", 0, 0, 'R');
+      $this->Cell(153, 5, "RECIBO CFDI DE NOMINA", 0, 0, 'R');
       $this->Ln();
       $this->SetFont('Arial','B',7);
       $this->SetTextColor(5, 5, 5);
@@ -319,7 +319,7 @@ class FacturaPdf extends FPDF {
       //$this->Line(10, $this->GetX(), 108, $this->GetX());*/
 
       $totalExc = (!empty($subsidio))? ($percepcion->TotalExento + $subsidio) : $percepcion->TotalExento;
-      $this->Ln();
+      $this->Ln(12);
       $this->Ln();
       $this->Ln();
       $this->SetFont('Arial','B',7);
